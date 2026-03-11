@@ -1,50 +1,87 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <title>Darbys Ridge</title>
+
 <style>
+
 body{
 font-family:Arial;
 background:#f5efe7;
+margin:0;
 display:flex;
 align-items:center;
 justify-content:center;
 height:100vh;
-margin:0;
 }
+
 .card{
 background:white;
 padding:40px;
-border-radius:15px;
+border-radius:16px;
 box-shadow:0 10px 30px rgba(0,0,0,0.1);
+width:360px;
 text-align:center;
 }
-button{
-padding:12px 20px;
-margin:10px;
-border-radius:10px;
-border:none;
-font-size:16px;
-cursor:pointer;
+
+h1{
+margin-bottom:5px;
 }
-.guest{background:#35513c;color:white;}
-.team{background:#a5764e;color:white;}
-.owner{background:#e6d7c3;}
+
+h3{
+margin-top:0;
+color:#7a6a5b;
+font-weight:normal;
+}
+
+.menu{
+margin-top:30px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+a{
+text-decoration:none;
+padding:14px;
+border-radius:10px;
+font-weight:bold;
+}
+
+.guide{background:#35513c;color:white;}
+.info{background:#a5764e;color:white;}
+.local{background:#7f8f7a;color:white;}
+.trail{background:#4d6a84;color:white;}
+.checkout{background:#e6d7c3;color:#3b2c1e;}
+
 </style>
+
 </head>
 
 <body>
+
 <div class="card">
+
 <h1>Darbys Ridge</h1>
 <h3>Welcome to the Ridge</h3>
 
-<p>Your cabin guide and guest portal.</p>
+<p>Your guide to the cabin and Blue Ridge.</p>
 
-<button class="guest">Guest Portal</button>
-<button class="team">Darbys Ridge Team</button>
-<button class="owner">Owner Login</button>
+<div class="menu">
+
+<a class="guide" href="#">Welcome Guide</a>
+
+<a class="info" href="#">Cabin Info</a>
+
+<a class="local" href="#">Local Favorites</a>
+
+<a class="trail" href="#">Trail to Lake</a>
+
+<a class="checkout" href="#">Checkout Checklist</a>
 
 </div>
+
+</div>
+
 </body>
 </html>
