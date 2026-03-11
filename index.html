@@ -1,87 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Darbys Ridge</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f5efe7;
-margin:0;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-}
-
-.card{
-background:white;
-padding:40px;
-border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
-width:360px;
-text-align:center;
-}
-
-h1{
-margin-bottom:5px;
-}
-
-h3{
-margin-top:0;
-color:#7a6a5b;
-font-weight:normal;
-}
-
-.menu{
-margin-top:30px;
-display:flex;
-flex-direction:column;
-gap:12px;
-}
-
-a{
-text-decoration:none;
-padding:14px;
-border-radius:10px;
-font-weight:bold;
-}
-
-.guide{background:#35513c;color:white;}
-.info{background:#a5764e;color:white;}
-.local{background:#7f8f7a;color:white;}
-.trail{background:#4d6a84;color:white;}
-.checkout{background:#e6d7c3;color:#3b2c1e;}
-
-</style>
-
+  <title>Darbys Ridge</title>
+  <style>
+    body{
+      font-family:Arial;
+      background:#f5efe7;
+      margin:0;
+      color:#3b2c1e;
+    }
+    .container{
+      max-width:420px;
+      margin:0 auto;
+      min-height:100vh;
+      background:white;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    }
+    .hero{
+      background:#a5764e;
+      color:white;
+      padding:32px 24px;
+      text-align:center;
+    }
+    h1{
+      margin:0 0 6px 0;
+      font-size:32px;
+    }
+    h2{
+      margin:0;
+      font-size:20px;
+      font-weight:normal;
+    }
+    .section{
+      padding:22px;
+      border-bottom:1px solid #eee;
+    }
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:18px;
+    }
+    a.button{
+      text-decoration:none;
+      padding:14px;
+      border-radius:10px;
+      font-weight:bold;
+      text-align:center;
+      display:block;
+    }
+    .guide{background:#35513c;color:white;}
+    .info{background:#a5764e;color:white;}
+    .local{background:#7f8f7a;color:white;}
+    .trail{background:#4d6a84;color:white;}
+    .checkout{background:#e6d7c3;color:#3b2c1e;}
+    .back{
+      color:#35513c;
+      text-decoration:none;
+      font-weight:bold;
+      display:inline-block;
+      margin-bottom:14px;
+    }
+    .hidden{display:none;}
+  </style>
 </head>
-
 <body>
 
-<div class="card">
+<div id="home" class="container">
+  <div class="hero">
+    <h1>Darbys Ridge</h1>
+    <h2>Welcome to the Ridge</h2>
+    <p>Your guide to the cabin and Blue Ridge.</p>
+  </div>
 
-<h1>Darbys Ridge</h1>
-<h3>Welcome to the Ridge</h3>
-
-<p>Your guide to the cabin and Blue Ridge.</p>
-
-<div class="menu">
-
-<a class="guide" href="#">Welcome Guide</a>
-
-<a class="info" href="#">Cabin Info</a>
-
-<a class="local" href="#">Local Favorites</a>
-
-<a class="trail" href="#">Trail to Lake</a>
-
-<a class="checkout" href="#">Checkout Checklist</a>
-
+  <div class="section">
+    <div class="menu">
+      <a class="button guide" href="#" onclick="showPage('welcome')">Welcome Guide</a>
+      <a class="button info" href="#">Cabin Info</a>
+      <a class="button local" href="#">Local Favorites</a>
+      <a class="button trail" href="#">Trail to Lake</a>
+      <a class="button checkout" href="#">Checkout Checklist</a>
+    </div>
+  </div>
 </div>
 
+<div id="welcome" class="container hidden">
+  <div class="hero">
+    <h1>Darbys Ridge</h1>
+    <h2>Welcome to the Ridge</h2>
+  </div>
+
+  <div class="section">
+    <a class="back" href="#" onclick="showPage('home')">← Back</a>
+    <p>We’re so glad you’ve chosen Darby’s Ridge for your stay in beautiful Blue Ridge, Georgia.</p>
+    <p>Our goal is to make you feel right at home while giving you a true mountain retreat experience.</p>
+    <p>Whether you’re here to unwind in the hot tub, gather with loved ones by the fire, or explore the trails and downtown just minutes away, we’ve designed every detail to make your stay unforgettable.</p>
+    <p>Take a deep breath, pour yourself a drink from the bourbon bar, and let the stress melt away.</p>
+    <p><strong>Welcome home.</strong></p>
+    <p>Warmly,<br>Paula &amp; Steve</p>
+  </div>
 </div>
+
+<script>
+  function showPage(page){
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById(page).classList.remove('hidden');
+  }
+</script>
 
 </body>
 </html>
