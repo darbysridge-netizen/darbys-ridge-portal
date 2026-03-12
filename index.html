@@ -1,299 +1,522 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Darby's Ridge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Darby's Ridge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{
+      --background:#e2d2bd;
+      --panel:#efe4d3;
+      --card:#f7efe3;
+      --text:#3a2a1d;
+      --muted:#6f5b49;
+      --line:#d3c2aa;
+      --button:#e9d9c5;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Allura&family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    *{box-sizing:border-box}
 
-<style>
+    body{
+      margin:0;
+      background:var(--background);
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+    }
 
-:root{
---background:#e2d2bd;
---panel:#efe4d3;
---card:#f7efe3;
---text:#3a2a1d;
---line:#d3c2aa;
-}
+    .phone{
+      max-width:430px;
+      margin:auto;
+      background:var(--panel);
+      min-height:100vh;
+      padding-bottom:90px;
+    }
 
-*{box-sizing:border-box}
+    .hero{
+      height:460px;
+      background:url('hero.jpg') center/cover no-repeat;
+      border-bottom-left-radius:30px;
+      border-bottom-right-radius:30px;
+      position:relative;
+      overflow:hidden;
+    }
 
-body{
-margin:0;
-background:var(--background);
-font-family:'Inter',sans-serif;
-color:var(--text);
-}
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.6));
+    }
 
-.phone{
-max-width:430px;
-margin:auto;
-background:var(--panel);
-min-height:100vh;
-padding-bottom:90px;
-}
+    .hero-text{
+      position:absolute;
+      bottom:40px;
+      left:28px;
+      right:28px;
+      color:white;
+      z-index:2;
+    }
 
-.hero{
-height:460px;
-background:url('hero.jpg') center/cover no-repeat;
-border-bottom-left-radius:30px;
-border-bottom-right-radius:30px;
-position:relative;
-overflow:hidden;
-}
+    .logo{
+      font-family:'Allura',cursive;
+      font-size:64px;
+      line-height:1;
+      margin:0;
+      letter-spacing:.5px;
+      text-shadow:0 3px 10px rgba(0,0,0,.35);
+    }
 
-.hero::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.6));
-}
+    .tagline{
+      font-family:'Libre Baskerville',serif;
+      font-size:18px;
+      margin-top:10px;
+    }
 
-.hero-text{
-position:absolute;
-bottom:40px;
-left:28px;
-right:28px;
-color:white;
-z-index:2;
-}
+    .description{
+      margin-top:12px;
+      max-width:280px;
+      line-height:1.5;
+      color:rgba(255,255,255,.9);
+    }
 
-.logo{
-font-family:'Allura',cursive;
-font-size:64px;
-line-height:1;
-margin:0;
-letter-spacing:.5px;
-text-shadow:0 3px 10px rgba(0,0,0,.35);
-}
+    .content{
+      padding:22px;
+    }
 
-.tagline{
-font-family:'Libre Baskerville',serif;
-font-size:18px;
-margin-top:10px;
-}
+    .section-title{
+      font-family:'Libre Baskerville',serif;
+      font-size:22px;
+      margin-bottom:16px;
+    }
 
-.description{
-margin-top:12px;
-max-width:280px;
-line-height:1.5;
-color:rgba(255,255,255,.9);
-}
+    .card-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
 
-.content{
-padding:22px;
-}
+    .menu-card{
+      aspect-ratio:1/1;
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      box-shadow:0 8px 22px rgba(0,0,0,.15);
+    }
 
-.section-title{
-font-family:'Libre Baskerville',serif;
-font-size:22px;
-margin-bottom:16px;
-}
+    .menu-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
 
-.card-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
+    .menu-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,.1));
+    }
 
-.menu-card{
-aspect-ratio:1/1;
-border-radius:18px;
-overflow:hidden;
-position:relative;
-cursor:pointer;
-box-shadow:0 8px 22px rgba(0,0,0,.15);
-}
+    .menu-label{
+      position:absolute;
+      bottom:12px;
+      left:14px;
+      right:14px;
+      color:white;
+      z-index:2;
+    }
 
-.menu-card img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
+    .menu-label span{
+      font-size:11px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      opacity:.9;
+    }
 
-.menu-card::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,.1));
-}
+    .menu-label strong{
+      display:block;
+      font-family:'Libre Baskerville',serif;
+      font-size:19px;
+      line-height:1.2;
+    }
 
-.menu-label{
-position:absolute;
-bottom:12px;
-left:14px;
-right:14px;
-color:white;
-z-index:2;
-}
+    .social, .card, .info-card, .place-card, .checklist-item{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
 
-.menu-label span{
-font-size:11px;
-letter-spacing:.1em;
-text-transform:uppercase;
-opacity:.9;
-}
+    .social{
+      margin-top:22px;
+      padding:18px;
+    }
 
-.menu-label strong{
-display:block;
-font-family:'Libre Baskerville',serif;
-font-size:19px;
-}
+    .social h3{
+      font-family:'Libre Baskerville',serif;
+      margin:0 0 10px;
+    }
 
-.social{
-margin-top:22px;
-padding:18px;
-border-radius:16px;
-background:var(--card);
-border:1px solid var(--line);
-}
+    .social p{
+      margin:0 0 10px;
+      color:var(--muted);
+      line-height:1.5;
+    }
 
-.social h3{
-font-family:'Libre Baskerville',serif;
-margin:0 0 10px;
-}
+    .social-links a, .action-link, .place-card a{
+      display:block;
+      margin-top:10px;
+      padding:14px;
+      background:var(--button);
+      border-radius:12px;
+      text-decoration:none;
+      color:var(--text);
+      font-weight:600;
+      border:1px solid var(--line);
+    }
 
-.social-links a{
-display:block;
-margin-top:10px;
-padding:14px;
-background:#e9d9c5;
-border-radius:12px;
-text-decoration:none;
-color:var(--text);
-font-weight:600;
-}
+    .social-links small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-weight:500;
+    }
 
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:50%;
-transform:translateX(-50%);
-max-width:430px;
-width:100%;
-background:#e2d2bd;
-border-top:1px solid var(--line);
-display:flex;
-justify-content:space-around;
-padding:14px 0;
-}
+    .hidden{
+      display:none;
+    }
 
-.bottom-nav a{
-text-decoration:none;
-color:#5b4636;
-font-size:13px;
-font-weight:600;
-cursor:pointer;
-}
+    .page{
+      padding:22px;
+      background:var(--panel);
+      min-height:100vh;
+    }
 
-</style>
+    .page h1{
+      font-family:'Libre Baskerville',serif;
+      font-size:32px;
+      margin:0 0 12px;
+    }
+
+    .page-sub{
+      color:var(--muted);
+      margin:0 0 18px;
+      line-height:1.5;
+    }
+
+    .back{
+      display:inline-block;
+      margin-bottom:14px;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .card{
+      padding:16px;
+      margin-bottom:12px;
+      line-height:1.6;
+    }
+
+    .info-card{
+      padding:16px;
+      margin-bottom:12px;
+      line-height:1.6;
+    }
+
+    .info-card strong{
+      display:block;
+      margin-bottom:6px;
+      font-family:'Libre Baskerville',serif;
+    }
+
+    .place-card{
+      padding:16px;
+      margin-bottom:12px;
+    }
+
+    .place-card h3{
+      margin:0 0 8px;
+      font-size:20px;
+      font-family:'Libre Baskerville',serif;
+    }
+
+    .place-card p{
+      margin:0 0 12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .checklist-item{
+      padding:16px;
+      margin-bottom:12px;
+      line-height:1.5;
+    }
+
+    .checklist-item strong{
+      display:block;
+      margin-bottom:4px;
+      font-family:'Libre Baskerville',serif;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;
+      left:50%;
+      transform:translateX(-50%);
+      max-width:430px;
+      width:100%;
+      background:#e2d2bd;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-around;
+      padding:14px 0;
+    }
+
+    .bottom-nav a{
+      text-decoration:none;
+      color:#5b4636;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="home" class="phone">
+  <div id="home" class="phone">
+    <div class="hero">
+      <div class="hero-text">
+        <h1 class="logo">Darby's Ridge</h1>
+        <div class="tagline">Welcome to the Ridge</div>
+        <div class="description">
+          Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
+        </div>
+      </div>
+    </div>
 
-<div class="hero">
+    <div class="content">
+      <div class="section-title">Guest Guide</div>
 
-<div class="hero-text">
+      <div class="card-grid">
+        <div class="menu-card" onclick="showPage('welcome')">
+          <img src="cabin-exterior.jpg" alt="Cabin Guide">
+          <div class="menu-label">
+            <span>Darby's Ridge</span>
+            <strong>Cabin Guide</strong>
+          </div>
+        </div>
 
-<h1 class="logo">Darby's Ridge</h1>
+        <div class="menu-card" onclick="showPage('info')">
+          <img src="essentials.jpg" alt="WiFi and Essentials">
+          <div class="menu-label">
+            <span>Stay Details</span>
+            <strong>WiFi & Essentials</strong>
+          </div>
+        </div>
 
-<div class="tagline">Welcome to the Ridge</div>
+        <div class="menu-card" onclick="showPage('local')">
+          <img src="local.jpg" alt="Local Favorites">
+          <div class="menu-label">
+            <span>Blue Ridge</span>
+            <strong>Local Favorites</strong>
+          </div>
+        </div>
 
-<div class="description">
-Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
-</div>
+        <div class="menu-card" onclick="showPage('trail')">
+          <img src="trail.jpg" alt="Trail to Lake">
+          <div class="menu-label">
+            <span>Adventure</span>
+            <strong>Trail to Lake</strong>
+          </div>
+        </div>
 
-</div>
+        <div class="menu-card" onclick="showPage('photos')">
+          <img src="outdoor.jpg" alt="Share Photos">
+          <div class="menu-label">
+            <span>Memories</span>
+            <strong>Share Photos</strong>
+          </div>
+        </div>
 
-</div>
+        <div class="menu-card" onclick="showPage('checkout')">
+          <img src="interior.jpg" alt="Checkout">
+          <div class="menu-label">
+            <span>Before You Go</span>
+            <strong>Checkout</strong>
+          </div>
+        </div>
+      </div>
 
-<div class="content">
+      <div class="social">
+        <h3>Follow Darby's Ridge</h3>
+        <p>Stay connected, follow along, and see more of the cabin experience.</p>
 
-<div class="section-title">Guest Guide</div>
+        <div class="social-links">
+          <a href="https://instagram.com/darbysridge" target="_blank">
+            Instagram
+            <small>@darbysridge</small>
+          </a>
 
-<div class="card-grid">
+          <a href="https://www.facebook.com/darbysridge/" target="_blank">
+            Facebook
+            <small>Darby's Ridge</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="menu-card">
-<img src="cabin-exterior.jpg">
-<div class="menu-label">
-<span>Darby's Ridge</span>
-<strong>Cabin Guide</strong>
-</div>
-</div>
+  <div id="welcome" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Welcome Guide</h1>
+    <p class="page-sub">A warm welcome to your Blue Ridge stay.</p>
 
-<div class="menu-card">
-<img src="essentials.jpg">
-<div class="menu-label">
-<span>Stay Details</span>
-<strong>WiFi & Essentials</strong>
-</div>
-</div>
+    <div class="card">
+      <p>We’re so glad you’ve chosen Darby’s Ridge for your stay in beautiful Blue Ridge, Georgia.</p>
+      <p>Our goal is to make you feel right at home while giving you a true mountain retreat experience.</p>
+      <p>Whether you’re here to unwind in the hot tub, gather with loved ones by the fire, or explore the trails and charming downtown just minutes away, we hope every detail makes your stay unforgettable.</p>
+      <p><strong>Welcome home.</strong></p>
+      <p>Warmly,<br>Paula &amp; Steve</p>
+    </div>
+  </div>
 
-<div class="menu-card">
-<img src="local.jpg">
-<div class="menu-label">
-<span>Blue Ridge</span>
-<strong>Local Favorites</strong>
-</div>
-</div>
+  <div id="info" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>WiFi & Essentials</h1>
+    <p class="page-sub">Everything you need for an easy, comfortable stay.</p>
 
-<div class="menu-card">
-<img src="trail.jpg">
-<div class="menu-label">
-<span>Adventure</span>
-<strong>Trail to Lake</strong>
-</div>
-</div>
+    <div class="info-card">
+      <strong>WiFi</strong>
+      Network: NETGEAR56<br>
+      Password: elegantboat149
+    </div>
 
-<div class="menu-card">
-<img src="outdoor.jpg">
-<div class="menu-label">
-<span>Memories</span>
-<strong>Share Photos</strong>
-</div>
-</div>
+    <div class="info-card">
+      <strong>Check-in / Check-out</strong>
+      Check-in: 4:00 PM<br>
+      Check-out: 10:00 AM
+    </div>
 
-<div class="menu-card">
-<img src="interior.jpg">
-<div class="menu-label">
-<span>Before You Go</span>
-<strong>Checkout</strong>
-</div>
-</div>
+    <div class="info-card">
+      <strong>Quiet Hours</strong>
+      10:00 PM – 8:00 AM
+    </div>
 
-</div>
+    <div class="info-card">
+      <strong>Need Help?</strong>
+      Lesley – Co-Host<br>
+      727-954-7594
+      <a class="action-link" href="tel:7279547594">Call / Text Lesley</a>
+    </div>
+  </div>
 
-<div class="social">
+  <div id="local" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Local Favorites</h1>
+    <p class="page-sub">A few of our favorite Blue Ridge spots.</p>
 
-<h3>Follow Darby's Ridge</h3>
+    <div class="place-card">
+      <h3>Harvest on Main</h3>
+      <p>Cozy elevated dinner and Southern mountain charm.</p>
+      <a href="https://www.google.com/maps/search/Harvest+on+Main+Blue+Ridge+GA" target="_blank">Open in Maps</a>
+    </div>
 
-<div class="social-links">
+    <div class="place-card">
+      <h3>Black Sheep</h3>
+      <p>Craft cocktails and creative Southern dishes in a beautiful historic home.</p>
+      <a href="https://www.google.com/maps/search/Black+Sheep+Blue+Ridge+GA" target="_blank">Open in Maps</a>
+    </div>
 
-<a href="https://instagram.com/darbysridge" target="_blank">
-Instagram — @darbysridge
-</a>
+    <div class="place-card">
+      <h3>Toccoa Riverside Restaurant</h3>
+      <p>Fresh trout and river views right on the water.</p>
+      <a href="https://www.google.com/maps/search/Toccoa+Riverside+Restaurant+Blue+Ridge+GA" target="_blank">Open in Maps</a>
+    </div>
 
-<a href="https://www.facebook.com/darbysridge/" target="_blank">
-Facebook — Darby's Ridge
-</a>
+    <div class="place-card">
+      <h3>Mercier Orchards</h3>
+      <p>Bakery, cider, market, and one of the best local stops.</p>
+      <a href="https://www.google.com/maps/search/Mercier+Orchards+Blue+Ridge+GA" target="_blank">Open in Maps</a>
+    </div>
+  </div>
 
-</div>
+  <div id="trail" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Trail to Lake</h1>
+    <p class="page-sub">A favorite part of the Darby’s Ridge experience.</p>
 
-</div>
+    <div class="card">
+      <p><strong>Green Mountain Trail System</strong></p>
+      <p>Direct access from the property with scenic forest paths and access toward Lake Blue Ridge.</p>
+      <p>Please use caution — trails can be steep, slippery, and conditions change with weather.</p>
+    </div>
+  </div>
 
-</div>
-</div>
+  <div id="photos" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Share Photos</h1>
+    <p class="page-sub">A place for guest memories will live here next.</p>
 
-<div class="bottom-nav">
-<a>Home</a>
-<a>Favorites</a>
-<a>Photos</a>
-<a>Checkout</a>
-</div>
+    <div class="card">
+      <p>This page is the next feature we should build. Guests will be able to upload their favorite stay photos here.</p>
+    </div>
+  </div>
+
+  <div id="checkout" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Checkout</h1>
+    <p class="page-sub">A quick checklist before you head out.</p>
+
+    <div class="checklist-item">
+      <strong>1</strong>
+      Load any remaining dirty dishes and start the dishwasher.
+    </div>
+
+    <div class="checklist-item">
+      <strong>2</strong>
+      Remove all food items you brought with you.
+    </div>
+
+    <div class="checklist-item">
+      <strong>3</strong>
+      Empty trash into the outdoor bear-proof bin.
+    </div>
+
+    <div class="checklist-item">
+      <strong>4</strong>
+      Place used towels in the laundry area.
+    </div>
+
+    <div class="checklist-item">
+      <strong>5</strong>
+      Lock all doors and windows before leaving.
+    </div>
+
+    <div class="checklist-item">
+      <strong>6</strong>
+      Text us when you depart so we can alert the cleaning team.
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('local')">Favorites</a>
+    <a onclick="showPage('photos')">Photos</a>
+    <a onclick="showPage('checkout')">Checkout</a>
+  </div>
+
+  <script>
+    function showPage(page){
+      const pages = ['home','welcome','info','local','trail','photos','checkout'];
+      pages.forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(page).classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
+  </script>
 
 </body>
 </html>
