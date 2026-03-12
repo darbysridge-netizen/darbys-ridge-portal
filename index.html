@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Darby's Ridge</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
-  :root{
---cream:#e9dccb;
---paper:#efe4d3;
---text:#3f2d1f;
+:root{
+--background:#d8c6ae;
+--panel:#e7d7c4;
+--card:#f0e4d3;
+--text:#3a2a1d;
 --muted:#6f5b49;
---line:#d7c7b2;
+--line:#c7b298;
 }
 
 *{box-sizing:border-box}
 
 body{
 margin:0;
-background:var(--cream);
-font-family:'Inter',sans-serif;
+background:var(--background);
+font-family:'Source Sans 3',sans-serif;
 color:var(--text);
 }
 
 .phone{
 max-width:430px;
 margin:auto;
-background:var(--paper);
+background:var(--panel);
 min-height:100vh;
 padding-bottom:90px;
 }
 
 .hero{
-height:420px;
+height:430px;
 background:url('hero.jpg') center/cover no-repeat;
-border-bottom-left-radius:28px;
-border-bottom-right-radius:28px;
+border-bottom-left-radius:30px;
+border-bottom-right-radius:30px;
 position:relative;
 overflow:hidden;
 }
@@ -54,21 +54,22 @@ background:linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.55));
 
 .hero-text{
 position:absolute;
-bottom:28px;
-left:22px;
-right:22px;
+bottom:30px;
+left:24px;
+right:24px;
 color:white;
 z-index:2;
 }
 
 .hero-text h1{
 margin:0;
-font-size:40px;
-font-family:'Playfair Display',serif;
+font-size:44px;
+font-family:'Cormorant Garamond',serif;
+letter-spacing:.5px;
 }
 
 .hero-text h2{
-margin:6px 0 0;
+margin:4px 0 0;
 font-weight:500;
 font-size:20px;
 }
@@ -81,13 +82,14 @@ color:rgba(255,255,255,.9);
 }
 
 .content{
-padding:20px;
+padding:22px;
 }
 
 .section-title{
-font-size:18px;
+font-size:20px;
 font-weight:600;
 margin-bottom:14px;
+font-family:'Cormorant Garamond',serif;
 }
 
 .card-grid{
@@ -102,7 +104,7 @@ border-radius:18px;
 overflow:hidden;
 position:relative;
 cursor:pointer;
-box-shadow:0 6px 18px rgba(0,0,0,.12);
+box-shadow:0 8px 22px rgba(0,0,0,.15);
 }
 
 .menu-card img{
@@ -115,7 +117,7 @@ object-fit:cover;
 content:"";
 position:absolute;
 inset:0;
-background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.15));
+background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.1));
 }
 
 .menu-label{
@@ -129,38 +131,41 @@ z-index:2;
 
 .menu-label span{
 font-size:11px;
-letter-spacing:.08em;
+letter-spacing:.1em;
 text-transform:uppercase;
 opacity:.9;
 }
 
 .menu-label strong{
 display:block;
-font-size:18px;
+font-size:19px;
+font-family:'Cormorant Garamond',serif;
 }
 
 .social{
 margin-top:22px;
-padding:18px;
+padding:20px;
 border-radius:16px;
-background:white;
+background:var(--card);
 border:1px solid var(--line);
 }
 
 .social h3{
-font-family:'Playfair Display',serif;
-margin:0 0 10px;
+font-family:'Cormorant Garamond',serif;
+margin:0 0 12px;
+font-size:24px;
 }
 
 .social-links a{
 display:block;
 margin-top:10px;
 padding:14px;
-background:#f8f2e9;
+background:#e5d3bf;
 border-radius:12px;
 text-decoration:none;
 color:var(--text);
 font-weight:600;
+border:1px solid var(--line);
 }
 
 .bottom-nav{
@@ -170,7 +175,7 @@ left:50%;
 transform:translateX(-50%);
 max-width:430px;
 width:100%;
-background:white;
+background:#d8c6ae;
 border-top:1px solid var(--line);
 display:flex;
 justify-content:space-around;
@@ -179,7 +184,7 @@ padding:14px 0;
 
 .bottom-nav a{
 text-decoration:none;
-color:#6a5646;
+color:#5b4636;
 font-size:13px;
 font-weight:600;
 }
@@ -187,23 +192,26 @@ font-weight:600;
 .hidden{display:none}
 
 .page{
-padding:20px;
+padding:22px;
+background:var(--panel);
+min-height:100vh;
 }
 
 .page h1{
-font-family:'Playfair Display',serif;
-margin-bottom:10px;
+font-family:'Cormorant Garamond',serif;
+font-size:32px;
+margin-bottom:12px;
 }
 
 .back{
 display:inline-block;
-margin-bottom:12px;
+margin-bottom:14px;
 font-weight:600;
 cursor:pointer;
 }
 
 .card{
-background:white;
+background:var(--card);
 padding:16px;
 border-radius:14px;
 border:1px solid var(--line);
@@ -211,6 +219,7 @@ margin-bottom:12px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -220,9 +229,12 @@ margin-bottom:12px;
 <div class="hero">
 
 <div class="hero-text">
+
 <h1>Darby's Ridge</h1>
 <h2>Welcome to the Ridge</h2>
+
 <p>Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.</p>
+
 </div>
 
 </div>
@@ -290,12 +302,12 @@ margin-bottom:12px;
 <div class="social-links">
 
 <a href="https://instagram.com/darbysridge" target="_blank">
-Instagram<br>
+Instagram  
 <small>@darbysridge</small>
 </a>
 
 <a href="https://www.facebook.com/darbysridge/" target="_blank">
-Facebook<br>
+Facebook  
 <small>Darby's Ridge</small>
 </a>
 
@@ -306,103 +318,13 @@ Facebook<br>
 </div>
 </div>
 
-<div id="welcome" class="phone hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Welcome Guide</h1>
-
-<div class="card">
-<p>We’re so glad you’ve chosen Darby’s Ridge for your stay in beautiful Blue Ridge, Georgia.</p>
-<p>Whether you're here to relax in the hot tub, explore trails, or enjoy the mountain views, we hope your stay is unforgettable.</p>
-<p>Warmly,<br>Paula & Steve</p>
-</div>
-</div>
-
-<div id="info" class="phone hidden page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h1>WiFi & Essentials</h1>
-
-<div class="card">
-<strong>WiFi</strong><br>
-Network: NETGEAR56<br>
-Password: elegantboat149
-</div>
-
-<div class="card">
-<strong>Check-in</strong><br>
-4:00 PM
-</div>
-
-<div class="card">
-<strong>Check-out</strong><br>
-10:00 AM
-</div>
-
-<div class="card">
-<strong>Need Help?</strong><br>
-Lesley – Co-Host<br>
-727-954-7594
-</div>
-
-</div>
-
-<div id="local" class="phone hidden page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h1>Local Favorites</h1>
-
-<div class="card">Harvest on Main</div>
-<div class="card">Black Sheep</div>
-<div class="card">Mercier Orchards</div>
-<div class="card">Toccoa Riverside</div>
-
-</div>
-
-<div id="trail" class="phone hidden page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h1>Trail to Lake</h1>
-
-<div class="card">
-Green Mountain Trail connects directly from the property and leads toward Lake Blue Ridge.
-</div>
-
-</div>
-
-<div id="photos" class="phone hidden page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h1>Share Photos</h1>
-
-<div class="card">
-Guest photo uploads will live here soon.
-</div>
-
-</div>
-
-<div id="checkout" class="phone hidden page">
-
-<div class="back" onclick="showPage('home')">← Back</div>
-
-<h1>Checkout</h1>
-
-<div class="card">Start dishwasher</div>
-<div class="card">Take trash to outdoor bin</div>
-<div class="card">Place used towels in laundry</div>
-<div class="card">Lock doors</div>
-<div class="card">Text when departing</div>
-
-</div>
-
 <div class="bottom-nav">
+
 <a onclick="showPage('home')">Home</a>
 <a onclick="showPage('local')">Favorites</a>
 <a onclick="showPage('photos')">Photos</a>
 <a onclick="showPage('checkout')">Checkout</a>
+
 </div>
 
 <script>
