@@ -4,7 +4,7 @@
   <title>Darby's Ridge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -15,6 +15,7 @@
       --muted:#6f5b49;
       --line:#d3c2aa;
       --button:#e9d9c5;
+      --green:#445b49;
     }
 
     *{box-sizing:border-box}
@@ -22,7 +23,7 @@
     body{
       margin:0;
       background:var(--background);
-      font-family:'Inter',sans-serif;
+      font-family:'Source Sans 3',sans-serif;
       color:var(--text);
     }
 
@@ -47,12 +48,12 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.6));
+      background:linear-gradient(to bottom,rgba(0,0,0,.18),rgba(0,0,0,.62));
     }
 
     .hero-text{
       position:absolute;
-      bottom:40px;
+      bottom:38px;
       left:28px;
       right:28px;
       color:white;
@@ -69,8 +70,8 @@
     }
 
     .tagline{
-      font-family:'Libre Baskerville',serif;
-      font-size:18px;
+      font-family:'Playfair Display',serif;
+      font-size:19px;
       margin-top:10px;
     }
 
@@ -78,7 +79,8 @@
       margin-top:12px;
       max-width:280px;
       line-height:1.5;
-      color:rgba(255,255,255,.9);
+      color:rgba(255,255,255,.92);
+      font-size:16px;
     }
 
     .content{
@@ -86,8 +88,8 @@
     }
 
     .section-title{
-      font-family:'Libre Baskerville',serif;
-      font-size:22px;
+      font-family:'Playfair Display',serif;
+      font-size:23px;
       margin-bottom:16px;
     }
 
@@ -117,7 +119,7 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,.1));
+      background:linear-gradient(to top,rgba(0,0,0,.66),rgba(0,0,0,.10));
     }
 
     .menu-label{
@@ -138,12 +140,12 @@
 
     .menu-label strong{
       display:block;
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
       font-size:19px;
       line-height:1.2;
     }
 
-    .social, .card, .info-card, .place-card, .checklist-item{
+    .social, .card, .info-card, .place-card, .checklist-item, .team-card{
       background:var(--card);
       border:1px solid var(--line);
       border-radius:16px;
@@ -155,7 +157,7 @@
     }
 
     .social h3{
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
       margin:0 0 10px;
     }
 
@@ -184,6 +186,18 @@
       font-weight:500;
     }
 
+    .team-access{
+      margin-top:14px;
+      text-align:center;
+    }
+
+    .team-access a{
+      color:var(--green);
+      font-weight:600;
+      text-decoration:none;
+      cursor:pointer;
+    }
+
     .hidden{
       display:none;
     }
@@ -195,7 +209,7 @@
     }
 
     .page h1{
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
       font-size:32px;
       margin:0 0 12px;
     }
@@ -228,7 +242,7 @@
     .info-card strong{
       display:block;
       margin-bottom:6px;
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
     }
 
     .place-card{
@@ -239,7 +253,7 @@
     .place-card h3{
       margin:0 0 8px;
       font-size:20px;
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
     }
 
     .place-card p{
@@ -257,7 +271,29 @@
     .checklist-item strong{
       display:block;
       margin-bottom:4px;
-      font-family:'Libre Baskerville',serif;
+      font-family:'Playfair Display',serif;
+    }
+
+    .team-card{
+      padding:16px;
+      margin-bottom:12px;
+      line-height:1.6;
+    }
+
+    .team-card h3{
+      margin:0 0 8px;
+      font-size:20px;
+      font-family:'Playfair Display',serif;
+    }
+
+    .team-list{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+
+    .team-list li{
+      margin-bottom:8px;
     }
 
     .bottom-nav{
@@ -289,7 +325,7 @@
     <div class="hero">
       <div class="hero-text">
         <h1 class="logo">Darby's Ridge</h1>
-        <div class="tagline">Welcome to the Ridge</div>
+        <div class="tagline">Your Blue Ridge Escape</div>
         <div class="description">
           Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
         </div>
@@ -363,6 +399,10 @@
             Facebook
             <small>Darby's Ridge</small>
           </a>
+        </div>
+
+        <div class="team-access">
+          <a onclick="showPage('team')">Team Access</a>
         </div>
       </div>
     </div>
@@ -500,6 +540,37 @@
     </div>
   </div>
 
+  <div id="team" class="phone hidden page">
+    <div class="back" onclick="showPage('home')">← Back</div>
+    <h1>Darby's Ridge Team</h1>
+    <p class="page-sub">A simple cleaner portal for turnover tasks and updates.</p>
+
+    <div class="team-card">
+      <h3>Today's Turnover</h3>
+      <ul class="team-list">
+        <li>Check beds and start linens</li>
+        <li>Restock coffee, paper products, and toiletries</li>
+        <li>Check hot tub and deck area</li>
+        <li>Take turnover photos</li>
+      </ul>
+    </div>
+
+    <div class="team-card">
+      <h3>Photo Uploads</h3>
+      <p>Kitchen, bathrooms, bedrooms, deck, hot tub, and any damage notes will live here in the full version.</p>
+    </div>
+
+    <div class="team-card">
+      <h3>Report an Issue</h3>
+      <p>This is where cleaners will be able to flag damage, low supplies, or maintenance needs.</p>
+    </div>
+
+    <div class="team-card">
+      <h3>Schedule</h3>
+      <p>Upcoming turnover dates and assignments will be added here next.</p>
+    </div>
+  </div>
+
   <div class="bottom-nav">
     <a onclick="showPage('home')">Home</a>
     <a onclick="showPage('local')">Favorites</a>
@@ -509,7 +580,7 @@
 
   <script>
     function showPage(page){
-      const pages = ['home','welcome','info','local','trail','photos','checkout'];
+      const pages = ['home','welcome','info','local','trail','photos','checkout','team'];
       pages.forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
