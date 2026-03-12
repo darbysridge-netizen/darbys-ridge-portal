@@ -3,144 +3,196 @@
 <head>
   <title>Darbys Ridge</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
+    :root{
+      --cream:#f7f1e8;
+      --paper:#fcf8f2;
+      --wood:#a87a53;
+      --wood-dark:#7d583a;
+      --green:#3f5a47;
+      --text:#3f2d1f;
+      --muted:#6f5b49;
+      --line:#eadfce;
+      --shadow:0 10px 28px rgba(60,40,20,.08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+
     body{
       margin:0;
-      font-family: Arial, sans-serif;
-      background:#efe7dc;
-      color:#3f2d1f;
+      background:var(--cream);
+      color:var(--text);
+      font-family:'Inter',sans-serif;
     }
 
     .phone{
       max-width:430px;
       margin:0 auto;
       min-height:100vh;
-      background:#fbf7f1;
-      box-shadow:0 8px 28px rgba(0,0,0,0.08);
+      background:var(--paper);
+      box-shadow:var(--shadow);
       position:relative;
-      padding-bottom:90px;
+      padding-bottom:88px;
     }
 
-    .hero-image{
-      height:240px;
-      background:linear-gradient(180deg,#8f6849,#c6a07d);
-      border-bottom-left-radius:28px;
-      border-bottom-right-radius:28px;
+    .hero{
+      position:relative;
+      height:280px;
+      border-bottom-left-radius:30px;
+      border-bottom-right-radius:30px;
+      overflow:hidden;
+      background:url('hero.jpg') center/cover no-repeat;
     }
 
-    .hero-copy{
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.38));
+    }
+
+    .hero-text{
+      position:absolute;
+      left:24px;
+      right:24px;
+      bottom:22px;
+      z-index:2;
+      color:white;
+    }
+
+    .hero-text h1{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:36px;
+      line-height:1.05;
+      letter-spacing:.2px;
+    }
+
+    .hero-text h2{
+      margin:8px 0 0;
+      font-size:20px;
+      font-weight:500;
+      color:rgba(255,255,255,.92);
+    }
+
+    .intro{
       padding:22px 22px 8px;
       text-align:center;
     }
 
-    .hero-copy h1{
-      margin:0;
-      font-size:34px;
-      color:#4a3524;
-    }
-
-    .hero-copy h2{
-      margin:8px 0 0;
-      font-size:22px;
-      font-weight:normal;
-      color:#7a5d43;
-    }
-
-    .hero-copy p{
-      margin:14px auto 0;
-      line-height:1.55;
-      color:#6a5646;
+    .intro p{
+      margin:0 auto;
       max-width:340px;
+      color:var(--muted);
+      line-height:1.55;
       font-size:15px;
     }
 
     .content{
-      padding:18px;
+      padding:16px 18px 22px;
     }
 
     .section-title{
+      margin:0 0 14px;
       font-size:18px;
-      font-weight:bold;
-      color:#4a3524;
-      margin:8px 0 14px;
+      font-weight:600;
+      color:var(--text);
     }
 
     .card-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:12px;
+      gap:14px;
     }
 
     .menu-card{
-      background:white;
-      border-radius:18px;
-      padding:18px 16px;
-      box-shadow:0 4px 14px rgba(0,0,0,0.06);
+      display:block;
       text-decoration:none;
-      color:#3f2d1f;
-      min-height:92px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
+      color:white;
+      min-height:150px;
+      border-radius:20px;
+      overflow:hidden;
+      position:relative;
+      box-shadow:0 8px 20px rgba(60,40,20,.10);
       cursor:pointer;
-      border:1px solid #eee2d4;
+      background:#c9b39b;
     }
 
-    .menu-card .icon{
-      font-size:22px;
-      margin-bottom:10px;
+    .menu-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
-    .menu-card .label{
-      font-weight:bold;
-      font-size:16px;
-      line-height:1.25;
+    .menu-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top, rgba(25,18,12,.72), rgba(25,18,12,.12));
     }
 
-    .accent-guide{border-top:5px solid #35513c;}
-    .accent-info{border-top:5px solid #a5764e;}
-    .accent-local{border-top:5px solid #6f8167;}
-    .accent-trail{border-top:5px solid #6b8aa0;}
-    .accent-photos{border-top:5px solid #b98758;}
-    .accent-checkout{border-top:5px solid #d8c3aa;}
+    .menu-label{
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:14px;
+      z-index:2;
+    }
+
+    .menu-label span{
+      display:block;
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      opacity:.9;
+      margin-bottom:4px;
+    }
+
+    .menu-label strong{
+      display:block;
+      font-size:17px;
+      line-height:1.2;
+      font-weight:600;
+    }
+
+    .feature-card,
+    .card,
+    .list-item{
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:0 4px 14px rgba(60,40,20,.05);
+    }
 
     .feature-card{
-      background:white;
-      border-radius:18px;
-      padding:18px;
-      box-shadow:0 4px 14px rgba(0,0,0,0.06);
       margin-top:16px;
-      border:1px solid #eee2d4;
+      padding:18px;
     }
 
     .feature-card strong{
       display:block;
       margin-bottom:8px;
-      color:#4a3524;
       font-size:16px;
     }
 
-    .feature-card p{
+    .feature-card p,
+    .card p{
       margin:0;
-      line-height:1.55;
-      color:#5f4c3c;
+      line-height:1.6;
+      color:var(--muted);
     }
 
-    .hidden{
-      display:none;
-    }
-
-    .back{
-      display:inline-block;
-      margin-bottom:14px;
-      color:#35513c;
-      font-weight:bold;
-      text-decoration:none;
-      cursor:pointer;
-    }
+    .hidden{display:none}
 
     .inner-hero{
-      background:linear-gradient(180deg,#a97a52,#c8a27f);
+      background:linear-gradient(180deg, var(--wood), #c59e78);
       color:white;
       padding:28px 22px 24px;
       border-bottom-left-radius:24px;
@@ -149,44 +201,48 @@
 
     .inner-hero h1{
       margin:0;
-      font-size:30px;
+      font-family:'Playfair Display',serif;
+      font-size:31px;
     }
 
     .inner-hero h2{
       margin:6px 0 0;
       font-size:20px;
-      font-weight:normal;
+      font-weight:500;
       opacity:.95;
     }
 
+    .page-content{
+      padding:18px;
+    }
+
+    .back{
+      display:inline-block;
+      margin-bottom:14px;
+      color:var(--green);
+      font-weight:600;
+      text-decoration:none;
+      cursor:pointer;
+    }
+
+    .card{
+      padding:18px;
+      margin-top:8px;
+    }
+
+    .card p{
+      margin:10px 0;
+    }
+
     .list-item{
-      background:#fff;
-      border-radius:14px;
       padding:14px 16px;
       margin-bottom:10px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.05);
-      border:1px solid #eee2d4;
     }
 
     .list-item strong{
       display:block;
-      margin-bottom:4px;
-      color:#3f2d1f;
-    }
-
-    .card{
-      background:white;
-      border-radius:18px;
-      padding:18px;
-      box-shadow:0 4px 14px rgba(0,0,0,0.06);
-      margin-top:14px;
-      border:1px solid #eee2d4;
-    }
-
-    .card p{
-      margin:8px 0;
-      line-height:1.55;
-      color:#5b4635;
+      margin-bottom:5px;
+      color:var(--text);
     }
 
     .bottom-nav{
@@ -196,25 +252,27 @@
       bottom:0;
       width:100%;
       max-width:430px;
-      background:white;
-      border-top:1px solid #e6ddd2;
+      background:rgba(255,255,255,.95);
+      backdrop-filter:blur(10px);
+      border-top:1px solid var(--line);
       display:flex;
       justify-content:space-around;
       padding:10px 0 14px;
-      box-shadow:0 -4px 20px rgba(0,0,0,0.05);
+      box-shadow:0 -4px 18px rgba(60,40,20,.05);
     }
 
     .bottom-nav a{
       text-decoration:none;
       color:#6a5646;
-      font-size:13px;
+      font-size:12px;
       text-align:center;
       cursor:pointer;
+      font-weight:500;
     }
 
     .bottom-nav span{
       display:block;
-      font-size:22px;
+      font-size:20px;
       margin-bottom:4px;
     }
   </style>
@@ -222,52 +280,73 @@
 <body>
 
   <div id="home" class="phone">
-    <div class="hero-image"></div>
+    <div class="hero">
+      <div class="hero-text">
+        <h1>Darbys Ridge</h1>
+        <h2>Welcome to the Ridge</h2>
+      </div>
+    </div>
 
-    <div class="hero-copy">
-      <h1>Darbys Ridge</h1>
-      <h2>Welcome to the Ridge</h2>
-      <p>Your guide to the cabin, local favorites, and everything you need for your stay.</p>
+    <div class="intro">
+      <p>Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.</p>
     </div>
 
     <div class="content">
       <div class="section-title">Guest Guide</div>
 
       <div class="card-grid">
-        <a class="menu-card accent-guide" onclick="showPage('welcome')">
-          <div class="icon">🏡</div>
-          <div class="label">Welcome Guide</div>
+        <a class="menu-card" onclick="showPage('welcome')">
+          <img src="cabin-exterior.jpg" alt="Cabin Guide">
+          <div class="menu-label">
+            <span>Darbys Ridge</span>
+            <strong>Cabin Guide</strong>
+          </div>
         </a>
 
-        <a class="menu-card accent-info" onclick="showPage('info')">
-          <div class="icon">📶</div>
-          <div class="label">WiFi & Essentials</div>
+        <a class="menu-card" onclick="showPage('info')">
+          <img src="essentials.jpg" alt="WiFi and Essentials">
+          <div class="menu-label">
+            <span>Stay Details</span>
+            <strong>WiFi & Essentials</strong>
+          </div>
         </a>
 
-        <a class="menu-card accent-local" onclick="showPage('local')">
-          <div class="icon">🍽</div>
-          <div class="label">Local Favorites</div>
+        <a class="menu-card" onclick="showPage('local')">
+          <img src="local.jpg" alt="Local Favorites">
+          <div class="menu-label">
+            <span>Blue Ridge</span>
+            <strong>Local Favorites</strong>
+          </div>
         </a>
 
-        <a class="menu-card accent-trail" onclick="showPage('trail')">
-          <div class="icon">🥾</div>
-          <div class="label">Trail to Lake</div>
+        <a class="menu-card" onclick="showPage('trail')">
+          <img src="trail.jpg" alt="Trail to Lake">
+          <div class="menu-label">
+            <span>Adventure</span>
+            <strong>Trail to Lake</strong>
+          </div>
         </a>
 
-        <a class="menu-card accent-photos" onclick="showPage('photos')">
-          <div class="icon">📷</div>
-          <div class="label">Share Photos</div>
+        <a class="menu-card" onclick="showPage('photos')">
+          <img src="outdoor.jpg" alt="Share Photos">
+          <div class="menu-label">
+            <span>Memories</span>
+            <strong>Share Photos</strong>
+          </div>
         </a>
 
-        <a class="menu-card accent-checkout" onclick="showPage('checkout')">
-          <div class="icon">✔</div>
-          <div class="label">Checkout</div>
+        <a class="menu-card" onclick="showPage('checkout')">
+          <img src="interior.jpg" alt="Checkout">
+          <div class="menu-label">
+            <span>Before You Go</span>
+            <strong>Checkout</strong>
+          </div>
         </a>
       </div>
 
       <div class="feature-card">
-        <strong>Quick Access</strong>
-        <p>Everything guests need in one place: WiFi, cabin info, local recommendations, trail notes, and checkout instructions.</p>
+        <strong>Everything in one place</strong>
+        <p>Cabin details, local recommendations, trail access, checkout instructions, and more — all right here for an easy stay.</p>
       </div>
     </div>
   </div>
@@ -277,7 +356,7 @@
       <h1>Darbys Ridge</h1>
       <h2>Welcome Guide</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
       <div class="card">
         <p>We’re so glad you’ve chosen Darby’s Ridge for your stay in beautiful Blue Ridge, Georgia.</p>
@@ -292,9 +371,9 @@
   <div id="info" class="phone hidden">
     <div class="inner-hero">
       <h1>Darbys Ridge</h1>
-      <h2>Cabin Info</h2>
+      <h2>WiFi & Essentials</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
 
       <div class="list-item">
@@ -327,7 +406,7 @@
       <h1>Darbys Ridge</h1>
       <h2>Local Favorites</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
 
       <div class="list-item">
@@ -357,9 +436,8 @@
       <h1>Darbys Ridge</h1>
       <h2>Trail to Lake</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
-
       <div class="card">
         <p><strong>Green Mountain Trail System</strong></p>
         <p>Direct access from Darby’s Ridge property with scenic forest paths and access toward Lake Blue Ridge.</p>
@@ -373,9 +451,8 @@
       <h1>Darbys Ridge</h1>
       <h2>Share Photos</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
-
       <div class="card">
         <p>Photo uploads will live here in the full version.</p>
         <p>Guests will be able to share favorite memories from their stay.</p>
@@ -386,9 +463,9 @@
   <div id="checkout" class="phone hidden">
     <div class="inner-hero">
       <h1>Darbys Ridge</h1>
-      <h2>Checkout Checklist</h2>
+      <h2>Checkout</h2>
     </div>
-    <div class="content">
+    <div class="page-content">
       <a class="back" onclick="showPage('home')">← Back</a>
 
       <div class="list-item"><strong>1</strong> Load any remaining dirty dishes and start the dishwasher.</div>
