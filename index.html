@@ -19,7 +19,6 @@
       --muted:#6f5b49;
       --line:#eadfce;
       --shadow:0 10px 28px rgba(60,40,20,.08);
-      --radius:22px;
     }
 
     *{box-sizing:border-box}
@@ -43,7 +42,7 @@
 
     .hero{
       position:relative;
-      height:280px;
+      height:360px;
       border-bottom-left-radius:30px;
       border-bottom-right-radius:30px;
       overflow:hidden;
@@ -54,22 +53,23 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.38));
+      background:linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.45));
     }
 
     .hero-text{
       position:absolute;
       left:24px;
       right:24px;
-      bottom:22px;
+      bottom:26px;
       z-index:2;
       color:white;
+      text-align:left;
     }
 
     .hero-text h1{
       margin:0;
       font-family:'Playfair Display',serif;
-      font-size:36px;
+      font-size:38px;
       line-height:1.05;
       letter-spacing:.2px;
     }
@@ -164,7 +164,8 @@
 
     .feature-card,
     .card,
-    .list-item{
+    .list-item,
+    .social-card{
       background:white;
       border:1px solid var(--line);
       border-radius:18px;
@@ -187,6 +188,47 @@
       margin:0;
       line-height:1.6;
       color:var(--muted);
+    }
+
+    .social-card{
+      margin-top:16px;
+      padding:18px;
+    }
+
+    .social-card h3{
+      margin:0 0 8px;
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      color:var(--text);
+    }
+
+    .social-card p{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .social-links{
+      display:grid;
+      gap:10px;
+    }
+
+    .social-links a{
+      display:block;
+      text-decoration:none;
+      color:var(--text);
+      background:#f8f2e9;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px 16px;
+      font-weight:600;
+    }
+
+    .social-links small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-weight:500;
     }
 
     .hidden{display:none}
@@ -257,7 +299,7 @@
       border-top:1px solid var(--line);
       display:flex;
       justify-content:space-around;
-      padding:10px 0 14px;
+      padding:12px 0 14px;
       box-shadow:0 -4px 18px rgba(60,40,20,.05);
     }
 
@@ -267,13 +309,7 @@
       font-size:12px;
       text-align:center;
       cursor:pointer;
-      font-weight:500;
-    }
-
-    .bottom-nav span{
-      display:block;
-      font-size:20px;
-      margin-bottom:4px;
+      font-weight:600;
     }
   </style>
 </head>
@@ -283,7 +319,7 @@
     <div class="hero">
       <div class="hero-text">
         <h1>Darby's Ridge</h1>
-        <h2>Your Blue Ridge Mountain Escape</h2>
+        <h2>Welcome to the Ridge</h2>
       </div>
     </div>
 
@@ -347,6 +383,23 @@
       <div class="feature-card">
         <strong>Everything in one place</strong>
         <p>Cabin details, local recommendations, trail access, checkout instructions, and more — all right here for an easy stay.</p>
+      </div>
+
+      <div class="social-card">
+        <h3>Follow Darby's Ridge</h3>
+        <p>Stay connected, follow along, and see more of the cabin experience.</p>
+
+        <div class="social-links">
+          <a href="https://instagram.com/darbysridge" target="_blank">
+            Instagram
+            <small>@darbysridge</small>
+          </a>
+
+          <a href="https://www.facebook.com/darbysridge/" target="_blank">
+            Facebook
+            <small>Darby's Ridge</small>
+          </a>
+        </div>
       </div>
     </div>
   </div>
