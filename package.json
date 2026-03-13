@@ -2,7 +2,6 @@
   "name": "darbys-ridge",
   "version": "1.0.0",
   "dependencies": {
-    "twilio": "^5.0.0",
-    "node-ical": "^0.20.1"
+    "twilio": "^5.0.0"
   }
 }
