@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Darby's Ridge</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-
 body{
 margin:0;
 background:#e2d2bd;
@@ -179,6 +176,7 @@ border-top:1px solid #d3c2aa;
 display:flex;
 justify-content:space-around;
 padding:14px 0;
+z-index:10;
 }
 
 .bottom-nav a{
@@ -197,12 +195,13 @@ display:none;
 padding:22px;
 background:#efe4d3;
 min-height:100vh;
-padding-bottom:100px;
+padding-bottom:110px;
 }
 
 .page h1{
 font-family:'Playfair Display',serif;
 font-size:30px;
+margin-top:0;
 }
 
 .back{
@@ -212,8 +211,82 @@ font-weight:600;
 cursor:pointer;
 }
 
-</style>
+.panel{
+background:#f7efe3;
+padding:18px;
+border-radius:16px;
+margin-top:14px;
+}
 
+.panel h3{
+margin-top:0;
+font-family:'Playfair Display',serif;
+}
+
+.button-link,
+button{
+display:block;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#445b49;
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+text-align:center;
+box-sizing:border-box;
+}
+
+.button-link{
+text-decoration:none;
+margin-top:12px;
+}
+
+.secondary-btn{
+background:#e9d9c5;
+color:#3c2c1f;
+}
+
+input, select, textarea{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #d3c2aa;
+font-size:15px;
+margin-top:8px;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+background:white;
+}
+
+label{
+display:block;
+margin-top:14px;
+font-weight:600;
+font-size:14px;
+}
+
+.form-message{
+display:none;
+margin-top:12px;
+padding:12px;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
+}
+
+.form-success{
+background:#e6f4ea;
+color:#25613a;
+}
+
+.form-error{
+background:#fdecea;
+color:#9b3d2f;
+}
+</style>
 </head>
 
 <body>
@@ -221,9 +294,7 @@ cursor:pointer;
 <div id="home" class="phone">
 
 <div class="hero">
-
 <div class="hero-text">
-
 <h1 class="logo">Darby's Ridge</h1>
 
 <div class="tagline">
@@ -233,9 +304,7 @@ Your Blue Ridge Escape
 <div class="description">
 Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
 </div>
-
 </div>
-
 </div>
 
 <div class="content">
@@ -297,34 +366,21 @@ Guest Guide
 </div>
 
 <div class="social">
-
 <h3>Follow Darby's Ridge</h3>
-
 <p>Stay connected and see more of the cabin experience.</p>
 
 <div class="social-links">
-
-<a href="https://instagram.com/darbysridge" target="_blank">
-Instagram
-</a>
-
-<a href="https://www.facebook.com/darbysridge/" target="_blank">
-Facebook
-</a>
-
+<a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
+<a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
 </div>
 
 <div class="team-access">
 <a onclick="showPage('login')">Team Access</a>
 </div>
-
 </div>
 
 </div>
-
 </div>
-
-<!-- PAGES -->
 
 <div id="welcome" class="hidden page">
 <div class="back" onclick="showPage('home')">← Back</div>
@@ -366,45 +422,20 @@ Facebook
 <div class="back" onclick="showPage('home')">← Back</div>
 <h1>Team Access</h1>
 
-<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
+<div class="panel">
   <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
 
   <input
     id="teamPassword"
     type="password"
     placeholder="Enter password"
-    style="
-      width:100%;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #d3c2aa;
-      font-size:15px;
-      margin-top:8px;
-      box-sizing:border-box;
-    "
   >
 
-  <div id="loginError" style="display:none; color:#9b3d2f; margin-top:10px; font-size:14px; font-weight:600;">
+  <div id="loginError" class="form-message form-error">
     Incorrect password. Please try again.
   </div>
 
-  <button
-    onclick="checkLogin()"
-    style="
-      width:100%;
-      margin-top:14px;
-      padding:14px;
-      border:none;
-      border-radius:12px;
-      background:#445b49;
-      color:white;
-      font-size:15px;
-      font-weight:600;
-      cursor:pointer;
-    "
-  >
-    Enter Team Portal
-  </button>
+  <button onclick="checkLogin()">Enter Team Portal</button>
 </div>
 </div>
 
@@ -412,8 +443,8 @@ Facebook
 <div class="back" onclick="showPage('home')">← Back</div>
 <h1>Cleaning Team Portal</h1>
 
-<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
-  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Turnover Checklist</h3>
+<div class="panel">
+  <h3>Turnover Checklist</h3>
   <ul style="line-height:1.7; padding-left:18px;">
     <li>Make all beds and fluff pillows</li>
     <li>Clean and reset bathrooms</li>
@@ -426,14 +457,85 @@ Facebook
   </ul>
 </div>
 
-<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
-  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Supplies to Check</h3>
-  <p>Toilet paper, paper towels, trash bags, dish pods, hand soap, coffee supplies, laundry items, and guest welcome touches.</p>
+<div class="panel">
+  <h3>Operations</h3>
+  <button onclick="showPage('supply')">Supply Request</button>
+  <button class="secondary-btn" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
+</div>
 </div>
 
-<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
-  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Maintenance Notes</h3>
-  <p>Add any damage, low inventory, stains, missing items, or anything that needs attention before the next guest arrives.</p>
+<div id="supply" class="hidden page">
+<div class="back" onclick="showPage('team')">← Back</div>
+<h1>Supply Request</h1>
+
+<div class="panel">
+  <label for="supplyRequestedBy">Requested By</label>
+  <input id="supplyRequestedBy" type="text" placeholder="Cleaner name">
+
+  <label for="supplyCategory">Category</label>
+  <select id="supplyCategory">
+    <option value="">Select category</option>
+    <option>Kitchen</option>
+    <option>Bathroom</option>
+    <option>Laundry</option>
+    <option>Welcome Items</option>
+    <option>Outdoor / Hot Tub</option>
+    <option>Other</option>
+  </select>
+
+  <label for="supplyItem">Item Needed</label>
+  <input id="supplyItem" type="text" placeholder="Dish pods, toilet paper, coffee, etc.">
+
+  <label for="supplyQuantity">Quantity Needed</label>
+  <input id="supplyQuantity" type="text" placeholder="2 packs, 1 case, etc.">
+
+  <label for="supplyUrgency">Urgency</label>
+  <select id="supplyUrgency">
+    <option value="">Select urgency</option>
+    <option>Low</option>
+    <option>Medium</option>
+    <option>Urgent</option>
+  </select>
+
+  <label for="supplyNotes">Notes</label>
+  <textarea id="supplyNotes" rows="5" placeholder="Anything else you want to note"></textarea>
+
+  <div id="supplySuccess" class="form-message form-success">Supply request submitted.</div>
+  <div id="supplyError" class="form-message form-error">There was a problem submitting this request.</div>
+
+  <button onclick="submitSupplyRequest()">Submit Supply Request</button>
+</div>
+</div>
+
+<div id="maintenance" class="hidden page">
+<div class="back" onclick="showPage('team')">← Back</div>
+<h1>Maintenance Request</h1>
+
+<div class="panel">
+  <label for="maintenanceReportedBy">Reported By</label>
+  <input id="maintenanceReportedBy" type="text" placeholder="Cleaner name">
+
+  <label for="maintenanceArea">Area</label>
+  <input id="maintenanceArea" type="text" placeholder="Kitchen, deck, hot tub, bedroom, etc.">
+
+  <label for="maintenanceIssueType">Issue Type</label>
+  <input id="maintenanceIssueType" type="text" placeholder="Broken, leaking, stained, not working, etc.">
+
+  <label for="maintenancePriority">Priority</label>
+  <select id="maintenancePriority">
+    <option value="">Select priority</option>
+    <option>Low</option>
+    <option>Medium</option>
+    <option>Urgent</option>
+  </select>
+
+  <label for="maintenanceDescription">Description</label>
+  <textarea id="maintenanceDescription" rows="5" placeholder="Describe the issue"></textarea>
+
+  <div id="maintenanceSuccess" class="form-message form-success">Maintenance request submitted.</div>
+  <div id="maintenanceError" class="form-message form-error">There was a problem submitting this request.</div>
+
+  <button onclick="submitMaintenanceRequest()">Submit Maintenance Request</button>
 </div>
 </div>
 
@@ -445,10 +547,11 @@ Facebook
 </div>
 
 <script>
+<script>
 
 function showPage(page){
 
-const pages=['home','welcome','info','local','trail','photos','checkout','login','team'];
+const pages=['home','welcome','info','local','trail','photos','checkout','login','team','supply','maintenance'];
 
 pages.forEach(id=>{
 const el=document.getElementById(id);
@@ -461,18 +564,142 @@ if(target){
 target.classList.remove('hidden');
 window.scrollTo(0,0);
 }
+
 }
 
 function checkLogin(){
+
 const password=document.getElementById('teamPassword').value;
 const error=document.getElementById('loginError');
 
 if(password === 'ridgecrew'){
 error.style.display='none';
 showPage('team');
-} else {
+}
+else{
 error.style.display='block';
 }
+
+}
+
+function hideMessages(ids){
+
+ids.forEach(id=>{
+const el=document.getElementById(id);
+if(el) el.style.display='none';
+});
+
+}
+
+
+async function submitSupplyRequest(){
+
+hideMessages(['supplySuccess','supplyError']);
+
+const payload = {
+
+type:'supply',
+requestedBy:document.getElementById('supplyRequestedBy').value,
+category:document.getElementById('supplyCategory').value,
+item:document.getElementById('supplyItem').value,
+quantity:document.getElementById('supplyQuantity').value,
+urgency:document.getElementById('supplyUrgency').value,
+notes:document.getElementById('supplyNotes').value
+
+};
+
+try{
+
+const response = await fetch('/api/send-text',{
+
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(payload)
+
+});
+
+const result = await response.json();
+
+if(result.success){
+
+document.getElementById('supplySuccess').style.display='block';
+
+document.getElementById('supplyRequestedBy').value='';
+document.getElementById('supplyCategory').value='';
+document.getElementById('supplyItem').value='';
+document.getElementById('supplyQuantity').value='';
+document.getElementById('supplyUrgency').value='';
+document.getElementById('supplyNotes').value='';
+
+}
+else{
+
+document.getElementById('supplyError').style.display='block';
+
+}
+
+}
+catch(e){
+
+document.getElementById('supplyError').style.display='block';
+
+}
+
+}
+
+
+
+async function submitMaintenanceRequest(){
+
+hideMessages(['maintenanceSuccess','maintenanceError']);
+
+const payload = {
+
+type:'maintenance',
+reportedBy:document.getElementById('maintenanceReportedBy').value,
+area:document.getElementById('maintenanceArea').value,
+issueType:document.getElementById('maintenanceIssueType').value,
+priority:document.getElementById('maintenancePriority').value,
+description:document.getElementById('maintenanceDescription').value
+
+};
+
+try{
+
+const response = await fetch('/api/send-text',{
+
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify(payload)
+
+});
+
+const result = await response.json();
+
+if(result.success){
+
+document.getElementById('maintenanceSuccess').style.display='block';
+
+document.getElementById('maintenanceReportedBy').value='';
+document.getElementById('maintenanceArea').value='';
+document.getElementById('maintenanceIssueType').value='';
+document.getElementById('maintenancePriority').value='';
+document.getElementById('maintenanceDescription').value='';
+
+}
+else{
+
+document.getElementById('maintenanceError').style.display='block';
+
+}
+
+}
+catch(e){
+
+document.getElementById('maintenanceError').style.display='block';
+
+}
+
 }
 
 </script>
