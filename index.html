@@ -100,6 +100,7 @@ box-shadow:0 8px 18px rgba(0,0,0,.15);
 width:100%;
 height:100%;
 object-fit:cover;
+display:block;
 }
 
 .menu-card:after{
@@ -196,6 +197,7 @@ display:none;
 padding:22px;
 background:#efe4d3;
 min-height:100vh;
+padding-bottom:100px;
 }
 
 .page h1{
@@ -322,7 +324,6 @@ Facebook
 
 </div>
 
-
 <!-- PAGES -->
 
 <div id="welcome" class="hidden page">
@@ -434,21 +435,20 @@ Facebook
   <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Maintenance Notes</h3>
   <p>Add any damage, low inventory, stains, missing items, or anything that needs attention before the next guest arrives.</p>
 </div>
+</div>
 
 <div class="bottom-nav">
-
 <a onclick="showPage('home')">Home</a>
 <a onclick="showPage('local')">Favorites</a>
 <a onclick="showPage('photos')">Photos</a>
 <a onclick="showPage('checkout')">Checkout</a>
-
 </div>
 
 <script>
 
 function showPage(page){
 
-const pages=['home','welcome','info','local','trail','photos','checkout','login','Team'];
+const pages=['home','welcome','info','local','trail','photos','checkout','login','team'];
 
 pages.forEach(id=>{
 const el=document.getElementById(id);
@@ -461,7 +461,18 @@ if(target){
 target.classList.remove('hidden');
 window.scrollTo(0,0);
 }
+}
 
+function checkLogin(){
+const password=document.getElementById('teamPassword').value;
+const error=document.getElementById('loginError');
+
+if(password === 'ridgecrew'){
+error.style.display='none';
+showPage('team');
+} else {
+error.style.display='block';
+}
 }
 
 </script>
