@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Darby's Ridge</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -254,6 +254,11 @@ background:#e9d9c5;
 color:#3c2c1f;
 }
 
+button.tertiary-btn{
+background:#d8c3aa;
+color:#3c2c1f;
+}
+
 input, select, textarea{
 width:100%;
 padding:14px;
@@ -291,6 +296,50 @@ color:#25613a;
 .form-error{
 background:#fdecea;
 color:#9b3d2f;
+}
+
+.small-note{
+font-size:13px;
+color:#6d5a49;
+line-height:1.5;
+}
+
+.status-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.status-row:last-child{
+border-bottom:none;
+padding-bottom:0;
+}
+
+.status-pill{
+background:#445b49;
+color:white;
+padding:6px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+white-space:nowrap;
+}
+
+.status-pill.soft{
+background:#c9b299;
+color:#3c2c1f;
+}
+
+.check-list{
+padding-left:18px;
+line-height:1.7;
+}
+
+.divider-space{
+height:8px;
 }
 </style>
 </head>
@@ -380,37 +429,60 @@ color:#9b3d2f;
 <div id="welcome" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Welcome Guide</h1>
-  <p>Welcome to Darby's Ridge. We're so glad you're here.</p>
+  <div class="panel">
+    <p>Welcome to Darby's Ridge. We're so glad you're here.</p>
+    <p class="small-note">This is where your warm welcome message, quick cabin notes, and first-night tips can go.</p>
+  </div>
 </div>
 
 <div id="info" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>WiFi & Essentials</h1>
-  <p>Add WiFi name, password, hot tub info, and cabin instructions here.</p>
+  <div class="panel">
+    <p><strong>WiFi:</strong> Add network name</p>
+    <p><strong>Password:</strong> Add password</p>
+    <p><strong>Check-in details:</strong> Add entry instructions here.</p>
+    <p><strong>Cabin notes:</strong> Hot tub, TV, fireplace, trash, parking, etc.</p>
+  </div>
 </div>
 
 <div id="local" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Local Favorites</h1>
-  <p>Add your favorite Blue Ridge restaurants, breweries, and activities.</p>
+  <div class="panel">
+    <p>Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.</p>
+  </div>
 </div>
 
 <div id="trail" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Trail to Lake</h1>
-  <p>Information about the Green Mountain Trail access from the property.</p>
+  <div class="panel">
+    <p>Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.</p>
+  </div>
 </div>
 
 <div id="photos" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Share Photos</h1>
-  <p>Tag @darbysridge on Instagram and Facebook.</p>
+  <div class="panel">
+    <p>Tag @darbysridge on Instagram and Facebook.</p>
+    <p class="small-note">You can also add a cabin hashtag here later.</p>
+  </div>
 </div>
 
 <div id="checkout" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Checkout</h1>
-  <p>Dishwasher, trash, lock doors, safe travels.</p>
+  <div class="panel">
+    <ul class="check-list">
+      <li>Load and start dishwasher</li>
+      <li>Bag trash and place in designated area</li>
+      <li>Turn off lights</li>
+      <li>Lock doors</li>
+      <li>Safe travels and thank you for staying with us</li>
+    </ul>
+  </div>
 </div>
 
 <div id="login" class="hidden page">
@@ -418,7 +490,7 @@ color:#9b3d2f;
   <h1>Team Access</h1>
 
   <div class="panel">
-    <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
+    <p style="margin-top:0;">Enter the cleaning team password to access the operations portal.</p>
     <input id="teamPassword" type="password" placeholder="Enter password">
     <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
     <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
@@ -431,7 +503,7 @@ color:#9b3d2f;
 
   <div class="panel">
     <h3>Turnover Checklist</h3>
-    <ul style="line-height:1.7; padding-left:18px;">
+    <ul class="check-list">
       <li>Make all beds and fluff pillows</li>
       <li>Clean and reset bathrooms</li>
       <li>Wipe kitchen counters and appliances</li>
@@ -445,8 +517,78 @@ color:#9b3d2f;
 
   <div class="panel">
     <h3>Operations</h3>
-    <button class="action-btn" type="button" onclick="showPage('supply')">Supply Request</button>
-    <button class="action-btn secondary-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
+    <button class="action-btn" type="button" onclick="showPage('cleanings')">Upcoming Cleanings</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('inventory')" style="margin-top:12px;">Inventory Checklist</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('supply')" style="margin-top:12px;">Supply Request</button>
+    <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('owner')" style="margin-top:12px;">Owner Dashboard</button>
+  </div>
+</div>
+
+<div id="cleanings" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upcoming Cleanings</h1>
+
+  <div class="panel">
+    <h3>Airbnb Calendar Connection</h3>
+    <p>This is the section we’ll connect to your Airbnb calendar feed.</p>
+    <p class="small-note">For now, this page is the layout for check-outs, check-ins, and turnover status. Once you copy your Airbnb calendar link, we’ll wire it in here.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Next Turnovers</h3>
+
+    <div class="status-row">
+      <div>
+        <strong>Darby's Ridge</strong><br>
+        <span class="small-note">Checkout: Add Airbnb date</span><br>
+        <span class="small-note">Next check-in: Add Airbnb date</span>
+      </div>
+      <div class="status-pill">Needs Review</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Cleaner Assigned</strong><br>
+        <span class="small-note">Add cleaner name here</span>
+      </div>
+      <div class="status-pill soft">Pending</div>
+    </div>
+  </div>
+</div>
+
+<div id="inventory" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Inventory Checklist</h1>
+
+  <div class="panel">
+    <h3>Kitchen</h3>
+    <ul class="check-list">
+      <li>Coffee supplies</li>
+      <li>Dish pods</li>
+      <li>Paper towels</li>
+      <li>Trash bags</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Bathrooms</h3>
+    <ul class="check-list">
+      <li>Toilet paper</li>
+      <li>Hand soap</li>
+      <li>Shampoo / conditioner / body wash</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Laundry / Extras</h3>
+    <ul class="check-list">
+      <li>Laundry pods</li>
+      <li>Linens / backup towels</li>
+      <li>Welcome items</li>
+      <li>Outdoor / hot tub items</li>
+    </ul>
   </div>
 </div>
 
@@ -525,6 +667,64 @@ color:#9b3d2f;
   </div>
 </div>
 
+<div id="turnover" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Turnover Complete</h1>
+
+  <div class="panel">
+    <label for="turnoverCleaner">Cleaner Name</label>
+    <input id="turnoverCleaner" type="text" placeholder="Cleaner name">
+
+    <label for="turnoverDate">Turnover Date</label>
+    <input id="turnoverDate" type="text" placeholder="Enter date">
+
+    <label for="turnoverNotes">Turnover Notes</label>
+    <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
+
+    <div id="turnoverSuccess" class="form-message form-success">Turnover marked complete.</div>
+
+    <button class="action-btn" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
+  </div>
+</div>
+
+<div id="owner" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Owner Dashboard</h1>
+
+  <div class="panel">
+    <h3>Today’s Snapshot</h3>
+
+    <div class="status-row">
+      <div>
+        <strong>Open Supply Requests</strong><br>
+        <span class="small-note">Placeholder count until tracking is connected</span>
+      </div>
+      <div class="status-pill">0</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Open Maintenance Issues</strong><br>
+        <span class="small-note">Placeholder count until tracking is connected</span>
+      </div>
+      <div class="status-pill">0</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Next Turnover</strong><br>
+        <span class="small-note">This will tie to Airbnb calendar</span>
+      </div>
+      <div class="status-pill soft">Pending</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Owner Notes</h3>
+    <p class="small-note">This is where we can later add live request history, maintenance tracking, calendar view, and cabin readiness status.</p>
+  </div>
+</div>
+
 <div class="bottom-nav">
   <button type="button" onclick="showPage('home')">Home</button>
   <button type="button" onclick="showPage('local')">Favorites</button>
@@ -534,11 +734,13 @@ color:#9b3d2f;
 
 <script>
 function showPage(page){
-  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','supply','maintenance'];
+  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','cleanings','inventory','supply','maintenance','turnover','owner'];
+
   pages.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.add('hidden');
   });
+
   const target = document.getElementById(page);
   if (target) {
     target.classList.remove('hidden');
@@ -549,6 +751,7 @@ function showPage(page){
 function checkLogin(){
   const password = document.getElementById('teamPassword').value;
   const error = document.getElementById('loginError');
+
   if (password === 'ridgecrew') {
     error.style.display = 'none';
     showPage('team');
@@ -644,6 +847,14 @@ async function submitMaintenanceRequest(){
     err.textContent = e.message || 'There was a problem submitting this request.';
     err.style.display = 'block';
   }
+}
+
+function submitTurnoverComplete(){
+  hideMessages(['turnoverSuccess']);
+  document.getElementById('turnoverSuccess').style.display = 'block';
+  document.getElementById('turnoverCleaner').value = '';
+  document.getElementById('turnoverDate').value = '';
+  document.getElementById('turnoverNotes').value = '';
 }
 </script>
 
