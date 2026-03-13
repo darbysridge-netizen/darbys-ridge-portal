@@ -13,6 +13,7 @@ function parseICalEvents(icsText) {
   const events = [];
 
   for (const block of blocks) {
+
     const startMatch = block.match(/DTSTART(?:;VALUE=DATE)?:(\d{8})/);
     const endMatch = block.match(/DTEND(?:;VALUE=DATE)?:(\d{8})/);
 
@@ -22,51 +23,51 @@ function parseICalEvents(icsText) {
     const endRaw = endMatch[1];
 
     const start = new Date(
-      `${startRaw.slice(0,4)}-${startRaw.slice(4,6)}-${startRaw.slice(6,8)}T00:00:00`
+      `${startRaw.slice(0,4)}-${startRaw.slice(4,6)}-${startRaw.slice(6,8)}`
     );
 
     const end = new Date(
-      `${endRaw.slice(0,4)}-${endRaw.slice(4,6)}-${endRaw.slice(6,8)}T00:00:00`
+      `${endRaw.slice(0,4)}-${endRaw.slice(4,6)}-${endRaw.slice(6,8)}`
     );
 
     events.push({ start, end });
+
   }
 
-  return events.sort((a, b) => a.start - b.start);
+  return events.sort((a,b)=>a.start-b.start);
 }
 
-module.exports = async function handler(req, res) {
-  try {
+module.exports = async function handler(req,res){
+
+  try{
+
     const response = await fetch(AIRBNB_ICAL_URL);
-
-    if (!response.ok) {
-      return res.status(500).json({
-        success: false,
-        error: `Calendar fetch failed: ${response.status}`
-      });
-    }
-
     const icsText = await response.text();
+
     const events = parseICalEvents(icsText);
     const today = new Date();
 
-    const upcomingBookings = events
+    const bookings = events
       .filter(event => event.end >= today)
       .map(event => ({
         checkIn: formatDate(event.start),
         checkOut: formatDate(event.end)
       }));
 
-    return res.status(200).json({
-      success: true,
-      bookings: upcomingBookings
+    res.status(200).json({
+      success:true,
+      bookings
     });
-  } catch (error) {
-    console.error("Calendar error:", error);
 
-    return res.status(500).json({
-      success: false,
-      error: error.message || "Unable to read Airbnb calendar"
+  } catch(error){
+
+    console.error(error);
+
+    res.status(500).json({
+      success:false,
+      error:"Calendar failed to load"
     });
+
   }
+
 };
