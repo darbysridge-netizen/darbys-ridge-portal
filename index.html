@@ -157,11 +157,14 @@ margin-top:14px;
 text-align:center;
 }
 
-.team-access a{
+.team-access button{
+background:none;
+border:none;
 color:#445b49;
 font-weight:600;
-text-decoration:none;
+font-size:16px;
 cursor:pointer;
+padding:0;
 }
 
 .bottom-nav{
@@ -179,8 +182,9 @@ padding:14px 0;
 z-index:10;
 }
 
-.bottom-nav a{
-text-decoration:none;
+.bottom-nav button{
+background:none;
+border:none;
 color:#5b4636;
 font-size:13px;
 font-weight:600;
@@ -188,10 +192,12 @@ cursor:pointer;
 }
 
 .hidden{
-display:none;
+display:none !important;
 }
 
 .page{
+max-width:430px;
+margin:auto;
 padding:22px;
 background:#efe4d3;
 min-height:100vh;
@@ -209,6 +215,11 @@ display:inline-block;
 margin-bottom:14px;
 font-weight:600;
 cursor:pointer;
+background:none;
+border:none;
+color:#3c2c1f;
+padding:0;
+font-size:16px;
 }
 
 .panel{
@@ -224,7 +235,7 @@ font-family:'Playfair Display',serif;
 }
 
 .button-link,
-button{
+button.action-btn{
 display:block;
 width:100%;
 padding:14px;
@@ -239,12 +250,7 @@ text-align:center;
 box-sizing:border-box;
 }
 
-.button-link{
-text-decoration:none;
-margin-top:12px;
-}
-
-.secondary-btn{
+button.secondary-btn{
 background:#e9d9c5;
 color:#3c2c1f;
 }
@@ -292,258 +298,243 @@ color:#9b3d2f;
 <body>
 
 <div id="home" class="phone">
+  <div class="hero">
+    <div class="hero-text">
+      <h1 class="logo">Darby's Ridge</h1>
+      <div class="tagline">Your Blue Ridge Escape</div>
+      <div class="description">
+        Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
+      </div>
+    </div>
+  </div>
 
-<div class="hero">
-<div class="hero-text">
-<h1 class="logo">Darby's Ridge</h1>
+  <div class="content">
+    <div class="section-title">Guest Guide</div>
 
-<div class="tagline">
-Your Blue Ridge Escape
-</div>
+    <div class="card-grid">
+      <div class="menu-card" onclick="showPage('welcome')">
+        <img src="cabin-exterior.jpg" alt="">
+        <div class="menu-label">
+          <span>DARBY'S RIDGE</span>
+          <strong>Cabin Guide</strong>
+        </div>
+      </div>
 
-<div class="description">
-Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
-</div>
-</div>
-</div>
+      <div class="menu-card" onclick="showPage('info')">
+        <img src="essentials.jpg" alt="">
+        <div class="menu-label">
+          <span>STAY DETAILS</span>
+          <strong>WiFi & Essentials</strong>
+        </div>
+      </div>
 
-<div class="content">
+      <div class="menu-card" onclick="showPage('local')">
+        <img src="local.jpg" alt="">
+        <div class="menu-label">
+          <span>BLUE RIDGE</span>
+          <strong>Local Favorites</strong>
+        </div>
+      </div>
 
-<div class="section-title">
-Guest Guide
-</div>
+      <div class="menu-card" onclick="showPage('trail')">
+        <img src="trail.jpg" alt="">
+        <div class="menu-label">
+          <span>ADVENTURE</span>
+          <strong>Trail to Lake</strong>
+        </div>
+      </div>
 
-<div class="card-grid">
+      <div class="menu-card" onclick="showPage('photos')">
+        <img src="outdoor.jpg" alt="">
+        <div class="menu-label">
+          <span>MEMORIES</span>
+          <strong>Share Photos</strong>
+        </div>
+      </div>
 
-<div class="menu-card" onclick="showPage('welcome')">
-<img src="cabin-exterior.jpg">
-<div class="menu-label">
-<span>DARBY'S RIDGE</span>
-<strong>Cabin Guide</strong>
-</div>
-</div>
+      <div class="menu-card" onclick="showPage('checkout')">
+        <img src="interior.jpg" alt="">
+        <div class="menu-label">
+          <span>BEFORE YOU GO</span>
+          <strong>Checkout</strong>
+        </div>
+      </div>
+    </div>
 
-<div class="menu-card" onclick="showPage('info')">
-<img src="essentials.jpg">
-<div class="menu-label">
-<span>STAY DETAILS</span>
-<strong>WiFi & Essentials</strong>
-</div>
-</div>
+    <div class="social">
+      <h3>Follow Darby's Ridge</h3>
+      <p>Stay connected and see more of the cabin experience.</p>
 
-<div class="menu-card" onclick="showPage('local')">
-<img src="local.jpg">
-<div class="menu-label">
-<span>BLUE RIDGE</span>
-<strong>Local Favorites</strong>
-</div>
-</div>
+      <div class="social-links">
+        <a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
+        <a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
+      </div>
 
-<div class="menu-card" onclick="showPage('trail')">
-<img src="trail.jpg">
-<div class="menu-label">
-<span>ADVENTURE</span>
-<strong>Trail to Lake</strong>
-</div>
-</div>
-
-<div class="menu-card" onclick="showPage('photos')">
-<img src="outdoor.jpg">
-<div class="menu-label">
-<span>MEMORIES</span>
-<strong>Share Photos</strong>
-</div>
-</div>
-
-<div class="menu-card" onclick="showPage('checkout')">
-<img src="interior.jpg">
-<div class="menu-label">
-<span>BEFORE YOU GO</span>
-<strong>Checkout</strong>
-</div>
-</div>
-
-</div>
-
-<div class="social">
-<h3>Follow Darby's Ridge</h3>
-<p>Stay connected and see more of the cabin experience.</p>
-
-<div class="social-links">
-<a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
-<a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
-</div>
-
-<div class="team-access">
-<a onclick="showPage('login')">Team Access</a>
-</div>
-</div>
-
-</div>
+      <div class="team-access">
+        <button type="button" onclick="showPage('login')">Team Access</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="welcome" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Welcome Guide</h1>
-<p>Welcome to Darby's Ridge. We're so glad you're here.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Welcome Guide</h1>
+  <p>Welcome to Darby's Ridge. We're so glad you're here.</p>
 </div>
 
 <div id="info" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>WiFi & Essentials</h1>
-<p>Add WiFi name, password, hot tub info, and cabin instructions here.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>WiFi & Essentials</h1>
+  <p>Add WiFi name, password, hot tub info, and cabin instructions here.</p>
 </div>
 
 <div id="local" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Local Favorites</h1>
-<p>Add your favorite Blue Ridge restaurants, breweries, and activities.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Local Favorites</h1>
+  <p>Add your favorite Blue Ridge restaurants, breweries, and activities.</p>
 </div>
 
 <div id="trail" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Trail to Lake</h1>
-<p>Information about the Green Mountain Trail access from the property.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Trail to Lake</h1>
+  <p>Information about the Green Mountain Trail access from the property.</p>
 </div>
 
 <div id="photos" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Share Photos</h1>
-<p>Tag @darbysridge on Instagram and Facebook.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Share Photos</h1>
+  <p>Tag @darbysridge on Instagram and Facebook.</p>
 </div>
 
 <div id="checkout" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Checkout</h1>
-<p>Dishwasher, trash, lock doors, safe travels.</p>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Checkout</h1>
+  <p>Dishwasher, trash, lock doors, safe travels.</p>
 </div>
 
 <div id="login" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Team Access</h1>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Team Access</h1>
 
-<div class="panel">
-  <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
+  <div class="panel">
+    <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
 
-  <input
-    id="teamPassword"
-    type="password"
-    placeholder="Enter password"
-  >
+    <input id="teamPassword" type="password" placeholder="Enter password">
 
-  <div id="loginError" class="form-message form-error">
-    Incorrect password. Please try again.
+    <div id="loginError" class="form-message form-error">
+      Incorrect password. Please try again.
+    </div>
+
+    <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
   </div>
-
-  <button onclick="checkLogin()">Enter Team Portal</button>
-</div>
 </div>
 
 <div id="team" class="hidden page">
-<div class="back" onclick="showPage('home')">← Back</div>
-<h1>Cleaning Team Portal</h1>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Cleaning Team Portal</h1>
 
-<div class="panel">
-  <h3>Turnover Checklist</h3>
-  <ul style="line-height:1.7; padding-left:18px;">
-    <li>Make all beds and fluff pillows</li>
-    <li>Clean and reset bathrooms</li>
-    <li>Wipe kitchen counters and appliances</li>
-    <li>Check refrigerator and remove leftover items</li>
-    <li>Restock paper goods, soaps, and coffee items</li>
-    <li>Check hot tub cover and outdoor areas</li>
-    <li>Sweep entry and check decks</li>
-    <li>Take final walkthrough photos</li>
-  </ul>
-</div>
+  <div class="panel">
+    <h3>Turnover Checklist</h3>
+    <ul style="line-height:1.7; padding-left:18px;">
+      <li>Make all beds and fluff pillows</li>
+      <li>Clean and reset bathrooms</li>
+      <li>Wipe kitchen counters and appliances</li>
+      <li>Check refrigerator and remove leftover items</li>
+      <li>Restock paper goods, soaps, and coffee items</li>
+      <li>Check hot tub cover and outdoor areas</li>
+      <li>Sweep entry and check decks</li>
+      <li>Take final walkthrough photos</li>
+    </ul>
+  </div>
 
-<div class="panel">
-  <h3>Operations</h3>
-  <button onclick="showPage('supply')">Supply Request</button>
-  <button class="secondary-btn" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
-</div>
+  <div class="panel">
+    <h3>Operations</h3>
+    <button class="action-btn" type="button" onclick="showPage('supply')">Supply Request</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
+  </div>
 </div>
 
 <div id="supply" class="hidden page">
-<div class="back" onclick="showPage('team')">← Back</div>
-<h1>Supply Request</h1>
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Supply Request</h1>
 
-<div class="panel">
-  <label for="supplyRequestedBy">Requested By</label>
-  <input id="supplyRequestedBy" type="text" placeholder="Cleaner name">
+  <div class="panel">
+    <label for="supplyRequestedBy">Requested By</label>
+    <input id="supplyRequestedBy" type="text" placeholder="Cleaner name">
 
-  <label for="supplyCategory">Category</label>
-  <select id="supplyCategory">
-    <option value="">Select category</option>
-    <option>Kitchen</option>
-    <option>Bathroom</option>
-    <option>Laundry</option>
-    <option>Welcome Items</option>
-    <option>Outdoor / Hot Tub</option>
-    <option>Other</option>
-  </select>
+    <label for="supplyCategory">Category</label>
+    <select id="supplyCategory">
+      <option value="">Select category</option>
+      <option>Kitchen</option>
+      <option>Bathroom</option>
+      <option>Laundry</option>
+      <option>Welcome Items</option>
+      <option>Outdoor / Hot Tub</option>
+      <option>Other</option>
+    </select>
 
-  <label for="supplyItem">Item Needed</label>
-  <input id="supplyItem" type="text" placeholder="Dish pods, toilet paper, coffee, etc.">
+    <label for="supplyItem">Item Needed</label>
+    <input id="supplyItem" type="text" placeholder="Dish pods, toilet paper, coffee, etc.">
 
-  <label for="supplyQuantity">Quantity Needed</label>
-  <input id="supplyQuantity" type="text" placeholder="2 packs, 1 case, etc.">
+    <label for="supplyQuantity">Quantity Needed</label>
+    <input id="supplyQuantity" type="text" placeholder="2 packs, 1 case, etc.">
 
-  <label for="supplyUrgency">Urgency</label>
-  <select id="supplyUrgency">
-    <option value="">Select urgency</option>
-    <option>Low</option>
-    <option>Medium</option>
-    <option>Urgent</option>
-  </select>
+    <label for="supplyUrgency">Urgency</label>
+    <select id="supplyUrgency">
+      <option value="">Select urgency</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Urgent</option>
+    </select>
 
-  <label for="supplyNotes">Notes</label>
-  <textarea id="supplyNotes" rows="5" placeholder="Anything else you want to note"></textarea>
+    <label for="supplyNotes">Notes</label>
+    <textarea id="supplyNotes" rows="5" placeholder="Anything else you want to note"></textarea>
 
-  <div id="supplySuccess" class="form-message form-success">Supply request submitted.</div>
-  <div id="supplyError" class="form-message form-error">There was a problem submitting this request.</div>
+    <div id="supplySuccess" class="form-message form-success">Supply request submitted.</div>
+    <div id="supplyError" class="form-message form-error">There was a problem submitting this request.</div>
 
-  <button onclick="submitSupplyRequest()">Submit Supply Request</button>
-</div>
+    <button class="action-btn" type="button" onclick="submitSupplyRequest()">Submit Supply Request</button>
+  </div>
 </div>
 
 <div id="maintenance" class="hidden page">
-<div class="back" onclick="showPage('team')">← Back</div>
-<h1>Maintenance Request</h1>
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Maintenance Request</h1>
 
-<div class="panel">
-  <label for="maintenanceReportedBy">Reported By</label>
-  <input id="maintenanceReportedBy" type="text" placeholder="Cleaner name">
+  <div class="panel">
+    <label for="maintenanceReportedBy">Reported By</label>
+    <input id="maintenanceReportedBy" type="text" placeholder="Cleaner name">
 
-  <label for="maintenanceArea">Area</label>
-  <input id="maintenanceArea" type="text" placeholder="Kitchen, deck, hot tub, bedroom, etc.">
+    <label for="maintenanceArea">Area</label>
+    <input id="maintenanceArea" type="text" placeholder="Kitchen, deck, hot tub, bedroom, etc.">
 
-  <label for="maintenanceIssueType">Issue Type</label>
-  <input id="maintenanceIssueType" type="text" placeholder="Broken, leaking, stained, not working, etc.">
+    <label for="maintenanceIssueType">Issue Type</label>
+    <input id="maintenanceIssueType" type="text" placeholder="Broken, leaking, stained, not working, etc.">
 
-  <label for="maintenancePriority">Priority</label>
-  <select id="maintenancePriority">
-    <option value="">Select priority</option>
-    <option>Low</option>
-    <option>Medium</option>
-    <option>Urgent</option>
-  </select>
+    <label for="maintenancePriority">Priority</label>
+    <select id="maintenancePriority">
+      <option value="">Select priority</option>
+      <option>Low</option>
+      <option>Medium</option>
+      <option>Urgent</option>
+    </select>
 
-  <label for="maintenanceDescription">Description</label>
-  <textarea id="maintenanceDescription" rows="5" placeholder="Describe the issue"></textarea>
+    <label for="maintenanceDescription">Description</label>
+    <textarea id="maintenanceDescription" rows="5" placeholder="Describe the issue"></textarea>
 
-  <div id="maintenanceSuccess" class="form-message form-success">Maintenance request submitted.</div>
-  <div id="maintenanceError" class="form-message form-error">There was a problem submitting this request.</div>
+    <div id="maintenanceSuccess" class="form-message form-success">Maintenance request submitted.</div>
+    <div id="maintenanceError" class="form-message form-error">There was a problem submitting this request.</div>
 
-  <button onclick="submitMaintenanceRequest()">Submit Maintenance Request</button>
-</div>
+    <button class="action-btn" type="button" onclick="submitMaintenanceRequest()">Submit Maintenance Request</button>
+  </div>
 </div>
 
 <div class="bottom-nav">
-<a onclick="showPage('home')">Home</a>
-<a onclick="showPage('local')">Favorites</a>
-<a onclick="showPage('photos')">Photos</a>
-<a onclick="showPage('checkout')">Checkout</a>
+  <button type="button" onclick="showPage('home')">Home</button>
+  <button type="button" onclick="showPage('local')">Favorites</button>
+  <button type="button" onclick="showPage('photos')">Photos</button>
+  <button type="button" onclick="showPage('checkout')">Checkout</button>
 </div>
 
 <script>
@@ -556,7 +547,6 @@ function showPage(page){
   });
 
   const target = document.getElementById(page);
-
   if (target) {
     target.classList.remove('hidden');
     window.scrollTo(0,0);
@@ -615,7 +605,7 @@ async function submitSupplyRequest(){
     } else {
       document.getElementById('supplyError').style.display = 'block';
     }
-  } catch(e) {
+  } catch (e) {
     document.getElementById('supplyError').style.display = 'block';
   }
 }
@@ -651,10 +641,11 @@ async function submitMaintenanceRequest(){
     } else {
       document.getElementById('maintenanceError').style.display = 'block';
     }
-  } catch(e) {
+  } catch (e) {
     document.getElementById('maintenanceError').style.display = 'block';
   }
 }
 </script>
+
 </body>
 </html>
