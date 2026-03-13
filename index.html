@@ -234,7 +234,6 @@ margin-top:0;
 font-family:'Playfair Display',serif;
 }
 
-.button-link,
 button.action-btn{
 display:block;
 width:100%;
@@ -281,6 +280,7 @@ padding:12px;
 border-radius:12px;
 font-size:14px;
 font-weight:600;
+white-space:pre-wrap;
 }
 
 .form-success{
@@ -419,13 +419,8 @@ color:#9b3d2f;
 
   <div class="panel">
     <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
-
     <input id="teamPassword" type="password" placeholder="Enter password">
-
-    <div id="loginError" class="form-message form-error">
-      Incorrect password. Please try again.
-    </div>
-
+    <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
     <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
   </div>
 </div>
@@ -540,12 +535,10 @@ color:#9b3d2f;
 <script>
 function showPage(page){
   const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','supply','maintenance'];
-
   pages.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.add('hidden');
   });
-
   const target = document.getElementById(page);
   if (target) {
     target.classList.remove('hidden');
@@ -556,7 +549,6 @@ function showPage(page){
 function checkLogin(){
   const password = document.getElementById('teamPassword').value;
   const error = document.getElementById('loginError');
-
   if (password === 'ridgecrew') {
     error.style.display = 'none';
     showPage('team');
@@ -602,7 +594,7 @@ async function submitSupplyRequest(){
       document.getElementById('supplyQuantity').value = '';
       document.getElementById('supplyUrgency').value = '';
       document.getElementById('supplyNotes').value = '';
-       } else {
+    } else {
       const err = document.getElementById('supplyError');
       err.textContent = result.error || 'There was a problem submitting this request.';
       err.style.display = 'block';
@@ -612,6 +604,7 @@ async function submitSupplyRequest(){
     err.textContent = e.message || 'There was a problem submitting this request.';
     err.style.display = 'block';
   }
+}
 
 async function submitMaintenanceRequest(){
   hideMessages(['maintenanceSuccess','maintenanceError']);
@@ -641,7 +634,7 @@ async function submitMaintenanceRequest(){
       document.getElementById('maintenanceIssueType').value = '';
       document.getElementById('maintenancePriority').value = '';
       document.getElementById('maintenanceDescription').value = '';
-       } else {
+    } else {
       const err = document.getElementById('maintenanceError');
       err.textContent = result.error || 'There was a problem submitting this request.';
       err.style.display = 'block';
