@@ -565,6 +565,22 @@ color:#5f4d3d;
   </div>
 
   <div class="panel">
+    <h3>Upcoming Bookings</h3>
+    <div id="calendarResults">
+      <div class="small-note">No calendar data yet.</div>
+    </div>
+  </div>
+</div>
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upcoming Cleanings</h1>
+
+  <div class="panel">
+    <h3>Airbnb Calendar</h3>
+    <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
+    <div id="calendarStatus" class="small-note">Loading calendar…</div>
+  </div>
+
+  <div class="panel">
     <h3>Next Turnover</h3>
     <div id="calendarResults">
       <div class="small-note">No calendar data yet.</div>
@@ -886,31 +902,22 @@ async function loadCalendar(){
     }
 
     status.textContent = 'Calendar connected.';
-    results.innerHTML = `
-      <div class="status-row">
-        <div>
-          <strong>Next Checkout</strong><br>
-          <span class="small-note">${data.nextCheckout || 'Not found'}</span>
-        </div>
-        <div class="status-pill">Checkout</div>
-      </div>
 
-      <div class="status-row">
-        <div>
-          <strong>Next Check-in</strong><br>
-          <span class="small-note">${data.nextCheckin || 'Not found'}</span>
-        </div>
-        <div class="status-pill soft">Check-in</div>
-      </div>
+    if(!data.bookings || !data.bookings.length){
+      results.innerHTML = '<div class="small-note">No upcoming bookings found.</div>';
+      return;
+    }
 
+    results.innerHTML = data.bookings.map((booking, index) => `
       <div class="status-row">
         <div>
-          <strong>Turnover Window</strong><br>
-          <span class="small-note">${data.turnoverWindow || 'Review needed'}</span>
+          <strong>Booking ${index + 1}</strong><br>
+          <span class="small-note">Check-in: ${booking.checkIn}</span><br>
+          <span class="small-note">Check-out: ${booking.checkOut}</span>
         </div>
-        <div class="status-pill">Ready</div>
+        <div class="status-pill">Booked</div>
       </div>
-    `;
+    `).join('');
   } catch(e){
     status.textContent = 'Unable to load calendar.';
     results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
