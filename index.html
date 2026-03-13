@@ -43,7 +43,7 @@ background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55));
 
 .hero-text{
 position:absolute;
-bottom:140px;
+bottom:170px;
 left:28px;
 right:28px;
 color:white;
@@ -322,37 +322,58 @@ Facebook
 
 </div>
 
+
+<!-- PAGES -->
+
 <div id="welcome" class="hidden page">
-
-<div class="back" onclick="showPage('home')">
-← Back
-</div>
-
+<div class="back" onclick="showPage('home')">← Back</div>
 <h1>Welcome Guide</h1>
-
-<p>
-Welcome to Darby's Ridge. We're so glad you're here.
-</p>
-
+<p>Welcome to Darby's Ridge. We're so glad you're here.</p>
 </div>
+
+<div id="info" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>WiFi & Essentials</h1>
+<p>Add WiFi name, password, hot tub info, and cabin instructions here.</p>
+</div>
+
+<div id="local" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Local Favorites</h1>
+<p>Add your favorite Blue Ridge restaurants, breweries, and activities.</p>
+</div>
+
+<div id="trail" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Trail to Lake</h1>
+<p>Information about the Green Mountain Trail access from the property.</p>
+</div>
+
+<div id="photos" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Share Photos</h1>
+<p>Tag @darbysridge on Instagram and Facebook.</p>
+</div>
+
+<div id="checkout" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Checkout</h1>
+<p>Dishwasher, trash, lock doors, safe travels.</p>
+</div>
+
+<div id="login" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Team Access</h1>
+<p>Cleaning team login page will go here.</p>
+</div>
+
 
 <div class="bottom-nav">
 
-<a onclick="showPage('home')">
-Home
-</a>
-
-<a onclick="showPage('local')">
-Favorites
-</a>
-
-<a onclick="showPage('photos')">
-Photos
-</a>
-
-<a onclick="showPage('checkout')">
-Checkout
-</a>
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('local')">Favorites</a>
+<a onclick="showPage('photos')">Photos</a>
+<a onclick="showPage('checkout')">Checkout</a>
 
 </div>
 
@@ -360,16 +381,19 @@ Checkout
 
 function showPage(page){
 
-const pages=['home','welcome','info','local','trail','photos','checkout','login','team'];
+const pages=['home','welcome','info','local','trail','photos','checkout','login'];
 
 pages.forEach(id=>{
 const el=document.getElementById(id);
 if(el) el.classList.add('hidden');
 });
 
-document.getElementById(page).classList.remove('hidden');
+const target=document.getElementById(page);
 
+if(target){
+target.classList.remove('hidden');
 window.scrollTo(0,0);
+}
 
 }
 
