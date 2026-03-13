@@ -547,162 +547,114 @@ Guest Guide
 </div>
 
 <script>
-<script>
-
 function showPage(page){
+  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','supply','maintenance'];
 
-const pages=['home','welcome','info','local','trail','photos','checkout','login','team','supply','maintenance'];
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
 
-pages.forEach(id=>{
-const el=document.getElementById(id);
-if(el) el.classList.add('hidden');
-});
+  const target = document.getElementById(page);
 
-const target=document.getElementById(page);
-
-if(target){
-target.classList.remove('hidden');
-window.scrollTo(0,0);
-}
-
+  if (target) {
+    target.classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
 }
 
 function checkLogin(){
+  const password = document.getElementById('teamPassword').value;
+  const error = document.getElementById('loginError');
 
-const password=document.getElementById('teamPassword').value;
-const error=document.getElementById('loginError');
-
-if(password === 'ridgecrew'){
-error.style.display='none';
-showPage('team');
-}
-else{
-error.style.display='block';
-}
-
+  if (password === 'ridgecrew') {
+    error.style.display = 'none';
+    showPage('team');
+  } else {
+    error.style.display = 'block';
+  }
 }
 
 function hideMessages(ids){
-
-ids.forEach(id=>{
-const el=document.getElementById(id);
-if(el) el.style.display='none';
-});
-
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 }
-
 
 async function submitSupplyRequest(){
+  hideMessages(['supplySuccess','supplyError']);
 
-hideMessages(['supplySuccess','supplyError']);
+  const payload = {
+    type: 'supply',
+    requestedBy: document.getElementById('supplyRequestedBy').value,
+    category: document.getElementById('supplyCategory').value,
+    item: document.getElementById('supplyItem').value,
+    quantity: document.getElementById('supplyQuantity').value,
+    urgency: document.getElementById('supplyUrgency').value,
+    notes: document.getElementById('supplyNotes').value
+  };
 
-const payload = {
+  try {
+    const response = await fetch('/api/send-text', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
 
-type:'supply',
-requestedBy:document.getElementById('supplyRequestedBy').value,
-category:document.getElementById('supplyCategory').value,
-item:document.getElementById('supplyItem').value,
-quantity:document.getElementById('supplyQuantity').value,
-urgency:document.getElementById('supplyUrgency').value,
-notes:document.getElementById('supplyNotes').value
+    const result = await response.json();
 
-};
-
-try{
-
-const response = await fetch('/api/send-text',{
-
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(payload)
-
-});
-
-const result = await response.json();
-
-if(result.success){
-
-document.getElementById('supplySuccess').style.display='block';
-
-document.getElementById('supplyRequestedBy').value='';
-document.getElementById('supplyCategory').value='';
-document.getElementById('supplyItem').value='';
-document.getElementById('supplyQuantity').value='';
-document.getElementById('supplyUrgency').value='';
-document.getElementById('supplyNotes').value='';
-
+    if (result.success) {
+      document.getElementById('supplySuccess').style.display = 'block';
+      document.getElementById('supplyRequestedBy').value = '';
+      document.getElementById('supplyCategory').value = '';
+      document.getElementById('supplyItem').value = '';
+      document.getElementById('supplyQuantity').value = '';
+      document.getElementById('supplyUrgency').value = '';
+      document.getElementById('supplyNotes').value = '';
+    } else {
+      document.getElementById('supplyError').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('supplyError').style.display = 'block';
+  }
 }
-else{
-
-document.getElementById('supplyError').style.display='block';
-
-}
-
-}
-catch(e){
-
-document.getElementById('supplyError').style.display='block';
-
-}
-
-}
-
-
 
 async function submitMaintenanceRequest(){
+  hideMessages(['maintenanceSuccess','maintenanceError']);
 
-hideMessages(['maintenanceSuccess','maintenanceError']);
+  const payload = {
+    type: 'maintenance',
+    reportedBy: document.getElementById('maintenanceReportedBy').value,
+    area: document.getElementById('maintenanceArea').value,
+    issueType: document.getElementById('maintenanceIssueType').value,
+    priority: document.getElementById('maintenancePriority').value,
+    description: document.getElementById('maintenanceDescription').value
+  };
 
-const payload = {
+  try {
+    const response = await fetch('/api/send-text', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
 
-type:'maintenance',
-reportedBy:document.getElementById('maintenanceReportedBy').value,
-area:document.getElementById('maintenanceArea').value,
-issueType:document.getElementById('maintenanceIssueType').value,
-priority:document.getElementById('maintenancePriority').value,
-description:document.getElementById('maintenanceDescription').value
+    const result = await response.json();
 
-};
-
-try{
-
-const response = await fetch('/api/send-text',{
-
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify(payload)
-
-});
-
-const result = await response.json();
-
-if(result.success){
-
-document.getElementById('maintenanceSuccess').style.display='block';
-
-document.getElementById('maintenanceReportedBy').value='';
-document.getElementById('maintenanceArea').value='';
-document.getElementById('maintenanceIssueType').value='';
-document.getElementById('maintenancePriority').value='';
-document.getElementById('maintenanceDescription').value='';
-
+    if (result.success) {
+      document.getElementById('maintenanceSuccess').style.display = 'block';
+      document.getElementById('maintenanceReportedBy').value = '';
+      document.getElementById('maintenanceArea').value = '';
+      document.getElementById('maintenanceIssueType').value = '';
+      document.getElementById('maintenancePriority').value = '';
+      document.getElementById('maintenanceDescription').value = '';
+    } else {
+      document.getElementById('maintenanceError').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('maintenanceError').style.display = 'block';
+  }
 }
-else{
-
-document.getElementById('maintenanceError').style.display='block';
-
-}
-
-}
-catch(e){
-
-document.getElementById('maintenanceError').style.display='block';
-
-}
-
-}
-
 </script>
-
 </body>
 </html>
