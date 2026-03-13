@@ -338,8 +338,35 @@ padding-left:18px;
 line-height:1.7;
 }
 
-.divider-space{
-height:8px;
+.list-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.list-row:last-child{
+border-bottom:none;
+}
+
+.delete-btn{
+background:none;
+border:none;
+color:#9b3d2f;
+font-weight:600;
+cursor:pointer;
+font-size:14px;
+padding:0;
+width:auto;
+}
+
+.media-list{
+margin-top:12px;
+font-size:14px;
+line-height:1.6;
+color:#5f4d3d;
 }
 </style>
 </head>
@@ -517,12 +544,13 @@ height:8px;
 
   <div class="panel">
     <h3>Operations</h3>
-    <button class="action-btn" type="button" onclick="showPage('cleanings')">Upcoming Cleanings</button>
+    <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
     <button class="action-btn secondary-btn" type="button" onclick="showPage('inventory')" style="margin-top:12px;">Inventory Checklist</button>
-    <button class="action-btn tertiary-btn" type="button" onclick="showPage('supply')" style="margin-top:12px;">Supply Request</button>
-    <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Request</button>
-    <button class="action-btn secondary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
-    <button class="action-btn tertiary-btn" type="button" onclick="showPage('owner')" style="margin-top:12px;">Owner Dashboard</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')" style="margin-top:12px;">Supplies Needed</button>
+    <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('media')" style="margin-top:12px;">Upload Photos / Video</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
+    <button class="action-btn" type="button" onclick="showPage('owner'); renderOwnerDashboard();" style="margin-top:12px;">Owner Dashboard</button>
   </div>
 </div>
 
@@ -531,29 +559,15 @@ height:8px;
   <h1>Upcoming Cleanings</h1>
 
   <div class="panel">
-    <h3>Airbnb Calendar Connection</h3>
-    <p>This is the section we’ll connect to your Airbnb calendar feed.</p>
-    <p class="small-note">For now, this page is the layout for check-outs, check-ins, and turnover status. Once you copy your Airbnb calendar link, we’ll wire it in here.</p>
+    <h3>Airbnb Calendar</h3>
+    <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
+    <div id="calendarStatus" class="small-note">Loading calendar…</div>
   </div>
 
   <div class="panel">
-    <h3>Next Turnovers</h3>
-
-    <div class="status-row">
-      <div>
-        <strong>Darby's Ridge</strong><br>
-        <span class="small-note">Checkout: Add Airbnb date</span><br>
-        <span class="small-note">Next check-in: Add Airbnb date</span>
-      </div>
-      <div class="status-pill">Needs Review</div>
-    </div>
-
-    <div class="status-row">
-      <div>
-        <strong>Cleaner Assigned</strong><br>
-        <span class="small-note">Add cleaner name here</span>
-      </div>
-      <div class="status-pill soft">Pending</div>
+    <h3>Next Turnover</h3>
+    <div id="calendarResults">
+      <div class="small-note">No calendar data yet.</div>
     </div>
   </div>
 </div>
@@ -592,78 +606,47 @@ height:8px;
   </div>
 </div>
 
-<div id="supply" class="hidden page">
+<div id="supplies" class="hidden page">
   <button class="back" type="button" onclick="showPage('team')">← Back</button>
-  <h1>Supply Request</h1>
+  <h1>Supplies Needed</h1>
 
   <div class="panel">
-    <label for="supplyRequestedBy">Requested By</label>
-    <input id="supplyRequestedBy" type="text" placeholder="Cleaner name">
+    <label for="supplySimpleInput">Add Supply Item</label>
+    <input id="supplySimpleInput" type="text" placeholder="Paper towels, dish pods, coffee pods...">
+    <button class="action-btn" type="button" onclick="addSupplyItem()" style="margin-top:12px;">Add Item</button>
+  </div>
 
-    <label for="supplyCategory">Category</label>
-    <select id="supplyCategory">
-      <option value="">Select category</option>
-      <option>Kitchen</option>
-      <option>Bathroom</option>
-      <option>Laundry</option>
-      <option>Welcome Items</option>
-      <option>Outdoor / Hot Tub</option>
-      <option>Other</option>
-    </select>
-
-    <label for="supplyItem">Item Needed</label>
-    <input id="supplyItem" type="text" placeholder="Dish pods, toilet paper, coffee, etc.">
-
-    <label for="supplyQuantity">Quantity Needed</label>
-    <input id="supplyQuantity" type="text" placeholder="2 packs, 1 case, etc.">
-
-    <label for="supplyUrgency">Urgency</label>
-    <select id="supplyUrgency">
-      <option value="">Select urgency</option>
-      <option>Low</option>
-      <option>Medium</option>
-      <option>Urgent</option>
-    </select>
-
-    <label for="supplyNotes">Notes</label>
-    <textarea id="supplyNotes" rows="5" placeholder="Anything else you want to note"></textarea>
-
-    <div id="supplySuccess" class="form-message form-success">Supply request submitted.</div>
-    <div id="supplyError" class="form-message form-error">There was a problem submitting this request.</div>
-
-    <button class="action-btn" type="button" onclick="submitSupplyRequest()">Submit Supply Request</button>
+  <div class="panel">
+    <h3>Current Supply List</h3>
+    <div id="supplyListContainer" class="small-note">No supplies listed.</div>
   </div>
 </div>
 
 <div id="maintenance" class="hidden page">
   <button class="back" type="button" onclick="showPage('team')">← Back</button>
-  <h1>Maintenance Request</h1>
+  <h1>Maintenance Log</h1>
 
   <div class="panel">
-    <label for="maintenanceReportedBy">Reported By</label>
-    <input id="maintenanceReportedBy" type="text" placeholder="Cleaner name">
+    <label for="maintenanceSimpleInput">Add Maintenance Item</label>
+    <input id="maintenanceSimpleInput" type="text" placeholder="Loose rail, lamp out, faucet drip...">
+    <button class="action-btn" type="button" onclick="addMaintenanceItem()" style="margin-top:12px;">Add Issue</button>
+  </div>
 
-    <label for="maintenanceArea">Area</label>
-    <input id="maintenanceArea" type="text" placeholder="Kitchen, deck, hot tub, bedroom, etc.">
+  <div class="panel">
+    <h3>Current Maintenance List</h3>
+    <div id="maintenanceListContainer" class="small-note">No maintenance items listed.</div>
+  </div>
+</div>
 
-    <label for="maintenanceIssueType">Issue Type</label>
-    <input id="maintenanceIssueType" type="text" placeholder="Broken, leaking, stained, not working, etc.">
+<div id="media" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upload Photos / Video</h1>
 
-    <label for="maintenancePriority">Priority</label>
-    <select id="maintenancePriority">
-      <option value="">Select priority</option>
-      <option>Low</option>
-      <option>Medium</option>
-      <option>Urgent</option>
-    </select>
-
-    <label for="maintenanceDescription">Description</label>
-    <textarea id="maintenanceDescription" rows="5" placeholder="Describe the issue"></textarea>
-
-    <div id="maintenanceSuccess" class="form-message form-success">Maintenance request submitted.</div>
-    <div id="maintenanceError" class="form-message form-error">There was a problem submitting this request.</div>
-
-    <button class="action-btn" type="button" onclick="submitMaintenanceRequest()">Submit Maintenance Request</button>
+  <div class="panel">
+    <label for="mediaFiles">Select Photos or Video</label>
+    <input id="mediaFiles" type="file" multiple accept="image/*,video/*" onchange="showSelectedMedia()">
+    <p class="small-note">This version lets the cleaner select files and review what was chosen. Actual storage/upload comes next when we connect backend storage.</p>
+    <div id="mediaSelectedList" class="media-list">No files selected.</div>
   </div>
 </div>
 
@@ -693,35 +676,12 @@ height:8px;
 
   <div class="panel">
     <h3>Today’s Snapshot</h3>
-
-    <div class="status-row">
-      <div>
-        <strong>Open Supply Requests</strong><br>
-        <span class="small-note">Placeholder count until tracking is connected</span>
-      </div>
-      <div class="status-pill">0</div>
-    </div>
-
-    <div class="status-row">
-      <div>
-        <strong>Open Maintenance Issues</strong><br>
-        <span class="small-note">Placeholder count until tracking is connected</span>
-      </div>
-      <div class="status-pill">0</div>
-    </div>
-
-    <div class="status-row">
-      <div>
-        <strong>Next Turnover</strong><br>
-        <span class="small-note">This will tie to Airbnb calendar</span>
-      </div>
-      <div class="status-pill soft">Pending</div>
-    </div>
+    <div id="ownerDashboardCounts"></div>
   </div>
 
   <div class="panel">
     <h3>Owner Notes</h3>
-    <p class="small-note">This is where we can later add live request history, maintenance tracking, calendar view, and cabin readiness status.</p>
+    <p class="small-note">This is where we’ll later add live request history, uploaded photos/videos, turnover history, and cabin readiness status.</p>
   </div>
 </div>
 
@@ -733,8 +693,13 @@ height:8px;
 </div>
 
 <script>
+const STORAGE_KEYS = {
+  supplies: 'darbysridge_supplies',
+  maintenance: 'darbysridge_maintenance'
+};
+
 function showPage(page){
-  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','cleanings','inventory','supply','maintenance','turnover','owner'];
+  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','cleanings','inventory','supplies','maintenance','media','turnover','owner'];
 
   pages.forEach(id => {
     const el = document.getElementById(id);
@@ -746,6 +711,10 @@ function showPage(page){
     target.classList.remove('hidden');
     window.scrollTo(0,0);
   }
+
+  if (page === 'supplies') renderSupplyList();
+  if (page === 'maintenance') renderMaintenanceList();
+  if (page === 'owner') renderOwnerDashboard();
 }
 
 function checkLogin(){
@@ -760,102 +729,197 @@ function checkLogin(){
   }
 }
 
-function hideMessages(ids){
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-}
-
-async function submitSupplyRequest(){
-  hideMessages(['supplySuccess','supplyError']);
-
-  const payload = {
-    type: 'supply',
-    requestedBy: document.getElementById('supplyRequestedBy').value,
-    category: document.getElementById('supplyCategory').value,
-    item: document.getElementById('supplyItem').value,
-    quantity: document.getElementById('supplyQuantity').value,
-    urgency: document.getElementById('supplyUrgency').value,
-    notes: document.getElementById('supplyNotes').value
-  };
-
-  try {
-    const response = await fetch('/api/send-text', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      document.getElementById('supplySuccess').style.display = 'block';
-      document.getElementById('supplyRequestedBy').value = '';
-      document.getElementById('supplyCategory').value = '';
-      document.getElementById('supplyItem').value = '';
-      document.getElementById('supplyQuantity').value = '';
-      document.getElementById('supplyUrgency').value = '';
-      document.getElementById('supplyNotes').value = '';
-    } else {
-      const err = document.getElementById('supplyError');
-      err.textContent = result.error || 'There was a problem submitting this request.';
-      err.style.display = 'block';
-    }
-  } catch (e) {
-    const err = document.getElementById('supplyError');
-    err.textContent = e.message || 'There was a problem submitting this request.';
-    err.style.display = 'block';
+function getStoredList(key){
+  try{
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch(e){
+    return [];
   }
 }
 
-async function submitMaintenanceRequest(){
-  hideMessages(['maintenanceSuccess','maintenanceError']);
+function saveStoredList(key, list){
+  localStorage.setItem(key, JSON.stringify(list));
+}
 
-  const payload = {
-    type: 'maintenance',
-    reportedBy: document.getElementById('maintenanceReportedBy').value,
-    area: document.getElementById('maintenanceArea').value,
-    issueType: document.getElementById('maintenanceIssueType').value,
-    priority: document.getElementById('maintenancePriority').value,
-    description: document.getElementById('maintenanceDescription').value
-  };
+function addSupplyItem(){
+  const input = document.getElementById('supplySimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
 
-  try {
-    const response = await fetch('/api/send-text', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  input.value = '';
+  renderSupplyList();
+  renderOwnerDashboard();
+}
 
-    const result = await response.json();
+function removeSupplyItem(index){
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  renderSupplyList();
+  renderOwnerDashboard();
+}
 
-    if (result.success) {
-      document.getElementById('maintenanceSuccess').style.display = 'block';
-      document.getElementById('maintenanceReportedBy').value = '';
-      document.getElementById('maintenanceArea').value = '';
-      document.getElementById('maintenanceIssueType').value = '';
-      document.getElementById('maintenancePriority').value = '';
-      document.getElementById('maintenanceDescription').value = '';
-    } else {
-      const err = document.getElementById('maintenanceError');
-      err.textContent = result.error || 'There was a problem submitting this request.';
-      err.style.display = 'block';
-    }
-  } catch (e) {
-    const err = document.getElementById('maintenanceError');
-    err.textContent = e.message || 'There was a problem submitting this request.';
-    err.style.display = 'block';
+function renderSupplyList(){
+  const container = document.getElementById('supplyListContainer');
+  const list = getStoredList(STORAGE_KEYS.supplies);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No supplies listed.</div>';
+    return;
   }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeSupplyItem(${index})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addMaintenanceItem(){
+  const input = document.getElementById('maintenanceSimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
+
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  input.value = '';
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function removeMaintenanceItem(index){
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function renderMaintenanceList(){
+  const container = document.getElementById('maintenanceListContainer');
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No maintenance items listed.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeMaintenanceItem(${index})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function renderOwnerDashboard(){
+  const supplyCount = getStoredList(STORAGE_KEYS.supplies).length;
+  const maintenanceCount = getStoredList(STORAGE_KEYS.maintenance).length;
+  const container = document.getElementById('ownerDashboardCounts');
+
+  container.innerHTML = `
+    <div class="status-row">
+      <div>
+        <strong>Supplies Needed</strong><br>
+        <span class="small-note">Current running supply list</span>
+      </div>
+      <div class="status-pill">${supplyCount}</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Maintenance Items</strong><br>
+        <span class="small-note">Current maintenance list</span>
+      </div>
+      <div class="status-pill">${maintenanceCount}</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Next Turnover</strong><br>
+        <span class="small-note">Pulled from Airbnb calendar page</span>
+      </div>
+      <div class="status-pill soft">Calendar</div>
+    </div>
+  `;
+}
+
+function showSelectedMedia(){
+  const files = document.getElementById('mediaFiles').files;
+  const list = document.getElementById('mediaSelectedList');
+
+  if(!files.length){
+    list.textContent = 'No files selected.';
+    return;
+  }
+
+  list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
 }
 
 function submitTurnoverComplete(){
-  hideMessages(['turnoverSuccess']);
   document.getElementById('turnoverSuccess').style.display = 'block';
   document.getElementById('turnoverCleaner').value = '';
   document.getElementById('turnoverDate').value = '';
   document.getElementById('turnoverNotes').value = '';
 }
+
+async function loadCalendar(){
+  const status = document.getElementById('calendarStatus');
+  const results = document.getElementById('calendarResults');
+
+  status.textContent = 'Loading calendar…';
+  results.innerHTML = '<div class="small-note">Loading…</div>';
+
+  try{
+    const response = await fetch('/api/airbnb-calendar');
+    const data = await response.json();
+
+    if(!data.success){
+      status.textContent = data.error || 'Unable to load calendar.';
+      results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+      return;
+    }
+
+    status.textContent = 'Calendar connected.';
+    results.innerHTML = `
+      <div class="status-row">
+        <div>
+          <strong>Next Checkout</strong><br>
+          <span class="small-note">${data.nextCheckout || 'Not found'}</span>
+        </div>
+        <div class="status-pill">Checkout</div>
+      </div>
+
+      <div class="status-row">
+        <div>
+          <strong>Next Check-in</strong><br>
+          <span class="small-note">${data.nextCheckin || 'Not found'}</span>
+        </div>
+        <div class="status-pill soft">Check-in</div>
+      </div>
+
+      <div class="status-row">
+        <div>
+          <strong>Turnover Window</strong><br>
+          <span class="small-note">${data.turnoverWindow || 'Review needed'}</span>
+        </div>
+        <div class="status-pill">Ready</div>
+      </div>
+    `;
+  } catch(e){
+    status.textContent = 'Unable to load calendar.';
+    results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+  }
+}
+
+renderSupplyList();
+renderMaintenanceList();
+renderOwnerDashboard();
 </script>
 
 </body>
