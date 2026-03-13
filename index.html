@@ -602,13 +602,16 @@ async function submitSupplyRequest(){
       document.getElementById('supplyQuantity').value = '';
       document.getElementById('supplyUrgency').value = '';
       document.getElementById('supplyNotes').value = '';
-    } else {
-      document.getElementById('supplyError').style.display = 'block';
+       } else {
+      const err = document.getElementById('supplyError');
+      err.textContent = result.error || 'There was a problem submitting this request.';
+      err.style.display = 'block';
     }
   } catch (e) {
-    document.getElementById('supplyError').style.display = 'block';
+    const err = document.getElementById('supplyError');
+    err.textContent = e.message || 'There was a problem submitting this request.';
+    err.style.display = 'block';
   }
-}
 
 async function submitMaintenanceRequest(){
   hideMessages(['maintenanceSuccess','maintenanceError']);
@@ -638,11 +641,15 @@ async function submitMaintenanceRequest(){
       document.getElementById('maintenanceIssueType').value = '';
       document.getElementById('maintenancePriority').value = '';
       document.getElementById('maintenanceDescription').value = '';
-    } else {
-      document.getElementById('maintenanceError').style.display = 'block';
+       } else {
+      const err = document.getElementById('maintenanceError');
+      err.textContent = result.error || 'There was a problem submitting this request.';
+      err.style.display = 'block';
     }
   } catch (e) {
-    document.getElementById('maintenanceError').style.display = 'block';
+    const err = document.getElementById('maintenanceError');
+    err.textContent = e.message || 'There was a problem submitting this request.';
+    err.style.display = 'block';
   }
 }
 </script>
