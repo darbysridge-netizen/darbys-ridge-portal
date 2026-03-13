@@ -1,73 +1,992 @@
-const AIRBNB_ICAL_URL = "https://www.airbnb.com/calendar/ical/1467535611813456162.ics?t=54884f33dff140aa838034767fa94ce8";
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darby's Ridge</title>
 
-function formatDate(dateValue) {
-  return new Date(dateValue).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+background:#e2d2bd;
+font-family:'Inter',sans-serif;
+color:#3c2c1f;
 }
 
-function parseICalEvents(icsText) {
-  const blocks = icsText.split("BEGIN:VEVENT").slice(1);
-  const events = [];
+.phone{
+max-width:430px;
+margin:auto;
+background:#efe4d3;
+min-height:100vh;
+padding-bottom:80px;
+}
 
-  for (const block of blocks) {
+.hero{
+height:460px;
+background:url(hero.jpg) center/cover no-repeat;
+border-bottom-left-radius:30px;
+border-bottom-right-radius:30px;
+position:relative;
+overflow:hidden;
+}
 
-    const startMatch = block.match(/DTSTART(?:;VALUE=DATE)?:(\d{8})/);
-    const endMatch = block.match(/DTEND(?:;VALUE=DATE)?:(\d{8})/);
+.hero:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55));
+}
 
-    if (!startMatch || !endMatch) continue;
+.hero-text{
+position:absolute;
+bottom:95px;
+left:28px;
+right:28px;
+color:white;
+z-index:2;
+}
 
-    const startRaw = startMatch[1];
-    const endRaw = endMatch[1];
+.logo{
+font-family:'Allura',cursive;
+font-size:64px;
+margin:0;
+text-shadow:0 4px 10px rgba(0,0,0,.35);
+}
 
-    const start = new Date(
-      `${startRaw.slice(0,4)}-${startRaw.slice(4,6)}-${startRaw.slice(6,8)}`
-    );
+.tagline{
+font-family:'Playfair Display',serif;
+font-size:20px;
+margin-top:8px;
+}
 
-    const end = new Date(
-      `${endRaw.slice(0,4)}-${endRaw.slice(4,6)}-${endRaw.slice(6,8)}`
-    );
+.description{
+margin-top:12px;
+font-size:15px;
+line-height:1.5;
+max-width:260px;
+color:rgba(255,255,255,.9);
+}
 
-    events.push({ start, end });
+.content{
+padding:22px;
+}
 
+.section-title{
+font-family:'Playfair Display',serif;
+font-size:24px;
+margin-bottom:16px;
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.menu-card{
+aspect-ratio:1/1;
+border-radius:18px;
+overflow:hidden;
+position:relative;
+cursor:pointer;
+box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
+
+.menu-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+.menu-card:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.1));
+}
+
+.menu-label{
+position:absolute;
+bottom:12px;
+left:14px;
+right:14px;
+color:white;
+z-index:2;
+}
+
+.menu-label span{
+font-size:11px;
+letter-spacing:.1em;
+text-transform:uppercase;
+opacity:.9;
+}
+
+.menu-label strong{
+display:block;
+font-family:'Playfair Display',serif;
+font-size:18px;
+}
+
+.social{
+margin-top:24px;
+background:#f7efe3;
+padding:18px;
+border-radius:16px;
+}
+
+.social h3{
+font-family:'Playfair Display',serif;
+margin:0 0 10px;
+}
+
+.social-links a{
+display:block;
+margin-top:10px;
+padding:14px;
+background:#e9d9c5;
+border-radius:12px;
+text-decoration:none;
+color:#3c2c1f;
+font-weight:500;
+}
+
+.team-access{
+margin-top:14px;
+text-align:center;
+}
+
+.team-access button{
+background:none;
+border:none;
+color:#445b49;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+padding:0;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+max-width:430px;
+width:100%;
+background:#e2d2bd;
+border-top:1px solid #d3c2aa;
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+z-index:10;
+}
+
+.bottom-nav button{
+background:none;
+border:none;
+color:#5b4636;
+font-size:13px;
+font-weight:600;
+cursor:pointer;
+}
+
+.hidden{
+display:none !important;
+}
+
+.page{
+max-width:430px;
+margin:auto;
+padding:22px;
+background:#efe4d3;
+min-height:100vh;
+padding-bottom:110px;
+}
+
+.page h1{
+font-family:'Playfair Display',serif;
+font-size:30px;
+margin-top:0;
+}
+
+.back{
+display:inline-block;
+margin-bottom:14px;
+font-weight:600;
+cursor:pointer;
+background:none;
+border:none;
+color:#3c2c1f;
+padding:0;
+font-size:16px;
+}
+
+.panel{
+background:#f7efe3;
+padding:18px;
+border-radius:16px;
+margin-top:14px;
+}
+
+.panel h3{
+margin-top:0;
+font-family:'Playfair Display',serif;
+}
+
+button.action-btn{
+display:block;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#445b49;
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+text-align:center;
+box-sizing:border-box;
+}
+
+button.secondary-btn{
+background:#e9d9c5;
+color:#3c2c1f;
+}
+
+button.tertiary-btn{
+background:#d8c3aa;
+color:#3c2c1f;
+}
+
+input, select, textarea{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #d3c2aa;
+font-size:15px;
+margin-top:8px;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+background:white;
+}
+
+label{
+display:block;
+margin-top:14px;
+font-weight:600;
+font-size:14px;
+}
+
+.form-message{
+display:none;
+margin-top:12px;
+padding:12px;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
+white-space:pre-wrap;
+}
+
+.form-success{
+background:#e6f4ea;
+color:#25613a;
+}
+
+.form-error{
+background:#fdecea;
+color:#9b3d2f;
+}
+
+.small-note{
+font-size:13px;
+color:#6d5a49;
+line-height:1.5;
+}
+
+.status-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.status-row:last-child{
+border-bottom:none;
+}
+
+.status-pill{
+background:#445b49;
+color:white;
+padding:6px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+white-space:nowrap;
+}
+
+.status-pill.soft{
+background:#c9b299;
+color:#3c2c1f;
+}
+
+.check-list{
+padding-left:18px;
+line-height:1.7;
+}
+
+.list-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.list-row:last-child{
+border-bottom:none;
+}
+
+.delete-btn{
+background:none;
+border:none;
+color:#9b3d2f;
+font-weight:600;
+cursor:pointer;
+font-size:14px;
+padding:0;
+width:auto;
+}
+
+.media-list{
+margin-top:12px;
+font-size:14px;
+line-height:1.6;
+color:#5f4d3d;
+}
+
+.edit-box{
+margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="home" class="phone">
+  <div class="hero">
+    <div class="hero-text">
+      <h1 class="logo">Darby's Ridge</h1>
+      <div class="tagline">Your Blue Ridge Escape</div>
+      <div class="description">
+        Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">Guest Guide</div>
+
+    <div class="card-grid">
+      <div class="menu-card" onclick="showPage('welcome')">
+        <img src="cabin-exterior.jpg" alt="">
+        <div class="menu-label">
+          <span>DARBY'S RIDGE</span>
+          <strong>Cabin Guide</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('info')">
+        <img src="essentials.jpg" alt="">
+        <div class="menu-label">
+          <span>STAY DETAILS</span>
+          <strong>WiFi & Essentials</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('local')">
+        <img src="local.jpg" alt="">
+        <div class="menu-label">
+          <span>BLUE RIDGE</span>
+          <strong>Local Favorites</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('trail')">
+        <img src="trail.jpg" alt="">
+        <div class="menu-label">
+          <span>ADVENTURE</span>
+          <strong>Trail to Lake</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('photos')">
+        <img src="outdoor.jpg" alt="">
+        <div class="menu-label">
+          <span>MEMORIES</span>
+          <strong>Share Photos</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('checkout')">
+        <img src="interior.jpg" alt="">
+        <div class="menu-label">
+          <span>BEFORE YOU GO</span>
+          <strong>Checkout</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="social">
+      <h3>Follow Darby's Ridge</h3>
+      <p>Stay connected and see more of the cabin experience.</p>
+
+      <div class="social-links">
+        <a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
+        <a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
+      </div>
+
+      <div class="team-access">
+        <button type="button" onclick="showPage('login')">Team Access</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="welcome" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Welcome Guide</h1>
+  <div class="panel">
+    <div id="welcomeContent"></div>
+  </div>
+</div>
+
+<div id="info" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>WiFi & Essentials</h1>
+  <div class="panel">
+    <div id="infoContent"></div>
+  </div>
+</div>
+
+<div id="local" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Local Favorites</h1>
+  <div class="panel">
+    <div id="localContent"></div>
+  </div>
+</div>
+
+<div id="trail" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Trail to Lake</h1>
+  <div class="panel">
+    <div id="trailContent"></div>
+  </div>
+</div>
+
+<div id="photos" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Share Photos</h1>
+  <div class="panel">
+    <div id="photosContent"></div>
+  </div>
+</div>
+
+<div id="checkout" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Checkout</h1>
+  <div class="panel">
+    <div id="checkoutContent"></div>
+  </div>
+</div>
+
+<div id="login" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Team Access</h1>
+
+  <div class="panel">
+    <p style="margin-top:0;">Enter the cleaning team password to access the operations portal.</p>
+    <input id="teamPassword" type="password" placeholder="Enter password">
+    <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
+    <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
+  </div>
+</div>
+
+<div id="team" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Cleaning Team Portal</h1>
+
+  <div class="panel">
+    <h3>Turnover Checklist</h3>
+    <ul class="check-list">
+      <li>Make all beds and fluff pillows</li>
+      <li>Clean and reset bathrooms</li>
+      <li>Wipe kitchen counters and appliances</li>
+      <li>Check refrigerator and remove leftover items</li>
+      <li>Restock paper goods, soaps, and coffee items</li>
+      <li>Check hot tub cover and outdoor areas</li>
+      <li>Sweep entry and check decks</li>
+      <li>Take final walkthrough photos</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Operations</h3>
+    <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('inventory')" style="margin-top:12px;">Inventory Checklist</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')" style="margin-top:12px;">Supplies Needed</button>
+    <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('media')" style="margin-top:12px;">Upload Photos / Video</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
+    <button class="action-btn" type="button" onclick="showPage('owner'); renderOwnerDashboard(); loadOwnerEditor();" style="margin-top:12px;">Owner Dashboard</button>
+  </div>
+</div>
+
+<div id="cleanings" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upcoming Cleanings</h1>
+
+  <div class="panel">
+    <h3>Airbnb Calendar</h3>
+    <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
+    <div id="calendarStatus" class="small-note">Loading calendar…</div>
+  </div>
+
+  <div class="panel">
+    <h3>Upcoming Bookings</h3>
+    <div id="calendarResults">
+      <div class="small-note">No calendar data yet.</div>
+    </div>
+  </div>
+</div>
+
+<div id="inventory" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Inventory Checklist</h1>
+
+  <div class="panel">
+    <h3>Kitchen</h3>
+    <ul class="check-list">
+      <li>Coffee supplies</li>
+      <li>Dish pods</li>
+      <li>Paper towels</li>
+      <li>Trash bags</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Bathrooms</h3>
+    <ul class="check-list">
+      <li>Toilet paper</li>
+      <li>Hand soap</li>
+      <li>Shampoo / conditioner / body wash</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Laundry / Extras</h3>
+    <ul class="check-list">
+      <li>Laundry pods</li>
+      <li>Linens / backup towels</li>
+      <li>Welcome items</li>
+      <li>Outdoor / hot tub items</li>
+    </ul>
+  </div>
+</div>
+
+<div id="supplies" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Supplies Needed</h1>
+
+  <div class="panel">
+    <label for="supplySimpleInput">Add Supply Item</label>
+    <input id="supplySimpleInput" type="text" placeholder="Paper towels, dish pods, coffee pods...">
+    <button class="action-btn" type="button" onclick="addSupplyItem()" style="margin-top:12px;">Add Item</button>
+  </div>
+
+  <div class="panel">
+    <h3>Current Supply List</h3>
+    <div id="supplyListContainer" class="small-note">No supplies listed.</div>
+  </div>
+</div>
+
+<div id="maintenance" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Maintenance Log</h1>
+
+  <div class="panel">
+    <label for="maintenanceSimpleInput">Add Maintenance Item</label>
+    <input id="maintenanceSimpleInput" type="text" placeholder="Loose rail, lamp out, faucet drip...">
+    <button class="action-btn" type="button" onclick="addMaintenanceItem()" style="margin-top:12px;">Add Issue</button>
+  </div>
+
+  <div class="panel">
+    <h3>Current Maintenance List</h3>
+    <div id="maintenanceListContainer" class="small-note">No maintenance items listed.</div>
+  </div>
+</div>
+
+<div id="media" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upload Photos / Video</h1>
+
+  <div class="panel">
+    <label for="mediaFiles">Select Photos or Video</label>
+    <input id="mediaFiles" type="file" multiple accept="image/*,video/*" onchange="showSelectedMedia()">
+    <p class="small-note">This version lets the cleaner select files and review what was chosen. Actual storage/upload comes next when we connect backend storage.</p>
+    <div id="mediaSelectedList" class="media-list">No files selected.</div>
+  </div>
+</div>
+
+<div id="turnover" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Turnover Complete</h1>
+
+  <div class="panel">
+    <label for="turnoverCleaner">Cleaner Name</label>
+    <input id="turnoverCleaner" type="text" placeholder="Cleaner name">
+
+    <label for="turnoverDate">Turnover Date</label>
+    <input id="turnoverDate" type="text" placeholder="Enter date">
+
+    <label for="turnoverNotes">Turnover Notes</label>
+    <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
+
+    <div id="turnoverSuccess" class="form-message form-success">Turnover marked complete.</div>
+
+    <button class="action-btn" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
+  </div>
+</div>
+
+<div id="owner" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Owner Dashboard</h1>
+
+  <div class="panel">
+    <h3>Today’s Snapshot</h3>
+    <div id="ownerDashboardCounts"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Edit Guest Guide Content</h3>
+
+    <label for="ownerSectionSelect">Choose Section</label>
+    <select id="ownerSectionSelect" onchange="loadOwnerEditor()">
+      <option value="welcome">Cabin Guide</option>
+      <option value="info">WiFi & Essentials</option>
+      <option value="local">Local Favorites</option>
+      <option value="trail">Trail to Lake</option>
+      <option value="photos">Share Photos</option>
+      <option value="checkout">Checkout</option>
+    </select>
+
+    <textarea id="ownerSectionEditor" rows="10" class="edit-box"></textarea>
+
+    <button class="action-btn" type="button" onclick="saveOwnerContent()" style="margin-top:12px;">Save Changes</button>
+    <div id="ownerSaveMessage" class="form-message form-success">Changes saved.</div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button type="button" onclick="showPage('home')">Home</button>
+  <button type="button" onclick="showPage('local')">Favorites</button>
+  <button type="button" onclick="showPage('photos')">Photos</button>
+  <button type="button" onclick="showPage('checkout')">Checkout</button>
+</div>
+
+<script>
+const STORAGE_KEYS = {
+  supplies: 'darbysridge_supplies',
+  maintenance: 'darbysridge_maintenance',
+  content: 'darbysridge_content'
+};
+
+const defaultContent = {
+  welcome: `Welcome to Darby's Ridge. We're so glad you're here.
+
+We hope you settle in, slow down, and enjoy every part of your Blue Ridge stay.`,
+  info: `WiFi Network:
+Password:
+
+Check-in details:
+Hot tub instructions:
+Trash location:
+Fireplace / TV notes:`,
+  local: `Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.`,
+  trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
+  photos: `Tag @darbysridge on Instagram and Facebook.
+
+You can also add a cabin hashtag here later.`,
+  checkout: `• Load and start dishwasher
+• Bag trash and place in designated area
+• Turn off lights
+• Lock doors
+• Safe travels and thank you for staying with us`
+};
+
+function getContentStore(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.content)) || {};
+  } catch(e){
+    return {};
+  }
+}
+
+function getSectionContent(section){
+  const store = getContentStore();
+  return store[section] || defaultContent[section] || '';
+}
+
+function saveSectionContent(section, value){
+  const store = getContentStore();
+  store[section] = value;
+  localStorage.setItem(STORAGE_KEYS.content, JSON.stringify(store));
+}
+
+function renderEditablePages(){
+  document.getElementById('welcomeContent').innerText = getSectionContent('welcome');
+  document.getElementById('infoContent').innerText = getSectionContent('info');
+  document.getElementById('localContent').innerText = getSectionContent('local');
+  document.getElementById('trailContent').innerText = getSectionContent('trail');
+  document.getElementById('photosContent').innerText = getSectionContent('photos');
+  document.getElementById('checkoutContent').innerText = getSectionContent('checkout');
+}
+
+function loadOwnerEditor(){
+  const section = document.getElementById('ownerSectionSelect').value;
+  document.getElementById('ownerSectionEditor').value = getSectionContent(section);
+  document.getElementById('ownerSaveMessage').style.display = 'none';
+}
+
+function saveOwnerContent(){
+  const section = document.getElementById('ownerSectionSelect').value;
+  const value = document.getElementById('ownerSectionEditor').value;
+  saveSectionContent(section, value);
+  renderEditablePages();
+  document.getElementById('ownerSaveMessage').style.display = 'block';
+}
+
+function showPage(page){
+  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','cleanings','inventory','supplies','maintenance','media','turnover','owner'];
+
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+
+  const target = document.getElementById(page);
+  if (target) {
+    target.classList.remove('hidden');
+    window.scrollTo(0,0);
   }
 
-  return events.sort((a,b)=>a.start-b.start);
+  if (page === 'supplies') renderSupplyList();
+  if (page === 'maintenance') renderMaintenanceList();
+  if (page === 'owner') {
+    renderOwnerDashboard();
+    loadOwnerEditor();
+  }
 }
 
-module.exports = async function handler(req,res){
+function checkLogin(){
+  const password = document.getElementById('teamPassword').value;
+  const error = document.getElementById('loginError');
+
+  if (password === 'ridgecrew') {
+    error.style.display = 'none';
+    showPage('team');
+  } else {
+    error.style.display = 'block';
+  }
+}
+
+function getStoredList(key){
+  try{
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch(e){
+    return [];
+  }
+}
+
+function saveStoredList(key, list){
+  localStorage.setItem(key, JSON.stringify(list));
+}
+
+function addSupplyItem(){
+  const input = document.getElementById('supplySimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
+
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  input.value = '';
+  renderSupplyList();
+  renderOwnerDashboard();
+}
+
+function removeSupplyItem(index){
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  renderSupplyList();
+  renderOwnerDashboard();
+}
+
+function renderSupplyList(){
+  const container = document.getElementById('supplyListContainer');
+  const list = getStoredList(STORAGE_KEYS.supplies);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No supplies listed.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeSupplyItem(${index})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addMaintenanceItem(){
+  const input = document.getElementById('maintenanceSimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
+
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  input.value = '';
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function removeMaintenanceItem(index){
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function renderMaintenanceList(){
+  const container = document.getElementById('maintenanceListContainer');
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No maintenance items listed.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeMaintenanceItem(${index})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function renderOwnerDashboard(){
+  const supplyCount = getStoredList(STORAGE_KEYS.supplies).length;
+  const maintenanceCount = getStoredList(STORAGE_KEYS.maintenance).length;
+  const container = document.getElementById('ownerDashboardCounts');
+
+  container.innerHTML = `
+    <div class="status-row">
+      <div>
+        <strong>Supplies Needed</strong><br>
+        <span class="small-note">Current running supply list</span>
+      </div>
+      <div class="status-pill">${supplyCount}</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Maintenance Items</strong><br>
+        <span class="small-note">Current maintenance list</span>
+      </div>
+      <div class="status-pill">${maintenanceCount}</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Guest Guide Content</strong><br>
+        <span class="small-note">Editable below</span>
+      </div>
+      <div class="status-pill soft">Ready</div>
+    </div>
+  `;
+}
+
+function showSelectedMedia(){
+  const files = document.getElementById('mediaFiles').files;
+  const list = document.getElementById('mediaSelectedList');
+
+  if(!files.length){
+    list.textContent = 'No files selected.';
+    return;
+  }
+
+  list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+}
+
+function submitTurnoverComplete(){
+  document.getElementById('turnoverSuccess').style.display = 'block';
+  document.getElementById('turnoverCleaner').value = '';
+  document.getElementById('turnoverDate').value = '';
+  document.getElementById('turnoverNotes').value = '';
+}
+
+async function loadCalendar(){
+  const status = document.getElementById('calendarStatus');
+  const results = document.getElementById('calendarResults');
+
+  status.textContent = 'Loading calendar...';
+  results.innerHTML = '<div class="small-note">Loading...</div>';
 
   try{
+    const response = await fetch('/api/airbnb-calendar');
+    const data = await response.json();
 
-    const response = await fetch(AIRBNB_ICAL_URL);
-    const icsText = await response.text();
+    if(!data.success){
+      status.textContent = data.error || 'Unable to load calendar.';
+      results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+      return;
+    }
 
-    const events = parseICalEvents(icsText);
-    const today = new Date();
+    status.textContent = 'Calendar connected.';
 
-    const bookings = events
-      .filter(event => event.end >= today)
-      .map(event => ({
-        checkIn: formatDate(event.start),
-        checkOut: formatDate(event.end)
-      }));
+    if(!data.bookings || !data.bookings.length){
+      results.innerHTML = '<div class="small-note">No upcoming bookings found.</div>';
+      return;
+    }
 
-    res.status(200).json({
-      success:true,
-      bookings
-    });
-
-  } catch(error){
-
-    console.error(error);
-
-    res.status(500).json({
-      success:false,
-      error:"Calendar failed to load"
-    });
-
+    results.innerHTML = data.bookings.map((booking,index)=>`
+      <div class="status-row">
+        <div>
+          <strong>Booking ${index + 1}</strong><br>
+          <span class="small-note">Check-in: ${booking.checkIn}</span><br>
+          <span class="small-note">Check-out: ${booking.checkOut}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch(e){
+    status.textContent = 'Unable to load calendar.';
+    results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
   }
+}
 
-};
+renderEditablePages();
+renderSupplyList();
+renderMaintenanceList();
+renderOwnerDashboard();
+</script>
+
+</body>
+</html>
