@@ -364,9 +364,76 @@ Facebook
 <div id="login" class="hidden page">
 <div class="back" onclick="showPage('home')">← Back</div>
 <h1>Team Access</h1>
-<p>Cleaning team login page will go here.</p>
+
+<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
+  <p style="margin-top:0;">Enter the cleaning team password to access the turnover page.</p>
+
+  <input
+    id="teamPassword"
+    type="password"
+    placeholder="Enter password"
+    style="
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #d3c2aa;
+      font-size:15px;
+      margin-top:8px;
+      box-sizing:border-box;
+    "
+  >
+
+  <div id="loginError" style="display:none; color:#9b3d2f; margin-top:10px; font-size:14px; font-weight:600;">
+    Incorrect password. Please try again.
+  </div>
+
+  <button
+    onclick="checkLogin()"
+    style="
+      width:100%;
+      margin-top:14px;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#445b49;
+      color:white;
+      font-size:15px;
+      font-weight:600;
+      cursor:pointer;
+    "
+  >
+    Enter Team Portal
+  </button>
+</div>
 </div>
 
+<div id="team" class="hidden page">
+<div class="back" onclick="showPage('home')">← Back</div>
+<h1>Cleaning Team Portal</h1>
+
+<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
+  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Turnover Checklist</h3>
+  <ul style="line-height:1.7; padding-left:18px;">
+    <li>Make all beds and fluff pillows</li>
+    <li>Clean and reset bathrooms</li>
+    <li>Wipe kitchen counters and appliances</li>
+    <li>Check refrigerator and remove leftover items</li>
+    <li>Restock paper goods, soaps, and coffee items</li>
+    <li>Check hot tub cover and outdoor areas</li>
+    <li>Sweep entry and check decks</li>
+    <li>Take final walkthrough photos</li>
+  </ul>
+</div>
+
+<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
+  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Supplies to Check</h3>
+  <p>Toilet paper, paper towels, trash bags, dish pods, hand soap, coffee supplies, laundry items, and guest welcome touches.</p>
+</div>
+
+<div style="background:#f7efe3; padding:18px; border-radius:16px; margin-top:14px;">
+  <h3 style="margin-top:0; font-family:'Playfair Display',serif;">Maintenance Notes</h3>
+  <p>Add any damage, low inventory, stains, missing items, or anything that needs attention before the next guest arrives.</p>
+</div>
 
 <div class="bottom-nav">
 
@@ -381,7 +448,7 @@ Facebook
 
 function showPage(page){
 
-const pages=['home','welcome','info','local','trail','photos','checkout','login'];
+const pages=['home','welcome','info','local','trail','photos','checkout','login','Team'];
 
 pages.forEach(id=>{
 const el=document.getElementById(id);
