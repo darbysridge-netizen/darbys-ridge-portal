@@ -35,12 +35,12 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55));
+      background:linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.58));
     }
 
     .hero-text{
       position:absolute;
-      bottom:66px;
+      bottom:52px;
       left:28px;
       right:28px;
       color:white;
@@ -49,23 +49,23 @@
 
     .logo{
       font-family:'Allura',cursive;
-      font-size:58px;
+      font-size:52px;
       margin:0;
       text-shadow:0 4px 10px rgba(0,0,0,.35);
-      line-height:.95;
+      line-height:.92;
     }
 
     .tagline{
       font-family:'Playfair Display',serif;
-      font-size:18px;
+      font-size:17px;
       margin-top:8px;
     }
 
     .description{
       margin-top:12px;
-      font-size:15px;
+      font-size:14px;
       line-height:1.5;
-      max-width:260px;
+      max-width:255px;
       color:rgba(255,255,255,.9);
     }
 
@@ -105,7 +105,7 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.1));
+      background:linear-gradient(to top, rgba(0,0,0,.68), rgba(0,0,0,.08));
     }
 
     .menu-label{
@@ -350,6 +350,7 @@
     .check-list{
       padding-left:18px;
       line-height:1.7;
+      margin:0;
     }
 
     .list-row{
@@ -374,6 +375,7 @@
       font-size:14px;
       padding:0;
       width:auto;
+      flex-shrink:0;
     }
 
     .media-list{
@@ -387,21 +389,25 @@
       margin-top:12px;
     }
 
-    .comment-card{
+    .center-button{
+      margin-top:12px;
+    }
+
+    .owner-list-card{
       background:white;
-      padding:14px;
+      padding:12px 14px;
       border-radius:12px;
       margin-top:10px;
       border:1px solid #eadbc8;
+      font-size:14px;
+      line-height:1.6;
     }
 
-    .comment-name{
+    .owner-subtitle{
       font-weight:600;
-      margin-bottom:6px;
-    }
-
-    .center-button{
-      margin-top:12px;
+      margin:16px 0 8px;
+      font-size:15px;
+      color:#3c2c1f;
     }
   </style>
 </head>
@@ -455,11 +461,11 @@
           </div>
         </div>
 
-        <div class="menu-card" onclick="showPage('memories')">
+        <div class="menu-card" onclick="showPage('guestMemories')">
           <img src="outdoor.jpg" alt="">
           <div class="menu-label">
-            <span>MEMORIES</span>
-            <strong>Photos & Comments</strong>
+            <span>GUEST MEMORIES</span>
+            <strong>Picture Upload</strong>
           </div>
         </div>
 
@@ -468,6 +474,14 @@
           <div class="menu-label">
             <span>BEFORE YOU GO</span>
             <strong>Checkout</strong>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="showPage('requestToBook')">
+          <img src="book-again.jpg" alt="">
+          <div class="menu-label">
+            <span>RETURN STAY</span>
+            <strong>Request to Book Again</strong>
           </div>
         </div>
       </div>
@@ -479,10 +493,6 @@
         <div class="social-links">
           <a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
           <a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
-        </div>
-
-        <div class="team-access">
-          <button type="button" onclick="showPage('requestToBook')">Request to Book Again</button>
         </div>
 
         <div class="team-access" style="margin-top:10px;">
@@ -528,39 +538,23 @@
     </div>
   </div>
 
-  <div id="memories" class="hidden page">
+  <div id="guestMemories" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Photos & Comments</h1>
+    <h1>Guest Memories</h1>
 
     <div class="panel">
-      <h3>Share Your Memories</h3>
       <div id="photosContent" class="small-note" style="margin-bottom:10px;"></div>
 
       <label for="guestMediaFiles">Select Photos</label>
       <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="showGuestMedia()">
-      <p class="small-note">Guests can choose photos here. This version shows selected file names on the device.</p>
+      <p class="small-note">Guests can choose photos here. This version shows the selected file names on the device.</p>
       <div id="guestMediaList" class="media-list">No files selected.</div>
-    </div>
-
-    <div class="panel">
-      <label for="guestCommentName">Your Name</label>
-      <input id="guestCommentName" type="text" placeholder="Enter your name">
-
-      <label for="guestCommentText">Tell us about your trip</label>
-      <textarea id="guestCommentText" rows="6" placeholder="What did you love about your stay?"></textarea>
-
-      <button class="action-btn center-button" type="button" onclick="addGuestComment()">Submit Comment</button>
-    </div>
-
-    <div class="panel">
-      <h3>Guest Notes</h3>
-      <div id="guestCommentsList" class="small-note">No comments yet.</div>
     </div>
   </div>
 
   <div id="checkout" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Checkout</h1>
+    <h1>Before You Go</h1>
     <div class="panel">
       <div id="checkoutContent"></div>
     </div>
@@ -621,26 +615,15 @@
 
     <div class="panel">
       <h3>Turnover Checklist</h3>
-      <ul class="check-list">
-        <li>Make all beds and fluff pillows</li>
-        <li>Clean and reset bathrooms</li>
-        <li>Wipe kitchen counters and appliances</li>
-        <li>Check refrigerator and remove leftover items</li>
-        <li>Restock paper goods, soaps, and coffee items</li>
-        <li>Check hot tub cover and outdoor areas</li>
-        <li>Sweep entry and check decks</li>
-        <li>Take final walkthrough photos</li>
-      </ul>
+      <ul class="check-list" id="teamChecklistDisplay"></ul>
     </div>
 
     <div class="panel">
       <h3>Operations</h3>
       <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
-      <button class="action-btn secondary-btn" type="button" onclick="showPage('inventory')" style="margin-top:12px;">Inventory Checklist</button>
       <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')" style="margin-top:12px;">Supplies Needed</button>
       <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
-      <button class="action-btn secondary-btn" type="button" onclick="showPage('media')" style="margin-top:12px;">Upload Photos / Video</button>
-      <button class="action-btn tertiary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
+      <button class="action-btn secondary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Turnover Submission</button>
     </div>
   </div>
 
@@ -659,40 +642,6 @@
       <div id="calendarResults">
         <div class="small-note">No calendar data yet.</div>
       </div>
-    </div>
-  </div>
-
-  <div id="inventory" class="hidden page">
-    <button class="back" type="button" onclick="showPage('team')">← Back</button>
-    <h1>Inventory Checklist</h1>
-
-    <div class="panel">
-      <h3>Kitchen</h3>
-      <ul class="check-list">
-        <li>Coffee supplies</li>
-        <li>Dish pods</li>
-        <li>Paper towels</li>
-        <li>Trash bags</li>
-      </ul>
-    </div>
-
-    <div class="panel">
-      <h3>Bathrooms</h3>
-      <ul class="check-list">
-        <li>Toilet paper</li>
-        <li>Hand soap</li>
-        <li>Shampoo / conditioner / body wash</li>
-      </ul>
-    </div>
-
-    <div class="panel">
-      <h3>Laundry / Extras</h3>
-      <ul class="check-list">
-        <li>Laundry pods</li>
-        <li>Linens / backup towels</li>
-        <li>Welcome items</li>
-        <li>Outdoor / hot tub items</li>
-      </ul>
     </div>
   </div>
 
@@ -728,21 +677,9 @@
     </div>
   </div>
 
-  <div id="media" class="hidden page">
-    <button class="back" type="button" onclick="showPage('team')">← Back</button>
-    <h1>Upload Photos / Video</h1>
-
-    <div class="panel">
-      <label for="mediaFiles">Select Photos or Video</label>
-      <input id="mediaFiles" type="file" multiple accept="image/*,video/*" onchange="showSelectedMedia()">
-      <p class="small-note">This version lets the cleaner select files and review what was chosen. Actual storage/upload comes next when we connect backend storage.</p>
-      <div id="mediaSelectedList" class="media-list">No files selected.</div>
-    </div>
-  </div>
-
   <div id="turnover" class="hidden page">
     <button class="back" type="button" onclick="showPage('team')">← Back</button>
-    <h1>Turnover Complete</h1>
+    <h1>Turnover Submission</h1>
 
     <div class="panel">
       <label for="turnoverCleaner">Cleaner Name</label>
@@ -754,9 +691,13 @@
       <label for="turnoverNotes">Turnover Notes</label>
       <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
 
-      <div id="turnoverSuccess" class="form-message form-success">Turnover marked complete.</div>
+      <label for="turnoverFiles">Upload Photos / Video</label>
+      <input id="turnoverFiles" type="file" multiple accept="image/*,video/*" onchange="showTurnoverMedia()">
+      <div id="turnoverFilesList" class="media-list">No files selected.</div>
 
-      <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
+      <div id="turnoverSuccess" class="form-message form-success">Turnover submission saved.</div>
+
+      <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Submit Turnover</button>
     </div>
   </div>
 
@@ -770,6 +711,14 @@
     </div>
 
     <div class="panel">
+      <h3>Supplies Needed</h3>
+      <div id="ownerSupplyList" class="small-note">No supplies listed.</div>
+
+      <div class="owner-subtitle">Maintenance Items</div>
+      <div id="ownerMaintenanceList" class="small-note">No maintenance items listed.</div>
+    </div>
+
+    <div class="panel">
       <h3>Edit Guest Guide Content</h3>
 
       <label for="ownerSectionSelect">Choose Section</label>
@@ -778,8 +727,9 @@
         <option value="info">WiFi & Essentials</option>
         <option value="local">Local Favorites</option>
         <option value="trail">Trail to Lake</option>
-        <option value="photos">Photos & Comments Intro</option>
-        <option value="checkout">Checkout</option>
+        <option value="photos">Guest Memories</option>
+        <option value="checkout">Checkout Instructions</option>
+        <option value="checklist">Turnover Checklist</option>
       </select>
 
       <textarea id="ownerSectionEditor" rows="10" class="edit-box"></textarea>
@@ -792,8 +742,8 @@
   <div class="bottom-nav">
     <button type="button" onclick="showPage('home')">Home</button>
     <button type="button" onclick="showPage('local')">Favorites</button>
-    <button type="button" onclick="showPage('memories')">Memories</button>
-    <button type="button" onclick="showPage('requestToBook')">Book Again</button>
+    <button type="button" onclick="showPage('guestMemories')">Memories</button>
+    <button type="button" onclick="showPage('checkout')">Checkout</button>
   </div>
 
   <script>
@@ -804,8 +754,8 @@
       supplies: 'darbysridge_supplies',
       maintenance: 'darbysridge_maintenance',
       content: 'darbysridge_content',
-      comments: 'darbysridge_comments',
-      requests: 'darbysridge_requests'
+      requests: 'darbysridge_requests',
+      turnovers: 'darbysridge_turnovers'
     };
 
     const defaultContent = {
@@ -821,12 +771,20 @@ Trash location:
 Fireplace / TV notes:`,
       local: `Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.`,
       trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
-      photos: `We'd love to see your favorite moments from your stay. Share a few photos and leave a quick note about your trip.`,
+      photos: `We'd love to see your favorite moments from your stay. Feel free to upload a few favorite cabin memories here.`,
       checkout: `• Load and start dishwasher
 • Bag trash and place in designated area
 • Turn off lights
 • Lock doors
-• Safe travels and thank you for staying with us`
+• Safe travels and thank you for staying with us`,
+      checklist: `Make all beds and fluff pillows
+Clean and reset bathrooms
+Wipe kitchen counters and appliances
+Check refrigerator and remove leftover items
+Restock paper goods, soaps, and coffee items
+Check hot tub cover and outdoor areas
+Sweep entry and check decks
+Take final walkthrough photos`
     };
 
     function getContentStore(){
@@ -848,6 +806,14 @@ Fireplace / TV notes:`,
       localStorage.setItem(STORAGE_KEYS.content, JSON.stringify(store));
     }
 
+    function getChecklistItems(){
+      const raw = getSectionContent('checklist');
+      return raw
+        .split('\n')
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
+
     function renderEditablePages(){
       document.getElementById('welcomeContent').innerText = getSectionContent('welcome');
       document.getElementById('infoContent').innerText = getSectionContent('info');
@@ -855,6 +821,12 @@ Fireplace / TV notes:`,
       document.getElementById('trailContent').innerText = getSectionContent('trail');
       document.getElementById('photosContent').innerText = getSectionContent('photos');
       document.getElementById('checkoutContent').innerText = getSectionContent('checkout');
+
+      const checklistEl = document.getElementById('teamChecklistDisplay');
+      if(checklistEl){
+        const items = getChecklistItems();
+        checklistEl.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+      }
     }
 
     function loadOwnerEditor(){
@@ -873,9 +845,8 @@ Fireplace / TV notes:`,
 
     function showPage(page){
       const pages = [
-        'home','welcome','info','local','trail','memories','checkout','requestToBook',
-        'login','ownerLogin','team','cleanings','inventory','supplies','maintenance',
-        'media','turnover','owner'
+        'home','welcome','info','local','trail','guestMemories','checkout','requestToBook',
+        'login','ownerLogin','team','cleanings','supplies','maintenance','turnover','owner'
       ];
 
       pages.forEach(id => {
@@ -895,7 +866,6 @@ Fireplace / TV notes:`,
         renderOwnerDashboard();
         loadOwnerEditor();
       }
-      if (page === 'memories') renderGuestComments();
     }
 
     function checkLogin(){
@@ -1010,58 +980,50 @@ Fireplace / TV notes:`,
       `).join('');
     }
 
-    function renderOwnerDashboard(){
-      const supplyCount = getStoredList(STORAGE_KEYS.supplies).length;
-      const maintenanceCount = getStoredList(STORAGE_KEYS.maintenance).length;
-      const commentCount = getStoredList(STORAGE_KEYS.comments).length;
-      const requestCount = getStoredList(STORAGE_KEYS.requests).length;
-      const container = document.getElementById('ownerDashboardCounts');
-
-      container.innerHTML = `
-        <div class="status-row">
-          <div>
-            <strong>Supplies Needed</strong><br>
-            <span class="small-note">Current running supply list</span>
-          </div>
-          <div class="status-pill">${supplyCount}</div>
-        </div>
-
-        <div class="status-row">
-          <div>
-            <strong>Maintenance Items</strong><br>
-            <span class="small-note">Current maintenance list</span>
-          </div>
-          <div class="status-pill">${maintenanceCount}</div>
-        </div>
-
-        <div class="status-row">
-          <div>
-            <strong>Guest Comments</strong><br>
-            <span class="small-note">Saved on this device</span>
-          </div>
-          <div class="status-pill">${commentCount}</div>
-        </div>
-
-        <div class="status-row">
-          <div>
-            <strong>Return Booking Requests</strong><br>
-            <span class="small-note">Saved on this device</span>
-          </div>
-          <div class="status-pill soft">${requestCount}</div>
-        </div>
-      `;
-    }
-
-    function showSelectedMedia(){
-      const files = document.getElementById('mediaFiles').files;
-      const list = document.getElementById('mediaSelectedList');
-
-      if(!files.length){
-        list.textContent = 'No files selected.';
-        return;
+    function renderSimpleOwnerList(list, emptyText){
+      if(!list.length){
+        return `<div class="small-note">${emptyText}</div>`;
       }
 
-      list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+      return list.map(item => `<div class="owner-list-card">${item}</div>`).join('');
+    }
+
+    function renderOwnerDashboard(){
+      const supplyList = getStoredList(STORAGE_KEYS.supplies);
+      const maintenanceList = getStoredList(STORAGE_KEYS.maintenance);
+      const requestCount = getStoredList(STORAGE_KEYS.requests).length;
+      const turnoverCount = getStoredList(STORAGE_KEYS.turnovers).length;
+
+      const snapshot = document.getElementById('ownerDashboardCounts');
+      if(snapshot){
+        snapshot.innerHTML = `
+          <div class="status-row">
+            <div>
+              <strong>Return Booking Requests</strong><br>
+              <span class="small-note">Saved on this device</span>
+            </div>
+            <div class="status-pill soft">${requestCount}</div>
+          </div>
+
+          <div class="status-row">
+            <div>
+              <strong>Turnover Submissions</strong><br>
+              <span class="small-note">Saved on this device</span>
+            </div>
+            <div class="status-pill">${turnoverCount}</div>
+          </div>
+        `;
+      }
+
+      const supplyEl = document.getElementById('ownerSupplyList');
+      if(supplyEl){
+        supplyEl.innerHTML = renderSimpleOwnerList(supplyList, 'No supplies listed.');
+      }
+
+      const maintenanceEl = document.getElementById('ownerMaintenanceList');
+      if(maintenanceEl){
+        maintenanceEl.innerHTML = renderSimpleOwnerList(maintenanceList, 'No maintenance items listed.');
+      }
     }
 
     function showGuestMedia(){
@@ -1076,44 +1038,38 @@ Fireplace / TV notes:`,
       list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
     }
 
+    function showTurnoverMedia(){
+      const files = document.getElementById('turnoverFiles').files;
+      const list = document.getElementById('turnoverFilesList');
+
+      if(!files.length){
+        list.textContent = 'No files selected.';
+        return;
+      }
+
+      list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+    }
+
     function submitTurnoverComplete(){
+      const cleaner = document.getElementById('turnoverCleaner').value.trim();
+      const date = document.getElementById('turnoverDate').value.trim();
+      const notes = document.getElementById('turnoverNotes').value.trim();
+      const files = Array.from(document.getElementById('turnoverFiles').files || []).map(file => file.name);
+
+      if(!cleaner || !date) return;
+
+      const list = getStoredList(STORAGE_KEYS.turnovers);
+      list.unshift({ cleaner, date, notes, files });
+      saveStoredList(STORAGE_KEYS.turnovers, list);
+
       document.getElementById('turnoverSuccess').style.display = 'block';
       document.getElementById('turnoverCleaner').value = '';
       document.getElementById('turnoverDate').value = '';
       document.getElementById('turnoverNotes').value = '';
-    }
+      document.getElementById('turnoverFiles').value = '';
+      document.getElementById('turnoverFilesList').textContent = 'No files selected.';
 
-    function addGuestComment(){
-      const name = document.getElementById('guestCommentName').value.trim();
-      const text = document.getElementById('guestCommentText').value.trim();
-      if(!name || !text) return;
-
-      const list = getStoredList(STORAGE_KEYS.comments);
-      list.unshift({name, text});
-      saveStoredList(STORAGE_KEYS.comments, list);
-
-      document.getElementById('guestCommentName').value = '';
-      document.getElementById('guestCommentText').value = '';
-
-      renderGuestComments();
       renderOwnerDashboard();
-    }
-
-    function renderGuestComments(){
-      const container = document.getElementById('guestCommentsList');
-      const list = getStoredList(STORAGE_KEYS.comments);
-
-      if(!list.length){
-        container.innerHTML = '<div class="small-note">No comments yet.</div>';
-        return;
-      }
-
-      container.innerHTML = list.map(comment => `
-        <div class="comment-card">
-          <div class="comment-name">${comment.name}</div>
-          <div>${comment.text}</div>
-        </div>
-      `).join('');
     }
 
     function submitRequestToBook(){
@@ -1181,7 +1137,6 @@ Fireplace / TV notes:`,
     renderEditablePages();
     renderSupplyList();
     renderMaintenanceList();
-    renderGuestComments();
     renderOwnerDashboard();
   </script>
 
