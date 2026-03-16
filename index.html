@@ -449,17 +449,31 @@
       background:white;
     }
 
-    .pdf-fallback{
-      padding:14px 18px 18px;
-      font-size:13px;
-      color:#6d5a49;
-      line-height:1.5;
+    .mobile-open{
+      display:none;
+      padding:16px;
+      text-align:center;
     }
 
-    .pdf-fallback a{
-      color:#445b49;
-      font-weight:600;
+    .open-guide-btn{
+      display:inline-block;
+      padding:14px 22px;
+      background:#445b49;
+      color:white;
+      border-radius:12px;
       text-decoration:none;
+      font-weight:600;
+    }
+
+    @media (max-width: 768px){
+      .pdf-frame{
+        height:85vh;
+        min-height:560px;
+      }
+
+      .mobile-open{
+        display:block;
+      }
     }
   </style>
 </head>
@@ -556,15 +570,15 @@
     <h1>Guest Guide</h1>
 
     <div class="pdf-wrap">
+      <div class="mobile-open">
+        <a href="darbys-guidebook.pdf" target="_blank" class="open-guide-btn">Open Guest Guide</a>
+      </div>
+
       <iframe
         class="pdf-frame"
-        src="darbys-guidebook.pdf#view=FitH"
+        src="darbys-guidebook.pdf#toolbar=0&navpanes=0&scrollbar=0"
         title="Darby's Ridge Guest Guide">
       </iframe>
-
-      <div class="pdf-fallback">
-        If the guide does not load here, <a href="darbys-guidebook.pdf" target="_blank">tap here to open it</a>.
-      </div>
     </div>
   </div>
 
