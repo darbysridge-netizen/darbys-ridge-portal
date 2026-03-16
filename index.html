@@ -3,7 +3,6 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darby's Ridge</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -35,37 +34,37 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.06), rgba(0,0,0,.58));
+      background:linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.58));
     }
 
     .hero-text{
       position:absolute;
-      bottom:34px;
-      left:28px;
-      right:28px;
+      bottom:20px;
+      left:24px;
+      right:24px;
       color:white;
       z-index:2;
     }
 
     .logo{
       font-family:'Allura',cursive;
-      font-size:44px;
+      font-size:40px;
       margin:0;
       text-shadow:0 4px 10px rgba(0,0,0,.35);
-      line-height:.92;
+      line-height:.9;
     }
 
     .tagline{
       font-family:'Playfair Display',serif;
-      font-size:15px;
-      margin-top:6px;
+      font-size:14px;
+      margin-top:4px;
     }
 
     .description{
-      margin-top:10px;
-      font-size:13px;
-      line-height:1.45;
-      max-width:220px;
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.4;
+      max-width:210px;
       color:rgba(255,255,255,.9);
     }
 
@@ -108,22 +107,6 @@
       background:linear-gradient(to top, rgba(0,0,0,.68), rgba(0,0,0,.08));
     }
 
-    .wide-card{
-      grid-column:1 / -1;
-      aspect-ratio:2.55/1;
-      min-height:106px;
-    }
-
-    .wide-card .menu-label{
-      bottom:16px;
-      left:18px;
-      right:18px;
-    }
-
-    .wide-card .menu-label strong{
-      font-size:20px;
-    }
-
     .menu-label{
       position:absolute;
       bottom:12px;
@@ -144,6 +127,22 @@
       display:block;
       font-family:'Playfair Display',serif;
       font-size:18px;
+    }
+
+    .wide-card{
+      grid-column:1 / -1;
+      aspect-ratio:auto;
+      height:108px;
+    }
+
+    .wide-card .menu-label{
+      bottom:14px;
+      left:16px;
+      right:16px;
+    }
+
+    .wide-card .menu-label strong{
+      font-size:20px;
     }
 
     .social{
@@ -824,10 +823,7 @@ Take final walkthrough photos`
 
     function getChecklistItems(){
       const raw = getSectionContent('checklist');
-      return raw
-        .split('\n')
-        .map(item => item.trim())
-        .filter(Boolean);
+      return raw.split('\n').map(item => item.trim()).filter(Boolean);
     }
 
     function renderEditablePages(){
@@ -1000,7 +996,6 @@ Take final walkthrough photos`
       if(!list.length){
         return `<div class="small-note">${emptyText}</div>`;
       }
-
       return list.map(item => `<div class="owner-list-card">${item}</div>`).join('');
     }
 
@@ -1155,6 +1150,5 @@ Take final walkthrough photos`
     renderMaintenanceList();
     renderOwnerDashboard();
   </script>
-
 </body>
 </html>
