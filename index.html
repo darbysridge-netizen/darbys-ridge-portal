@@ -132,13 +132,6 @@
       font-size:18px;
     }
 
-    .compact-label strong{
-      display:block;
-      font-family:'Playfair Display',serif;
-      font-size:17px;
-      line-height:1.15;
-    }
-
     .wide-card{
       grid-column:1 / -1;
       aspect-ratio:auto;
@@ -472,35 +465,39 @@
       font-weight:600;
     }
 
-    .essentials-grid{
+    .essentials-single{
       display:flex;
       flex-direction:column;
-      gap:14px;
-      margin-top:14px;
+      gap:18px;
     }
 
-    .essentials-card{
-      background:#f7efe3;
-      border-radius:16px;
-      padding:16px;
-      box-shadow:0 4px 10px rgba(0,0,0,.04);
+    .essentials-block{
+      padding-bottom:16px;
+      border-bottom:1px solid #e5d7c4;
     }
 
-    .essentials-card h3{
-      margin:0 0 10px;
+    .essentials-block:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+
+    .essentials-block h3{
+      margin:0 0 8px;
       font-family:'Playfair Display',serif;
-      font-size:20px;
+      font-size:22px;
+      color:#3c2c1f;
     }
 
-    .essentials-card p{
+    .essentials-block p{
       margin:0;
-      line-height:1.6;
-      font-size:14px;
+      line-height:1.7;
+      font-size:15px;
+      font-family:'Inter',sans-serif;
       color:#4f3d2f;
       white-space:pre-line;
     }
 
-    .essentials-card .highlight{
+    .highlight{
       font-weight:700;
       color:#2f241b;
     }
@@ -545,7 +542,7 @@
 
         <div class="menu-card" onclick="showPage('info')">
           <img src="essentials.jpg" alt="">
-          <div class="menu-label compact-label">
+          <div class="menu-label">
             <span>STAY DETAILS</span>
             <strong>WiFi + Essentials</strong>
           </div>
@@ -914,11 +911,19 @@ Please refer to the guest guide for additional house information, tips for your 
       local: `Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.`,
       trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
       photos: `We'd love to see your favorite moments from your stay. Feel free to upload a few favorite cabin memories here.`,
-      checkout: `• Load and start dishwasher
-• Bag trash and place in designated area
-• Turn off lights
-• Lock doors
-• Safe travels and thank you for staying with us`,
+      checkout: `Checkout Checklist
+
+Please load any remaining dirty dishes and start the dishwasher.
+Remove all food items that you brought with you.
+Empty all trash cans and place bags in the bear-proof outdoor bin.
+Place used towels in the laundry area.
+Leave beds that were used unmade.
+Double-check drawers, outlets, and outdoor areas for personal belongings.
+If you moved any décor or items, please return them to their original spots.
+Lock all doors and windows before leaving.
+Turn thermostat to 72 in the summer and 68 in the winter.
+Text us when you depart so we can alert our cleaning team.
+Thank you for staying at Darby’s Ridge — we hope to host you again soon!`,
       checklist: `Make all beds and fluff pillows
 Clean and reset bathrooms
 Wipe kitchen counters and appliances
@@ -954,21 +959,23 @@ Take final walkthrough photos`
     }
 
     function formatInfoContent(raw){
-      const chunks = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
-      const cards = [];
+      const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
+      let html = '<div class="panel"><div class="essentials-single">';
 
-      for(let i = 0; i < chunks.length; i += 2){
-        const title = chunks[i] || '';
-        const body = chunks[i + 1] || '';
-        cards.push(`
-          <div class="essentials-card">
+      for(let i = 0; i < sections.length; i += 2){
+        const title = sections[i] || '';
+        const body = sections[i + 1] || '';
+
+        html += `
+          <div class="essentials-block">
             <h3>${escapeHtml(title)}</h3>
             <p>${highlightLabels(escapeHtml(body))}</p>
           </div>
-        `);
+        `;
       }
 
-      return `<div class="essentials-grid">${cards.join('')}</div>`;
+      html += '</div></div>';
+      return html;
     }
 
     function escapeHtml(text){
