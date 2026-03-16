@@ -1139,10 +1139,16 @@
 
     const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
-    const GUEST_BUCKET = 'guest-photos';
+    const GUEST_BUCKET = 'guest-bucket';
     const TURNOVER_BUCKET = 'turnover-photos';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let supabase = null;
+
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      console.warn('Supabase failed to load. Upload features will be unavailable until the script loads correctly.');
+    }
 
     const STORAGE_KEYS = {
       supplies: 'darbysridge_supplies',
@@ -1578,9 +1584,9 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Shared Uploads</strong><br>
-              <span class="small-note">Guest gallery + turnover photos now live in Supabase</span>
+              <span class="small-note">${supabase ? 'Guest gallery + turnover photos connected' : 'Upload service not connected yet'}</span>
             </div>
-            <div class="status-pill">Cloud</div>
+            <div class="status-pill">${supabase ? 'Cloud' : 'Offline'}</div>
           </div>
         `;
       }
@@ -1635,9 +1641,17 @@ Take final walkthrough photos`
     }
 
     async function addGuestPhotos(){
+      const message = document.getElementById('guestPhotoMessage');
+
+      if (!supabase) {
+        message.className = 'form-message form-error';
+        message.textContent = 'Upload service is not connected yet. The rest of the app should still work.';
+        message.style.display = 'block';
+        return;
+      }
+
       const files = Array.from(document.getElementById('guestMediaFiles').files || []);
       const guestName = document.getElementById('guestMemoryName').value.trim() || 'Guest Memory';
-      const message = document.getElementById('guestPhotoMessage');
 
       if(!files.length){
         message.className = 'form-message form-error';
@@ -1679,6 +1693,14 @@ Take final walkthrough photos`
 
     async function loadGuestGallery(){
       const gallery = document.getElementById('guestGallery');
+
+      if (!supabase) {
+        if (gallery) {
+          gallery.innerHTML = '<div class="small-note">Gallery is temporarily unavailable until Supabase is connected.</div>';
+        }
+        return;
+      }
+
       if(!gallery) return;
 
       gallery.innerHTML = '<div class="small-note">Loading gallery...</div>';
@@ -1722,13 +1744,20 @@ Take final walkthrough photos`
     }
 
     async function submitTurnoverComplete(){
+      const errorEl = document.getElementById('turnoverError');
+
+      if (!supabase) {
+        errorEl.textContent = 'Upload service is not connected yet. The rest of the app should still work.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
       const cleaner = document.getElementById('turnoverCleaner').value.trim();
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
       const files = Array.from(document.getElementById('turnoverFiles').files || []);
 
       const success = document.getElementById('turnoverSuccess');
-      const errorEl = document.getElementById('turnoverError');
 
       success.style.display = 'none';
       errorEl.style.display = 'none';
@@ -1793,6 +1822,14 @@ Take final walkthrough photos`
 
     async function renderOwnerTurnovers(){
       const container = document.getElementById('ownerTurnoverEntries');
+
+      if (!supabase) {
+        if (container) {
+          container.innerHTML = '<div class="small-note">Turnover uploads are temporarily unavailable until Supabase is connected.</div>';
+        }
+        return;
+      }
+
       if(!container) return;
 
       container.innerHTML = '<div class="small-note">Loading turnover submissions...</div>';
@@ -1809,7 +1846,7 @@ Take final walkthrough photos`
         return;
       }
 
-      const directoryItems = (folders || []).filter(item => item.id === null || item.metadata === null || !item.name.includes('.'));
+      const directoryItems = (folders || []).filter(item => item.name && !item.name.includes('.'));
 
       if(!directoryItems.length){
         container.innerHTML = '<div class="small-note">No turnover submissions yet.</div>';
