@@ -39,7 +39,7 @@
 
     .hero-text{
       position:absolute;
-      bottom:40px;
+      bottom:70px;
       left:26px;
       right:26px;
       color:white;
@@ -431,6 +431,36 @@
       font-size:15px;
       color:#3c2c1f;
     }
+
+    .pdf-wrap{
+      background:#f7efe3;
+      border-radius:16px;
+      overflow:hidden;
+      margin-top:14px;
+      box-shadow:0 6px 16px rgba(0,0,0,.08);
+    }
+
+    .pdf-frame{
+      width:100%;
+      height:78vh;
+      min-height:700px;
+      border:none;
+      display:block;
+      background:white;
+    }
+
+    .pdf-fallback{
+      padding:14px 18px 18px;
+      font-size:13px;
+      color:#6d5a49;
+      line-height:1.5;
+    }
+
+    .pdf-fallback a{
+      color:#445b49;
+      font-weight:600;
+      text-decoration:none;
+    }
   </style>
 </head>
 
@@ -451,11 +481,11 @@
       <div class="section-title">Guest Guide</div>
 
       <div class="card-grid">
-        <div class="menu-card" onclick="showPage('welcome')">
+        <div class="menu-card" onclick="showPage('guidebook')">
           <img src="cabin-exterior.jpg" alt="">
           <div class="menu-label">
             <span>DARBY'S RIDGE</span>
-            <strong>Cabin Guide</strong>
+            <strong>Guest Guide</strong>
           </div>
         </div>
 
@@ -521,11 +551,20 @@
     </div>
   </div>
 
-  <div id="welcome" class="hidden page">
+  <div id="guidebook" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Welcome Guide</h1>
-    <div class="panel">
-      <div id="welcomeContent"></div>
+    <h1>Guest Guide</h1>
+
+    <div class="pdf-wrap">
+      <iframe
+        class="pdf-frame"
+        src="darbys-guidebook.pdf#view=FitH"
+        title="Darby's Ridge Guest Guide">
+      </iframe>
+
+      <div class="pdf-fallback">
+        If the guide does not load here, <a href="darbys-guidebook.pdf" target="_blank">tap here to open it</a>.
+      </div>
     </div>
   </div>
 
@@ -738,7 +777,6 @@
 
       <label for="ownerSectionSelect">Choose Section</label>
       <select id="ownerSectionSelect" onchange="loadOwnerEditor()">
-        <option value="welcome">Cabin Guide</option>
         <option value="info">WiFi & Essentials</option>
         <option value="local">Local Favorites</option>
         <option value="trail">Trail to Lake</option>
@@ -773,9 +811,6 @@
     };
 
     const defaultContent = {
-      welcome: `Welcome to Darby's Ridge. We're so glad you're here.
-
-We hope you settle in, slow down, and enjoy every part of your Blue Ridge stay.`,
       info: `WiFi Network:
 Password:
 
@@ -826,7 +861,6 @@ Take final walkthrough photos`
     }
 
     function renderEditablePages(){
-      document.getElementById('welcomeContent').innerText = getSectionContent('welcome');
       document.getElementById('infoContent').innerText = getSectionContent('info');
       document.getElementById('localContent').innerText = getSectionContent('local');
       document.getElementById('trailContent').innerText = getSectionContent('trail');
@@ -856,7 +890,7 @@ Take final walkthrough photos`
 
     function showPage(page){
       const pages = [
-        'home','welcome','info','local','trail','guestMemories','checkout','requestToBook',
+        'home','guidebook','info','local','trail','guestMemories','checkout','requestToBook',
         'login','ownerLogin','team','cleanings','supplies','maintenance','turnover','owner'
       ];
 
