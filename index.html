@@ -1,645 +1,1180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Darby's Ridge</title>
-  <style>
-    :root {
-      --bg: #f6f3ee;
-      --overlay: rgba(0, 0, 0, 0.34);
-      --card: rgba(255, 255, 255, 0.92);
-      --text: #ffffff;
-      --dark: #2b2b2b;
-      --accent: #8a6a45;
-      --accent-dark: #6e5334;
-      --soft: #efe7dc;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
-      --radius: 22px;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darby's Ridge</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: "Georgia", "Times New Roman", serif;
-      background: var(--bg);
-      color: var(--dark);
-      min-height: 100%;
-    }
+<style>
+body{
+margin:0;
+background:#e2d2bd;
+font-family:'Inter',sans-serif;
+color:#3c2c1f;
+}
 
-    body {
-      overflow-x: hidden;
-    }
+.phone{
+max-width:430px;
+margin:auto;
+background:#efe4d3;
+min-height:100vh;
+padding-bottom:80px;
+}
 
-    .screen {
-      display: none;
-      min-height: 100vh;
-      width: 100%;
-    }
+.hero{
+height:460px;
+background:url(hero.jpg) center/cover no-repeat;
+border-bottom-left-radius:30px;
+border-bottom-right-radius:30px;
+position:relative;
+overflow:hidden;
+}
 
-    .screen.active {
-      display: block;
-    }
+.hero:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55));
+}
 
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      background:
-        linear-gradient(var(--overlay), var(--overlay)),
-        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80") center center / cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 0 20px 40px;
-    }
+.hero-text{
+position:absolute;
+bottom:70px;
+left:28px;
+right:28px;
+color:white;
+z-index:2;
+}
 
-    .hero-content {
-      width: 100%;
-      max-width: 1100px;
-      text-align: center;
-      color: var(--text);
-      padding-top: 90px; /* lowered a bit more */
-    }
+.logo{
+font-family:'Allura',cursive;
+font-size:64px;
+margin:0;
+text-shadow:0 4px 10px rgba(0,0,0,.35);
+line-height:.95;
+}
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2.5rem, 6vw, 4.8rem);
-      line-height: 1.05;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-shadow: 0 3px 14px rgba(0,0,0,0.25);
-    }
+.tagline{
+font-family:'Playfair Display',serif;
+font-size:20px;
+margin-top:8px;
+}
 
-    .hero p {
-      margin: 14px auto 0;
-      font-size: clamp(1rem, 2vw, 1.35rem);
-      max-width: 760px;
-      line-height: 1.5;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.22);
-    }
+.description{
+margin-top:12px;
+font-size:15px;
+line-height:1.5;
+max-width:260px;
+color:rgba(255,255,255,.9);
+}
 
-    .button-grid {
-      width: 100%;
-      max-width: 980px;
-      margin-top: 42px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 16px;
-    }
+.content{
+padding:22px;
+}
 
-    .menu-btn {
-      border: none;
-      border-radius: 18px;
-      padding: 18px 16px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: rgba(255,255,255,0.92);
-      color: #2d2a27;
-      box-shadow: var(--shadow);
-      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
-      font-family: inherit;
-    }
+.section-title{
+font-family:'Playfair Display',serif;
+font-size:24px;
+margin-bottom:16px;
+}
 
-    .menu-btn:hover {
-      transform: translateY(-2px);
-      background: #fff;
-      box-shadow: 0 12px 26px rgba(0,0,0,0.2);
-    }
+.card-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
 
-    .social-row {
-      margin-top: 24px;
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
+.menu-card{
+aspect-ratio:1/1;
+border-radius:18px;
+overflow:hidden;
+position:relative;
+cursor:pointer;
+box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
 
-    .social-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 120px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.92);
-      color: #2d2a27;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: var(--shadow);
-      transition: transform 0.18s ease;
-    }
+.menu-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
 
-    .social-link:hover {
-      transform: translateY(-2px);
-    }
+.menu-card:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.1));
+}
 
-    .page {
-      padding: 26px 18px 60px;
-      background: linear-gradient(to bottom, #f7f2eb, #f1ebe3);
-    }
+.menu-label{
+position:absolute;
+bottom:12px;
+left:14px;
+right:14px;
+color:white;
+z-index:2;
+}
 
-    .page-wrap {
-      max-width: 980px;
-      margin: 0 auto;
-    }
+.menu-label span{
+font-size:11px;
+letter-spacing:.1em;
+text-transform:uppercase;
+opacity:.9;
+}
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
+.menu-label strong{
+display:block;
+font-family:'Playfair Display',serif;
+font-size:18px;
+}
 
-    .back-btn {
-      border: none;
-      background: var(--accent);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: var(--shadow);
-      font-family: inherit;
-    }
+.social{
+margin-top:24px;
+background:#f7efe3;
+padding:18px;
+border-radius:16px;
+text-align:center;
+}
 
-    .back-btn:hover {
-      background: var(--accent-dark);
-    }
+.social h3{
+font-family:'Playfair Display',serif;
+margin:0 0 10px;
+}
 
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin-bottom: 18px;
-    }
+.social p{
+margin-bottom:14px;
+}
 
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 2rem;
-      color: #3a2d21;
-    }
+.social-links{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:10px;
+}
 
-    .card h3 {
-      margin-bottom: 10px;
-      color: #4b3829;
-    }
+.social-links a{
+display:block;
+width:100%;
+max-width:240px;
+padding:14px;
+background:#e9d9c5;
+border-radius:12px;
+text-decoration:none;
+color:#3c2c1f;
+font-weight:500;
+text-align:center;
+}
 
-    .card p,
-    .card li,
-    .card label {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
+.team-access{
+margin-top:14px;
+text-align:center;
+}
 
-    .card ul {
-      padding-left: 20px;
-      margin-top: 8px;
-    }
+.team-access button{
+background:none;
+border:none;
+color:#445b49;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+padding:0;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 13px 14px;
-      border-radius: 14px;
-      border: 1px solid #d7cbbd;
-      font-size: 1rem;
-      margin-top: 8px;
-      margin-bottom: 14px;
-      font-family: inherit;
-      background: #fffdfb;
-    }
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+max-width:430px;
+width:100%;
+background:#e2d2bd;
+border-top:1px solid #d3c2aa;
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+z-index:10;
+}
 
-    textarea {
-      min-height: 130px;
-      resize: vertical;
-    }
+.bottom-nav button{
+background:none;
+border:none;
+color:#5b4636;
+font-size:13px;
+font-weight:600;
+cursor:pointer;
+}
 
-    .submit-btn {
-      border: none;
-      background: var(--accent);
-      color: white;
-      padding: 13px 18px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: inherit;
-      box-shadow: var(--shadow);
-    }
+.hidden{
+display:none !important;
+}
 
-    .submit-btn:hover {
-      background: var(--accent-dark);
-    }
+.page{
+max-width:430px;
+margin:auto;
+padding:22px;
+background:#efe4d3;
+min-height:100vh;
+padding-bottom:110px;
+}
 
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
+.page h1{
+font-family:'Playfair Display',serif;
+font-size:30px;
+margin-top:0;
+}
 
-    .calendar-frame {
-      width: 100%;
-      min-height: 700px;
-      border: 0;
-      border-radius: 18px;
-      background: #fff;
-    }
+.back{
+display:inline-block;
+margin-bottom:14px;
+font-weight:600;
+cursor:pointer;
+background:none;
+border:none;
+color:#3c2c1f;
+padding:0;
+font-size:16px;
+}
 
-    .hidden {
-      display: none !important;
-    }
+.panel{
+background:#f7efe3;
+padding:18px;
+border-radius:16px;
+margin-top:14px;
+}
 
-    .notice {
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: #f4ede4;
-      color: #4b3829;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
+.panel h3{
+margin-top:0;
+font-family:'Playfair Display',serif;
+}
 
-    .password-box {
-      max-width: 420px;
-      margin: 0 auto;
-    }
+button.action-btn{
+display:block;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#445b49;
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+text-align:center;
+box-sizing:border-box;
+}
 
-    .footer-note {
-      margin-top: 10px;
-      font-size: 0.92rem;
-      color: #6a5847;
-    }
+button.secondary-btn{
+background:#e9d9c5;
+color:#3c2c1f;
+}
 
-    @media (max-width: 760px) {
-      .hero-content {
-        padding-top: 105px;
-      }
+button.tertiary-btn{
+background:#d8c3aa;
+color:#3c2c1f;
+}
 
-      .two-col {
-        grid-template-columns: 1fr;
-      }
+input, select, textarea{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #d3c2aa;
+font-size:15px;
+margin-top:8px;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+background:white;
+}
 
-      .card {
-        padding: 20px;
-      }
+label{
+display:block;
+margin-top:14px;
+font-weight:600;
+font-size:14px;
+}
 
-      .hero h1 {
-        font-size: clamp(2.2rem, 11vw, 3.2rem);
-      }
-    }
-  </style>
+.form-message{
+display:none;
+margin-top:12px;
+padding:12px;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
+white-space:pre-wrap;
+}
+
+.form-success{
+background:#e6f4ea;
+color:#25613a;
+}
+
+.form-error{
+background:#fdecea;
+color:#9b3d2f;
+}
+
+.small-note{
+font-size:13px;
+color:#6d5a49;
+line-height:1.5;
+}
+
+.status-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.status-row:last-child{
+border-bottom:none;
+}
+
+.status-pill{
+background:#445b49;
+color:white;
+padding:6px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+white-space:nowrap;
+}
+
+.status-pill.soft{
+background:#c9b299;
+color:#3c2c1f;
+}
+
+.check-list{
+padding-left:18px;
+line-height:1.7;
+}
+
+.list-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid #e5d7c4;
+}
+
+.list-row:last-child{
+border-bottom:none;
+}
+
+.delete-btn{
+background:none;
+border:none;
+color:#9b3d2f;
+font-weight:600;
+cursor:pointer;
+font-size:14px;
+padding:0;
+width:auto;
+}
+
+.media-list{
+margin-top:12px;
+font-size:14px;
+line-height:1.6;
+color:#5f4d3d;
+}
+
+.edit-box{
+margin-top:12px;
+}
+
+.comment-card{
+background:white;
+padding:14px;
+border-radius:12px;
+margin-top:10px;
+border:1px solid #eadbc8;
+}
+
+.comment-name{
+font-weight:600;
+margin-bottom:6px;
+}
+
+.center-button{
+margin-top:12px;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- HOME -->
-  <section id="home" class="screen active">
-    <div class="hero">
-      <div class="hero-content">
-        <h1>Darby’s Ridge</h1>
-        <p>Your Blue Ridge escape</p>
+<div id="home" class="phone">
+  <div class="hero">
+    <div class="hero-text">
+      <h1 class="logo">Darby's Ridge</h1>
+      <div class="tagline">Your Blue Ridge Escape</div>
+      <div class="description">
+        Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
+      </div>
+    </div>
+  </div>
 
-        <div class="button-grid">
-          <button class="menu-btn" onclick="showScreen('welcome')">Welcome</button>
-          <button class="menu-btn" onclick="showScreen('wifi')">Wi-Fi</button>
-          <button class="menu-btn" onclick="showScreen('guide')">Cabin Guide</button>
-          <button class="menu-btn" onclick="showScreen('checkout')">Checkout</button>
-          <button class="menu-btn" onclick="showScreen('guestmemories')">Photos + Trip Comments</button>
-          <button class="menu-btn" onclick="showScreen('calendar')">Airbnb Calendar</button>
-          <button class="menu-btn" onclick="showScreen('teamportal')">Team Portal</button>
-          <button class="menu-btn" onclick="showOwnerLogin()">Owner Portal</button>
+  <div class="content">
+    <div class="section-title">Guest Guide</div>
+
+    <div class="card-grid">
+      <div class="menu-card" onclick="showPage('welcome')">
+        <img src="cabin-exterior.jpg" alt="">
+        <div class="menu-label">
+          <span>DARBY'S RIDGE</span>
+          <strong>Cabin Guide</strong>
         </div>
+      </div>
 
-        <div class="social-row">
-          <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a class="social-link" href="mailto:your@email.com">Email</a>
+      <div class="menu-card" onclick="showPage('info')">
+        <img src="essentials.jpg" alt="">
+        <div class="menu-label">
+          <span>STAY DETAILS</span>
+          <strong>WiFi & Essentials</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('local')">
+        <img src="local.jpg" alt="">
+        <div class="menu-label">
+          <span>BLUE RIDGE</span>
+          <strong>Local Favorites</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('trail')">
+        <img src="trail.jpg" alt="">
+        <div class="menu-label">
+          <span>ADVENTURE</span>
+          <strong>Trail to Lake</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('guestUploads')">
+        <img src="outdoor.jpg" alt="">
+        <div class="menu-label">
+          <span>MEMORIES</span>
+          <strong>Upload Photos</strong>
+        </div>
+      </div>
+
+      <div class="menu-card" onclick="showPage('comments')">
+        <img src="interior.jpg" alt="">
+        <div class="menu-label">
+          <span>SHARE</span>
+          <strong>Trip Comments</strong>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- WELCOME -->
-  <section id="welcome" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
-        <div class="card">
-          <h2>Welcome to Darby’s Ridge</h2>
-          <p>
-            We’re so glad you’re here. We hope you settle in, relax, and enjoy everything
-            the cabin and Blue Ridge have to offer. Whether you’re here for adventure,
-            rest, family time, or a little bit of all three, we hope your stay is truly special.
-          </p>
-          <p>
-            Take in the mountain air, enjoy the cozy spaces, and make yourself right at home.
-          </p>
-        </div>
+    <div class="social">
+      <h3>Follow Darby's Ridge</h3>
+      <p>Stay connected and see more of the cabin experience.</p>
+
+      <div class="social-links">
+        <a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
+        <a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
+      </div>
+
+      <div class="team-access">
+        <button type="button" onclick="showPage('requestToBook')">Request to Book Again</button>
+      </div>
+
+      <div class="team-access" style="margin-top:10px;">
+        <button type="button" onclick="showPage('login')">Team Access</button>
+      </div>
+
+      <div class="team-access" style="margin-top:10px;">
+        <button type="button" onclick="showPage('ownerLogin')">Owner Portal</button>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- WIFI -->
-  <section id="wifi" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
-        <div class="card">
-          <h2>Wi-Fi Info</h2>
-          <p><strong>Network:</strong> DarbysRidge_WIFI</p>
-          <p><strong>Password:</strong> WelcomeToTheRidge</p>
-          <p class="footer-note">Update these with your actual Wi-Fi details.</p>
-        </div>
-      </div>
+<div id="welcome" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Welcome Guide</h1>
+  <div class="panel">
+    <div id="welcomeContent"></div>
+  </div>
+</div>
+
+<div id="info" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>WiFi & Essentials</h1>
+  <div class="panel">
+    <div id="infoContent"></div>
+  </div>
+</div>
+
+<div id="local" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Local Favorites</h1>
+  <div class="panel">
+    <div id="localContent"></div>
+  </div>
+</div>
+
+<div id="trail" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Trail to Lake</h1>
+  <div class="panel">
+    <div id="trailContent"></div>
+  </div>
+</div>
+
+<div id="guestUploads" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Upload Photos</h1>
+  <div class="panel">
+    <label for="guestMediaFiles">Select Photos</label>
+    <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="showGuestMedia()">
+    <p class="small-note">Guests can choose photos here. This version shows the selected file names on the device.</p>
+    <div id="guestMediaList" class="media-list">No files selected.</div>
+  </div>
+</div>
+
+<div id="comments" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Trip Comments</h1>
+
+  <div class="panel">
+    <label for="guestCommentName">Your Name</label>
+    <input id="guestCommentName" type="text" placeholder="Enter your name">
+
+    <label for="guestCommentText">Tell us about your trip</label>
+    <textarea id="guestCommentText" rows="6" placeholder="What did you love about your stay?"></textarea>
+
+    <button class="action-btn center-button" type="button" onclick="addGuestComment()">Submit Comment</button>
+  </div>
+
+  <div class="panel">
+    <h3>Guest Notes</h3>
+    <div id="guestCommentsList" class="small-note">No comments yet.</div>
+  </div>
+</div>
+
+<div id="requestToBook" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Request to Book Again</h1>
+
+  <div class="panel">
+    <label for="requestName">Name</label>
+    <input id="requestName" type="text" placeholder="Your name">
+
+    <label for="requestArrival">Preferred Arrival Date</label>
+    <input id="requestArrival" type="text" placeholder="Enter date">
+
+    <label for="requestDeparture">Preferred Departure Date</label>
+    <input id="requestDeparture" type="text" placeholder="Enter date">
+
+    <label for="requestGuests">Number of Guests</label>
+    <input id="requestGuests" type="text" placeholder="How many guests?">
+
+    <label for="requestNotes">Notes</label>
+    <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
+
+    <div id="requestBookSuccess" class="form-message form-success">Request saved on this device.</div>
+    <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
+  </div>
+</div>
+
+<div id="login" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Team Access</h1>
+
+  <div class="panel">
+    <p style="margin-top:0;">Enter the cleaning team password to access the operations portal.</p>
+    <input id="teamPassword" type="password" placeholder="Enter password">
+    <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
+    <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
+  </div>
+</div>
+
+<div id="ownerLogin" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Owner Portal</h1>
+
+  <div class="panel">
+    <p style="margin-top:0;">Enter the owner password.</p>
+    <input id="ownerPassword" type="password" placeholder="Enter password">
+    <div id="ownerLoginError" class="form-message form-error">Incorrect password. Please try again.</div>
+    <button class="action-btn" type="button" onclick="checkOwnerLogin()">Enter Owner Dashboard</button>
+  </div>
+</div>
+
+<div id="team" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Cleaning Team Portal</h1>
+
+  <div class="panel">
+    <h3>Turnover Checklist</h3>
+    <ul class="check-list">
+      <li>Make all beds and fluff pillows</li>
+      <li>Clean and reset bathrooms</li>
+      <li>Wipe kitchen counters and appliances</li>
+      <li>Check refrigerator and remove leftover items</li>
+      <li>Restock paper goods, soaps, and coffee items</li>
+      <li>Check hot tub cover and outdoor areas</li>
+      <li>Sweep entry and check decks</li>
+      <li>Take final walkthrough photos</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Operations</h3>
+    <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('inventory')" style="margin-top:12px;">Inventory Checklist</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')" style="margin-top:12px;">Supplies Needed</button>
+    <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
+    <button class="action-btn secondary-btn" type="button" onclick="showPage('media')" style="margin-top:12px;">Upload Photos / Video</button>
+    <button class="action-btn tertiary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
+  </div>
+</div>
+
+<div id="cleanings" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upcoming Cleanings</h1>
+
+  <div class="panel">
+    <h3>Airbnb Calendar</h3>
+    <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
+    <div id="calendarStatus" class="small-note">Loading calendar...</div>
+  </div>
+
+  <div class="panel">
+    <h3>Upcoming Bookings</h3>
+    <div id="calendarResults">
+      <div class="small-note">No calendar data yet.</div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- CABIN GUIDE -->
-  <section id="guide" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
+<div id="inventory" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Inventory Checklist</h1>
 
-        <div class="card">
-          <h2>Cabin Guide</h2>
-          <div class="two-col">
-            <div>
-              <h3>House Notes</h3>
-              <ul>
-                <li>Please lock doors when leaving.</li>
-                <li>Please use caution on decks, steps, and outdoor areas.</li>
-                <li>Follow hot tub rules before use.</li>
-                <li>Keep food secured and do not leave trash outside.</li>
-              </ul>
-            </div>
-            <div>
-              <h3>Helpful Info</h3>
-              <ul>
-                <li>Nearest grocery and restaurants are a short drive away.</li>
-                <li>Downtown Blue Ridge is nearby for shopping and dining.</li>
-                <li>Reach out through Airbnb with any questions during your stay.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="panel">
+    <h3>Kitchen</h3>
+    <ul class="check-list">
+      <li>Coffee supplies</li>
+      <li>Dish pods</li>
+      <li>Paper towels</li>
+      <li>Trash bags</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Bathrooms</h3>
+    <ul class="check-list">
+      <li>Toilet paper</li>
+      <li>Hand soap</li>
+      <li>Shampoo / conditioner / body wash</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Laundry / Extras</h3>
+    <ul class="check-list">
+      <li>Laundry pods</li>
+      <li>Linens / backup towels</li>
+      <li>Welcome items</li>
+      <li>Outdoor / hot tub items</li>
+    </ul>
+  </div>
+</div>
+
+<div id="supplies" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Supplies Needed</h1>
+
+  <div class="panel">
+    <label for="supplySimpleInput">Add Supply Item</label>
+    <input id="supplySimpleInput" type="text" placeholder="Paper towels, dish pods, coffee pods...">
+    <button class="action-btn center-button" type="button" onclick="addSupplyItem()">Add Item</button>
+  </div>
+
+  <div class="panel">
+    <h3>Current Supply List</h3>
+    <div id="supplyListContainer" class="small-note">No supplies listed.</div>
+  </div>
+</div>
+
+<div id="maintenance" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Maintenance Log</h1>
+
+  <div class="panel">
+    <label for="maintenanceSimpleInput">Add Maintenance Item</label>
+    <input id="maintenanceSimpleInput" type="text" placeholder="Loose rail, lamp out, faucet drip...">
+    <button class="action-btn center-button" type="button" onclick="addMaintenanceItem()">Add Issue</button>
+  </div>
+
+  <div class="panel">
+    <h3>Current Maintenance List</h3>
+    <div id="maintenanceListContainer" class="small-note">No maintenance items listed.</div>
+  </div>
+</div>
+
+<div id="media" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Upload Photos / Video</h1>
+
+  <div class="panel">
+    <label for="mediaFiles">Select Photos or Video</label>
+    <input id="mediaFiles" type="file" multiple accept="image/*,video/*" onchange="showSelectedMedia()">
+    <p class="small-note">This version lets the cleaner select files and review what was chosen. Actual storage/upload comes next when we connect backend storage.</p>
+    <div id="mediaSelectedList" class="media-list">No files selected.</div>
+  </div>
+</div>
+
+<div id="turnover" class="hidden page">
+  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <h1>Turnover Complete</h1>
+
+  <div class="panel">
+    <label for="turnoverCleaner">Cleaner Name</label>
+    <input id="turnoverCleaner" type="text" placeholder="Cleaner name">
+
+    <label for="turnoverDate">Turnover Date</label>
+    <input id="turnoverDate" type="text" placeholder="Enter date">
+
+    <label for="turnoverNotes">Turnover Notes</label>
+    <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
+
+    <div id="turnoverSuccess" class="form-message form-success">Turnover marked complete.</div>
+
+    <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
+  </div>
+</div>
+
+<div id="owner" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Owner Dashboard</h1>
+
+  <div class="panel">
+    <h3>Today’s Snapshot</h3>
+    <div id="ownerDashboardCounts"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Edit Guest Guide Content</h3>
+
+    <label for="ownerSectionSelect">Choose Section</label>
+    <select id="ownerSectionSelect" onchange="loadOwnerEditor()">
+      <option value="welcome">Cabin Guide</option>
+      <option value="info">WiFi & Essentials</option>
+      <option value="local">Local Favorites</option>
+      <option value="trail">Trail to Lake</option>
+      <option value="photos">Share Photos</option>
+      <option value="checkout">Checkout</option>
+    </select>
+
+    <textarea id="ownerSectionEditor" rows="10" class="edit-box"></textarea>
+
+    <button class="action-btn center-button" type="button" onclick="saveOwnerContent()">Save Changes</button>
+    <div id="ownerSaveMessage" class="form-message form-success">Changes saved.</div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <button type="button" onclick="showPage('home')">Home</button>
+  <button type="button" onclick="showPage('local')">Favorites</button>
+  <button type="button" onclick="showPage('comments')">Comments</button>
+  <button type="button" onclick="showPage('requestToBook')">Book Again</button>
+</div>
+
+<script>
+const TEAM_PASSWORD = 'ridgecrew';
+const OWNER_PASSWORD_VALUE = 'darbysowner';
+
+const STORAGE_KEYS = {
+  supplies: 'darbysridge_supplies',
+  maintenance: 'darbysridge_maintenance',
+  content: 'darbysridge_content',
+  comments: 'darbysridge_comments',
+  requests: 'darbysridge_requests'
+};
+
+const defaultContent = {
+  welcome: `Welcome to Darby's Ridge. We're so glad you're here.
+
+We hope you settle in, slow down, and enjoy every part of your Blue Ridge stay.`,
+  info: `WiFi Network:
+Password:
+
+Check-in details:
+Hot tub instructions:
+Trash location:
+Fireplace / TV notes:`,
+  local: `Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.`,
+  trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
+  photos: `Tag @darbysridge on Instagram and Facebook.
+
+You can also add a cabin hashtag here later.`,
+  checkout: `• Load and start dishwasher
+• Bag trash and place in designated area
+• Turn off lights
+• Lock doors
+• Safe travels and thank you for staying with us`
+};
+
+function getContentStore(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.content)) || {};
+  } catch(e){
+    return {};
+  }
+}
+
+function getSectionContent(section){
+  const store = getContentStore();
+  return store[section] || defaultContent[section] || '';
+}
+
+function saveSectionContent(section, value){
+  const store = getContentStore();
+  store[section] = value;
+  localStorage.setItem(STORAGE_KEYS.content, JSON.stringify(store));
+}
+
+function renderEditablePages(){
+  document.getElementById('welcomeContent').innerText = getSectionContent('welcome');
+  document.getElementById('infoContent').innerText = getSectionContent('info');
+  document.getElementById('localContent').innerText = getSectionContent('local');
+  document.getElementById('trailContent').innerText = getSectionContent('trail');
+  document.getElementById('photosContent').innerText = getSectionContent('photos');
+  document.getElementById('checkoutContent').innerText = getSectionContent('checkout');
+}
+
+function loadOwnerEditor(){
+  const section = document.getElementById('ownerSectionSelect').value;
+  document.getElementById('ownerSectionEditor').value = getSectionContent(section);
+  document.getElementById('ownerSaveMessage').style.display = 'none';
+}
+
+function saveOwnerContent(){
+  const section = document.getElementById('ownerSectionSelect').value;
+  const value = document.getElementById('ownerSectionEditor').value;
+  saveSectionContent(section, value);
+  renderEditablePages();
+  document.getElementById('ownerSaveMessage').style.display = 'block';
+}
+
+function showPage(page){
+  const pages = ['home','welcome','info','local','trail','guestUploads','comments','requestToBook','login','ownerLogin','team','cleanings','inventory','supplies','maintenance','media','turnover','owner'];
+
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+
+  const target = document.getElementById(page);
+  if (target) {
+    target.classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
+
+  if (page === 'supplies') renderSupplyList();
+  if (page === 'maintenance') renderMaintenanceList();
+  if (page === 'owner') {
+    renderOwnerDashboard();
+    loadOwnerEditor();
+  }
+  if (page === 'comments') renderGuestComments();
+}
+
+function checkLogin(){
+  const password = document.getElementById('teamPassword').value;
+  const error = document.getElementById('loginError');
+
+  if (password === TEAM_PASSWORD) {
+    error.style.display = 'none';
+    showPage('team');
+  } else {
+    error.style.display = 'block';
+  }
+}
+
+function checkOwnerLogin(){
+  const password = document.getElementById('ownerPassword').value;
+  const error = document.getElementById('ownerLoginError');
+
+  if (password === OWNER_PASSWORD_VALUE) {
+    error.style.display = 'none';
+    showPage('owner');
+  } else {
+    error.style.display = 'block';
+  }
+}
+
+function getStoredList(key){
+  try{
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch(e){
+    return [];
+  }
+}
+
+function saveStoredList(key, list){
+  localStorage.setItem(key, JSON.stringify(list));
+}
+
+function addSupplyItem(){
+  const input = document.getElementById('supplySimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
+
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  input.value = '';
+  renderSupplyList();
+  renderOwnerDashboard();
+}
+
+function removeSupplyItem(index){
+  const list = getStoredList(STORAGE_KEYS.supplies);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.supplies, list);
+  renderSupplyList();
+  renderOwnerDashboard();
+}
+
+function renderSupplyList(){
+  const container = document.getElementById('supplyListContainer');
+  const list = getStoredList(STORAGE_KEYS.supplies);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No supplies listed.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeSupplyItem(${index})">Remove</button>
     </div>
-  </section>
+  `).join('');
+}
 
-  <!-- CHECKOUT -->
-  <section id="checkout" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
+function addMaintenanceItem(){
+  const input = document.getElementById('maintenanceSimpleInput');
+  const value = input.value.trim();
+  if(!value) return;
 
-        <div class="card">
-          <h2>Checkout</h2>
-          <ul>
-            <li>Check out time is by 10:00 AM unless otherwise arranged.</li>
-            <li>Please place used towels in the bathroom or laundry area.</li>
-            <li>Load and start the dishwasher if needed.</li>
-            <li>Please place trash in the proper bins.</li>
-            <li>Turn off lights, lock doors, and make sure windows are closed.</li>
-            <li>Message us through Airbnb once you’ve checked out if needed.</li>
-          </ul>
-        </div>
-      </div>
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.push(value);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  input.value = '';
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function removeMaintenanceItem(index){
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+  list.splice(index,1);
+  saveStoredList(STORAGE_KEYS.maintenance, list);
+  renderMaintenanceList();
+  renderOwnerDashboard();
+}
+
+function renderMaintenanceList(){
+  const container = document.getElementById('maintenanceListContainer');
+  const list = getStoredList(STORAGE_KEYS.maintenance);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No maintenance items listed.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map((item,index)=>`
+    <div class="list-row">
+      <div>${item}</div>
+      <button class="delete-btn" type="button" onclick="removeMaintenanceItem(${index})">Remove</button>
     </div>
-  </section>
+  `).join('');
+}
 
-  <!-- COMBINED PHOTOS + COMMENTS -->
-  <section id="guestmemories" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
+function renderOwnerDashboard(){
+  const supplyCount = getStoredList(STORAGE_KEYS.supplies).length;
+  const maintenanceCount = getStoredList(STORAGE_KEYS.maintenance).length;
+  const commentCount = getStoredList(STORAGE_KEYS.comments).length;
+  const requestCount = getStoredList(STORAGE_KEYS.requests).length;
+  const container = document.getElementById('ownerDashboardCounts');
 
-        <div class="card">
-          <h2>Photos + Trip Comments</h2>
-          <p>
-            We’d love to see your favorite moments from your stay and hear about your trip.
-          </p>
-
-          <form onsubmit="handleGuestMemories(event)">
-            <label for="guestName">Your Name</label>
-            <input id="guestName" type="text" placeholder="Your name" />
-
-            <label for="guestEmail">Email (optional)</label>
-            <input id="guestEmail" type="email" placeholder="you@example.com" />
-
-            <label for="guestComment">Tell us about your trip</label>
-            <textarea id="guestComment" placeholder="What did you enjoy most? Any favorite memories from your stay?"></textarea>
-
-            <label for="guestPhotos">Upload photos</label>
-            <input id="guestPhotos" type="file" multiple accept="image/*" />
-
-            <button type="submit" class="submit-btn">Submit</button>
-          </form>
-
-          <div id="guestMemoriesMessage" class="notice hidden">
-            Thank you! Your photos and trip comments have been submitted.
-          </div>
-
-          <p class="footer-note">
-            This demo version shows the form and success message. To actually receive uploads/comments,
-            connect this form to Formspree, Airtable, Firebase, or another form handler later.
-          </p>
-        </div>
+  container.innerHTML = `
+    <div class="status-row">
+      <div>
+        <strong>Supplies Needed</strong><br>
+        <span class="small-note">Current running supply list</span>
       </div>
+      <div class="status-pill">${supplyCount}</div>
     </div>
-  </section>
 
-  <!-- AIRBNB CALENDAR -->
-  <section id="calendar" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
-
-        <div class="card">
-          <h2>Airbnb Calendar</h2>
-          <p>Replace the iframe link below with your actual Airbnb calendar embed or hosted calendar page if needed.</p>
-
-          <iframe
-            class="calendar-frame"
-            src="https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York"
-            loading="lazy">
-          </iframe>
-
-          <p class="footer-note">
-            If you already had a working Airbnb calendar embed, paste that exact embed URL into this iframe’s <code>src</code>.
-          </p>
-        </div>
+    <div class="status-row">
+      <div>
+        <strong>Maintenance Items</strong><br>
+        <span class="small-note">Current maintenance list</span>
       </div>
+      <div class="status-pill">${maintenanceCount}</div>
     </div>
-  </section>
 
-  <!-- TEAM PORTAL -->
-  <section id="teamportal" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
-
-        <div class="card">
-          <h2>Team Portal</h2>
-          <p>This section can be used for cleaners, maintenance, and your team.</p>
-
-          <div class="two-col">
-            <div>
-              <h3>Turnover Notes</h3>
-              <ul>
-                <li>Check all beds and linens</li>
-                <li>Restock toiletries and kitchen basics</li>
-                <li>Confirm hot tub area is clean and reset</li>
-                <li>Check outdoor furniture and firepit area</li>
-              </ul>
-            </div>
-            <div>
-              <h3>Team Reminders</h3>
-              <ul>
-                <li>Report damage immediately</li>
-                <li>Upload before/after photos to your team system</li>
-                <li>Confirm doors locked after service</li>
-                <li>Message owner if anything needs attention</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+    <div class="status-row">
+      <div>
+        <strong>Guest Comments</strong><br>
+        <span class="small-note">Saved on this device</span>
       </div>
+      <div class="status-pill">${commentCount}</div>
     </div>
-  </section>
 
-  <!-- OWNER LOGIN -->
-  <section id="ownerlogin" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="showScreen('home')">← Back Home</button>
-        </div>
-
-        <div class="card password-box">
-          <h2>Owner Portal</h2>
-          <p>Please enter the password to continue.</p>
-
-          <label for="ownerPassword">Password</label>
-          <input id="ownerPassword" type="password" placeholder="Enter password" />
-
-          <button class="submit-btn" onclick="checkOwnerPassword()">Enter Owner Portal</button>
-
-          <div id="ownerError" class="notice hidden">Incorrect password. Please try again.</div>
-        </div>
+    <div class="status-row">
+      <div>
+        <strong>Return Booking Requests</strong><br>
+        <span class="small-note">Saved on this device</span>
       </div>
+      <div class="status-pill soft">${requestCount}</div>
     </div>
-  </section>
+  `;
+}
 
-  <!-- OWNER PORTAL -->
-  <section id="ownerportal" class="screen">
-    <div class="page">
-      <div class="page-wrap">
-        <div class="topbar">
-          <button class="back-btn" onclick="ownerLogout()">← Log Out</button>
-        </div>
+function showSelectedMedia(){
+  const files = document.getElementById('mediaFiles').files;
+  const list = document.getElementById('mediaSelectedList');
 
-        <div class="card">
-          <h2>Owner Portal</h2>
-          <p>This section is password protected.</p>
+  if(!files.length){
+    list.textContent = 'No files selected.';
+    return;
+  }
 
-          <div class="two-col">
-            <div>
-              <h3>Owner Notes</h3>
-              <ul>
-                <li>Track guest updates</li>
-                <li>Review maintenance items</li>
-                <li>Store owner-only links and docs</li>
-              </ul>
-            </div>
-            <div>
-              <h3>Quick Links</h3>
-              <ul>
-                <li><a href="#" onclick="return false;">Airbnb Host Dashboard</a></li>
-                <li><a href="#" onclick="return false;">Cleaning Checklist</a></li>
-                <li><a href="#" onclick="return false;">Property Expenses</a></li>
-              </ul>
-            </div>
-          </div>
+  list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+}
 
-          <p class="footer-note">
-            Change the password in the script below to your preferred password.
-          </p>
-        </div>
-      </div>
+function showGuestMedia(){
+  const files = document.getElementById('guestMediaFiles').files;
+  const list = document.getElementById('guestMediaList');
+
+  if(!files.length){
+    list.textContent = 'No files selected.';
+    return;
+  }
+
+  list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+}
+
+function submitTurnoverComplete(){
+  document.getElementById('turnoverSuccess').style.display = 'block';
+  document.getElementById('turnoverCleaner').value = '';
+  document.getElementById('turnoverDate').value = '';
+  document.getElementById('turnoverNotes').value = '';
+}
+
+function addGuestComment(){
+  const name = document.getElementById('guestCommentName').value.trim();
+  const text = document.getElementById('guestCommentText').value.trim();
+  if(!name || !text) return;
+
+  const list = getStoredList(STORAGE_KEYS.comments);
+  list.unshift({name, text});
+  saveStoredList(STORAGE_KEYS.comments, list);
+
+  document.getElementById('guestCommentName').value = '';
+  document.getElementById('guestCommentText').value = '';
+
+  renderGuestComments();
+  renderOwnerDashboard();
+}
+
+function renderGuestComments(){
+  const container = document.getElementById('guestCommentsList');
+  const list = getStoredList(STORAGE_KEYS.comments);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No comments yet.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(comment => `
+    <div class="comment-card">
+      <div class="comment-name">${comment.name}</div>
+      <div>${comment.text}</div>
     </div>
-  </section>
+  `).join('');
+}
 
-  <script>
-    const OWNER_PASSWORD = "DarbysRidgeOwner"; // change this to your real password
+function submitRequestToBook(){
+  const name = document.getElementById('requestName').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+  const notes = document.getElementById('requestNotes').value.trim();
 
-    function showScreen(screenId) {
-      const screens = document.querySelectorAll(".screen");
-      screens.forEach(screen => screen.classList.remove("active"));
-      const next = document.getElementById(screenId);
-      if (next) next.classList.add("active");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  if(!name || !arrival || !departure) return;
+
+  const list = getStoredList(STORAGE_KEYS.requests);
+  list.unshift({name, arrival, departure, guests, notes});
+  saveStoredList(STORAGE_KEYS.requests, list);
+
+  document.getElementById('requestName').value = '';
+  document.getElementById('requestArrival').value = '';
+  document.getElementById('requestDeparture').value = '';
+  document.getElementById('requestGuests').value = '';
+  document.getElementById('requestNotes').value = '';
+
+  document.getElementById('requestBookSuccess').style.display = 'block';
+  renderOwnerDashboard();
+}
+
+async function loadCalendar(){
+  const status = document.getElementById('calendarStatus');
+  const results = document.getElementById('calendarResults');
+
+  status.textContent = 'Loading calendar...';
+  results.innerHTML = '<div class="small-note">Loading...</div>';
+
+  try{
+    const response = await fetch('/api/airbnb-calendar');
+    const data = await response.json();
+
+    if(!data.success){
+      status.textContent = data.error || 'Unable to load calendar.';
+      results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+      return;
     }
 
-    function showOwnerLogin() {
-      document.getElementById("ownerPassword").value = "";
-      document.getElementById("ownerError").classList.add("hidden");
-      showScreen("ownerlogin");
+    status.textContent = 'Calendar connected.';
+
+    if(!data.bookings || !data.bookings.length){
+      results.innerHTML = '<div class="small-note">No upcoming bookings found.</div>';
+      return;
     }
 
-    function checkOwnerPassword() {
-      const value = document.getElementById("ownerPassword").value;
-      const error = document.getElementById("ownerError");
+    results.innerHTML = data.bookings.map((booking,index)=>`
+      <div class="status-row">
+        <div>
+          <strong>Booking ${index + 1}</strong><br>
+          <span class="small-note">Check-in: ${booking.checkIn}</span><br>
+          <span class="small-note">Check-out: ${booking.checkOut}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch(e){
+    status.textContent = 'Unable to load calendar.';
+    results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+  }
+}
 
-      if (value === OWNER_PASSWORD) {
-        error.classList.add("hidden");
-        showScreen("ownerportal");
-      } else {
-        error.classList.remove("hidden");
-      }
-    }
+renderEditablePages();
+renderSupplyList();
+renderMaintenanceList();
+renderGuestComments();
+renderOwnerDashboard();
+</script>
 
-    function ownerLogout() {
-      showScreen("home");
-    }
-
-    function handleGuestMemories(event) {
-      event.preventDefault();
-      document.getElementById("guestMemoriesMessage").classList.remove("hidden");
-
-      document.getElementById("guestName").value = "";
-      document.getElementById("guestEmail").value = "";
-      document.getElementById("guestComment").value = "";
-      document.getElementById("guestPhotos").value = "";
-    }
-
-    document.getElementById("ownerPassword").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkOwnerPassword();
-      }
-    });
-  </script>
 </body>
 </html>
-
