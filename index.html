@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darby's Ridge</title>
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     body{
@@ -34,12 +34,12 @@
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.45));
+      background:linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,.46));
     }
 
     .hero-text{
       position:absolute;
-      bottom:70px;
+      bottom:64px;
       left:26px;
       right:26px;
       color:white;
@@ -48,7 +48,7 @@
 
     .logo{
       font-family:'Allura',cursive;
-      font-size:60px;
+      font-size:56px;
       margin:0;
       text-shadow:0 6px 14px rgba(0,0,0,.45);
       line-height:1;
@@ -160,39 +160,89 @@
 
     .social{
       margin-top:24px;
-      background:#f7efe3;
-      padding:18px;
-      border-radius:16px;
-      text-align:center;
+      background:linear-gradient(145deg, #f7efe3, #f1e4d2);
+      padding:20px;
+      border-radius:20px;
+      box-shadow:0 8px 18px rgba(0,0,0,.06);
+      border:1px solid #eadbc8;
+    }
+
+    .social-kicker{
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#8f6a4c;
+      font-weight:700;
+      margin-bottom:8px;
     }
 
     .social h3{
       font-family:'Playfair Display',serif;
-      margin:0 0 10px;
+      margin:0 0 8px;
+      font-size:24px;
+      color:#3c2c1f;
     }
 
     .social p{
-      margin-bottom:14px;
+      margin:0 0 16px;
+      line-height:1.55;
+      color:#5b4636;
+      font-size:14px;
     }
 
     .social-links{
       display:flex;
       flex-direction:column;
-      align-items:center;
-      gap:10px;
+      gap:12px;
     }
 
-    .social-links a{
-      display:block;
-      width:100%;
-      max-width:240px;
-      padding:14px;
-      background:#e9d9c5;
-      border-radius:12px;
+    .social-link{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      background:white;
+      border-radius:14px;
       text-decoration:none;
       color:#3c2c1f;
-      font-weight:500;
-      text-align:center;
+      border:1px solid #eadbc8;
+      box-shadow:0 4px 10px rgba(0,0,0,.04);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+
+    .social-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 16px rgba(0,0,0,.08);
+    }
+
+    .social-icon{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex-shrink:0;
+      background:#ead8c2;
+      color:#5b4636;
+    }
+
+    .social-text{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .social-text strong{
+      font-size:15px;
+      color:#3c2c1f;
+    }
+
+    .social-text small{
+      color:#8a725d;
+      font-size:12px;
+      font-weight:600;
     }
 
     .bottom-nav{
@@ -597,6 +647,115 @@
       text-decoration:underline;
     }
 
+    .upload-actions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .upload-actions button{
+      flex:1;
+    }
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .gallery-card{
+      background:white;
+      border:1px solid #eadbc8;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 4px 10px rgba(0,0,0,.04);
+    }
+
+    .gallery-card img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      display:block;
+    }
+
+    .gallery-meta{
+      padding:10px;
+      font-size:12px;
+      line-height:1.45;
+      color:#6d5a49;
+    }
+
+    .gallery-meta strong{
+      display:block;
+      font-size:13px;
+      color:#3c2c1f;
+      margin-bottom:4px;
+    }
+
+    .preview-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .preview-item{
+      background:white;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid #eadbc8;
+    }
+
+    .preview-item img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      display:block;
+    }
+
+    .preview-item div{
+      padding:8px;
+      font-size:12px;
+      color:#6d5a49;
+    }
+
+    .submission-card{
+      background:white;
+      border-radius:14px;
+      border:1px solid #eadbc8;
+      padding:14px;
+      margin-top:10px;
+    }
+
+    .submission-card h4{
+      margin:0 0 6px;
+      font-size:15px;
+      color:#3c2c1f;
+    }
+
+    .submission-card p{
+      margin:4px 0;
+      font-size:14px;
+      color:#5f4d3d;
+      line-height:1.55;
+    }
+
+    .submission-photos{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .submission-photos img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      border-radius:12px;
+      display:block;
+    }
+
     @media (max-width: 768px){
       .pdf-frame{
         height:85vh;
@@ -647,7 +806,7 @@
           <img src="local.jpg" alt="">
           <div class="menu-label">
             <span>BLUE RIDGE</span>
-            <strong>Local Favorites</strong>
+            <strong>Guest Favorites</strong>
           </div>
         </div>
 
@@ -663,7 +822,7 @@
           <img src="outdoor.jpg" alt="">
           <div class="menu-label">
             <span>GUEST MEMORIES</span>
-            <strong>Picture Upload</strong>
+            <strong>Photo Gallery</strong>
           </div>
         </div>
 
@@ -686,12 +845,26 @@
       </div>
 
       <div class="social">
+        <div class="social-kicker">STAY CONNECTED</div>
         <h3>Follow Darby's Ridge</h3>
-        <p>Stay connected and see more of the cabin experience.</p>
+        <p>See cabin moments, Blue Ridge favorites, and updates from the ridge.</p>
 
         <div class="social-links">
-          <a href="https://instagram.com/darbysridge" target="_blank">Instagram</a>
-          <a href="https://www.facebook.com/darbysridge/" target="_blank">Facebook</a>
+          <a class="social-link" href="https://instagram.com/darbysridge" target="_blank">
+            <div class="social-icon">📸</div>
+            <div class="social-text">
+              <strong>Instagram</strong>
+              <small>@darbysridge</small>
+            </div>
+          </a>
+
+          <a class="social-link" href="https://www.facebook.com/darbysridge/" target="_blank">
+            <div class="social-icon">👍</div>
+            <div class="social-text">
+              <strong>Facebook</strong>
+              <small>Darby's Ridge</small>
+            </div>
+          </a>
         </div>
       </div>
     </div>
@@ -722,7 +895,7 @@
 
   <div id="local" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Local Favorites</h1>
+    <h1>Blue Ridge Guest Favorites</h1>
     <div class="panel">
       <div id="localContent"></div>
     </div>
@@ -743,10 +916,29 @@
     <div class="panel">
       <div id="photosContent" class="small-note" style="margin-bottom:10px;"></div>
 
+      <label for="guestMemoryName">Your Name (Optional)</label>
+      <input id="guestMemoryName" type="text" placeholder="Add your name">
+
       <label for="guestMediaFiles">Select Photos</label>
-      <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="showGuestMedia()">
-      <p class="small-note">Guests can choose photos here. This version shows the selected file names on the device.</p>
-      <div id="guestMediaList" class="media-list">No files selected.</div>
+      <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="previewGuestMedia()">
+
+      <div id="guestPreview" class="preview-grid"></div>
+
+      <div class="upload-actions">
+        <button class="action-btn" type="button" onclick="addGuestPhotos()">Add to Guest Gallery</button>
+        <button class="action-btn secondary-btn" type="button" onclick="clearGuestPreview()">Clear</button>
+      </div>
+
+      <div id="guestPhotoMessage" class="form-message"></div>
+
+      <p class="small-note" style="margin-top:12px;">
+        Photos saved here stay visible in this browser on this device. For a shared gallery across all guests and devices, you'd need cloud storage added later.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h3>Guest Photo Gallery</h3>
+      <div id="guestGallery" class="small-note">No guest photos yet.</div>
     </div>
   </div>
 
@@ -763,6 +955,9 @@
     <div class="panel">
       <label for="requestName">Name</label>
       <input id="requestName" type="text" placeholder="Your name">
+
+      <label for="requestPhone">Phone Number</label>
+      <input id="requestPhone" type="tel" placeholder="Best phone number">
 
       <label for="requestArrival">Preferred Arrival Date</label>
       <input id="requestArrival" type="text" placeholder="Enter date">
@@ -887,11 +1082,13 @@
       <label for="turnoverNotes">Turnover Notes</label>
       <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
 
-      <label for="turnoverFiles">Upload Photos / Video</label>
-      <input id="turnoverFiles" type="file" multiple accept="image/*,video/*" onchange="showTurnoverMedia()">
-      <div id="turnoverFilesList" class="media-list">No files selected.</div>
+      <label for="turnoverFiles">Upload Turnover Photos</label>
+      <input id="turnoverFiles" type="file" multiple accept="image/*" onchange="previewTurnoverMedia()">
+
+      <div id="turnoverPreview" class="preview-grid"></div>
 
       <div id="turnoverSuccess" class="form-message form-success">Turnover submission saved.</div>
+      <div id="turnoverError" class="form-message form-error">There was a problem saving the turnover submission.</div>
 
       <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Submit Turnover</button>
     </div>
@@ -907,6 +1104,11 @@
     </div>
 
     <div class="panel">
+      <h3>Recent Booking Requests</h3>
+      <div id="ownerRequestList" class="small-note">No requests yet.</div>
+    </div>
+
+    <div class="panel">
       <h3>Supplies Needed</h3>
       <div id="ownerSupplyList" class="small-note">No supplies listed.</div>
 
@@ -915,14 +1117,19 @@
     </div>
 
     <div class="panel">
+      <h3>Recent Turnover Submissions</h3>
+      <div id="ownerTurnoverEntries" class="small-note">No turnover submissions yet.</div>
+    </div>
+
+    <div class="panel">
       <h3>Edit Guest Guide Content</h3>
 
       <label for="ownerSectionSelect">Choose Section</label>
       <select id="ownerSectionSelect" onchange="loadOwnerEditor()">
         <option value="info">WiFi & Cabin Essentials</option>
-        <option value="local">Local Favorites</option>
+        <option value="local">Blue Ridge Guest Favorites</option>
         <option value="trail">Trail to Lake</option>
-        <option value="photos">Guest Memories</option>
+        <option value="photos">Guest Memories Intro</option>
         <option value="checkout">Checkout Instructions</option>
         <option value="checklist">Turnover Checklist</option>
       </select>
@@ -949,7 +1156,8 @@
       maintenance: 'darbysridge_maintenance',
       content: 'darbysridge_content',
       requests: 'darbysridge_requests',
-      turnovers: 'darbysridge_turnovers'
+      turnovers: 'darbysridge_turnovers',
+      guestPhotos: 'darbysridge_guest_photos'
     };
 
     const defaultContent = {
@@ -1044,7 +1252,6 @@ Please refer to the guest guide for additional house information, tips for your 
           <h3>Lake Blue Ridge</h3>
           <p>A beautiful mountain lake for boating, fishing, swimming, or just relaxing by the water.</p>
           <p>
-            <a href="https://www.blueridgemountains.com/things-to-do/outdoors/water-sports/lake-blue-ridge/" target="_blank">Website</a> |
             <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
           </p>
         </div>
@@ -1073,40 +1280,30 @@ Please refer to the guest guide for additional house information, tips for your 
 
         <div class="favorite-item">
           <h3>Green Mountain Trail Access</h3>
-          <p>Darby’s Ridge offers trail access right from the property, making it easy to step outside and start your hike without driving anywhere first.</p>
+          <p>Darby’s Ridge offers trail access right from the property, making it easy to step outside and begin your hike without having to drive anywhere first.</p>
         </div>
 
         <div class="favorite-item">
-          <h3>What to Expect</h3>
-          <p>The Green Mountain trail system is a popular mountain trail area near Lake Blue Ridge with hiking options that can range from shorter scenic stretches to longer, more moderate outings depending on how far you go.</p>
+          <h3>Trail to Lake</h3>
+          <p>This trail system is a beautiful way to explore the mountain setting around the cabin and make your way toward the Lake Blue Ridge area. Trail conditions can vary depending on weather and recent rainfall.</p>
         </div>
 
         <div class="favorite-item">
-          <h3>Good to Know</h3>
-          <p>Please wear sturdy shoes, bring water, and use extra caution after rain since parts of the trail can be uneven, steep, or slick in spots. Cell service may be limited, so it’s smart to head out prepared.</p>
+          <h3>What to Bring</h3>
+          <p>We recommend sturdy shoes, water, and your phone before heading out. Cell service can be limited in the mountains, so it’s best to hike prepared and use extra caution on uneven or slick sections.</p>
         </div>
 
         <div class="favorite-item">
-          <h3>Trail Links</h3>
+          <h3>Helpful Links</h3>
           <p>
-            <a href="https://www.askaadventure.com/green-mountain-loop/" target="_blank">Trail Info</a> |
-            <a href="https://www.alltrails.com/trail/us/georgia/green-mountain-via-whissenhunt-loop-to-toccoa-river" target="_blank">AllTrails</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Lake Blue Ridge</h3>
-          <p>If you continue exploring the area, you’ll find beautiful views and access points around Lake Blue Ridge, one of the prettiest spots in the area.</p>
-          <p>
-            <a href="https://www.blueridgemountains.com/things-to-do/outdoors/water-sports/lake-blue-ridge/" target="_blank">Lake Info</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA" target="_blank">Trail Map</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Lake Map</a>
           </p>
         </div>
 
       </div>`,
 
-      photos: `We'd love to see your favorite moments from your stay. Feel free to upload a few favorite cabin memories here.`,
+      photos: `We’d love to see your favorite moments from your stay. Add a few favorite photos below and they’ll appear in the guest gallery saved on this device.`,
 
       checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
@@ -1155,8 +1352,20 @@ Take final walkthrough photos`
       return raw.split('\n').map(item => item.trim()).filter(Boolean);
     }
 
+    function getStoredList(key){
+      try{
+        return JSON.parse(localStorage.getItem(key)) || [];
+      } catch(e){
+        return [];
+      }
+    }
+
+    function saveStoredList(key, list){
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
     function escapeHtml(text){
-      return text
+      return String(text)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
@@ -1250,6 +1459,7 @@ Take final walkthrough photos`
 
       if (page === 'supplies') renderSupplyList();
       if (page === 'maintenance') renderMaintenanceList();
+      if (page === 'guestMemories') renderGuestGallery();
       if (page === 'owner') {
         renderOwnerDashboard();
         loadOwnerEditor();
@@ -1278,18 +1488,6 @@ Take final walkthrough photos`
       } else {
         error.style.display = 'block';
       }
-    }
-
-    function getStoredList(key){
-      try{
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch(e){
-        return [];
-      }
-    }
-
-    function saveStoredList(key, list){
-      localStorage.setItem(key, JSON.stringify(list));
     }
 
     function addSupplyItem(){
@@ -1375,11 +1573,59 @@ Take final walkthrough photos`
       return list.map(item => `<div class="owner-list-card">${escapeHtml(item)}</div>`).join('');
     }
 
+    function renderOwnerRequests(){
+      const requests = getStoredList(STORAGE_KEYS.requests);
+      const container = document.getElementById('ownerRequestList');
+      if(!container) return;
+
+      if(!requests.length){
+        container.innerHTML = '<div class="small-note">No requests yet.</div>';
+        return;
+      }
+
+      container.innerHTML = requests.map(item => `
+        <div class="submission-card">
+          <h4>${escapeHtml(item.name || 'Guest Request')}</h4>
+          <p><strong>Phone:</strong> ${escapeHtml(item.phone || 'Not provided')}</p>
+          <p><strong>Arrival:</strong> ${escapeHtml(item.arrival || '')}</p>
+          <p><strong>Departure:</strong> ${escapeHtml(item.departure || '')}</p>
+          <p><strong>Guests:</strong> ${escapeHtml(item.guests || '')}</p>
+          ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderOwnerTurnovers(){
+      const container = document.getElementById('ownerTurnoverEntries');
+      if(!container) return;
+
+      const list = getStoredList(STORAGE_KEYS.turnovers);
+
+      if(!list.length){
+        container.innerHTML = '<div class="small-note">No turnover submissions yet.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(item => `
+        <div class="submission-card">
+          <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
+          <p><strong>Date:</strong> ${escapeHtml(item.date || '')}</p>
+          ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+          ${item.files && item.files.length ? `
+            <div class="submission-photos">
+              ${item.files.map(src => `<img src="${src}" alt="Turnover photo">`).join('')}
+            </div>
+          ` : '<p>No photos attached.</p>'}
+        </div>
+      `).join('');
+    }
+
     function renderOwnerDashboard(){
       const supplyList = getStoredList(STORAGE_KEYS.supplies);
       const maintenanceList = getStoredList(STORAGE_KEYS.maintenance);
       const requestCount = getStoredList(STORAGE_KEYS.requests).length;
       const turnoverCount = getStoredList(STORAGE_KEYS.turnovers).length;
+      const guestPhotoCount = getStoredList(STORAGE_KEYS.guestPhotos).length;
 
       const snapshot = document.getElementById('ownerDashboardCounts');
       if(snapshot){
@@ -1387,7 +1633,7 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Return Booking Requests</strong><br>
-              <span class="small-note">Saved on this device</span>
+              <span class="small-note">Saved in this browser</span>
             </div>
             <div class="status-pill soft">${requestCount}</div>
           </div>
@@ -1395,9 +1641,17 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Turnover Submissions</strong><br>
-              <span class="small-note">Saved on this device</span>
+              <span class="small-note">Saved in this browser</span>
             </div>
             <div class="status-pill">${turnoverCount}</div>
+          </div>
+
+          <div class="status-row">
+            <div>
+              <strong>Guest Gallery Photos</strong><br>
+              <span class="small-note">Saved in this browser</span>
+            </div>
+            <div class="status-pill soft">${guestPhotoCount}</div>
           </div>
         `;
       }
@@ -1411,56 +1665,218 @@ Take final walkthrough photos`
       if(maintenanceEl){
         maintenanceEl.innerHTML = renderSimpleOwnerList(maintenanceList, 'No maintenance items listed.');
       }
+
+      renderOwnerRequests();
+      renderOwnerTurnovers();
     }
 
-    function showGuestMedia(){
+    function readFileAsDataURL(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function resizeImageDataUrl(dataUrl, maxSize = 1200, quality = 0.82){
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if(width > height && width > maxSize){
+            height = Math.round((height * maxSize) / width);
+            width = maxSize;
+          } else if(height >= width && height > maxSize){
+            width = Math.round((width * maxSize) / height);
+            height = maxSize;
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+    }
+
+    async function processImageFiles(fileList, maxItems = 6){
+      const files = Array.from(fileList || []).slice(0, maxItems);
+      const results = [];
+
+      for(const file of files){
+        if(!file.type.startsWith('image/')) continue;
+        const original = await readFileAsDataURL(file);
+        const resized = await resizeImageDataUrl(original);
+        results.push({
+          name: file.name,
+          src: resized
+        });
+      }
+
+      return results;
+    }
+
+    async function previewGuestMedia(){
+      const container = document.getElementById('guestPreview');
       const files = document.getElementById('guestMediaFiles').files;
-      const list = document.getElementById('guestMediaList');
 
       if(!files.length){
-        list.textContent = 'No files selected.';
+        container.innerHTML = '';
         return;
       }
 
-      list.innerHTML = Array.from(files).map(file => `<div>• ${escapeHtml(file.name)}</div>`).join('');
+      const processed = await processImageFiles(files, 6);
+      container.innerHTML = processed.map(item => `
+        <div class="preview-item">
+          <img src="${item.src}" alt="${escapeHtml(item.name)}">
+          <div>${escapeHtml(item.name)}</div>
+        </div>
+      `).join('');
     }
 
-    function showTurnoverMedia(){
+    function clearGuestPreview(){
+      document.getElementById('guestMediaFiles').value = '';
+      document.getElementById('guestMemoryName').value = '';
+      document.getElementById('guestPreview').innerHTML = '';
+      const msg = document.getElementById('guestPhotoMessage');
+      msg.style.display = 'none';
+    }
+
+    function renderGuestGallery(){
+      const gallery = document.getElementById('guestGallery');
+      if(!gallery) return;
+
+      const photos = getStoredList(STORAGE_KEYS.guestPhotos);
+
+      if(!photos.length){
+        gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+        return;
+      }
+
+      gallery.innerHTML = `<div class="gallery-grid">${
+        photos.map(item => `
+          <div class="gallery-card">
+            <img src="${item.src}" alt="Guest memory">
+            <div class="gallery-meta">
+              <strong>${escapeHtml(item.name || 'Guest Memory')}</strong>
+              <div>${escapeHtml(item.date || '')}</div>
+            </div>
+          </div>
+        `).join('')
+      }</div>`;
+    }
+
+    async function addGuestPhotos(){
+      const files = document.getElementById('guestMediaFiles').files;
+      const guestName = document.getElementById('guestMemoryName').value.trim();
+      const message = document.getElementById('guestPhotoMessage');
+
+      if(!files.length){
+        message.className = 'form-message form-error';
+        message.textContent = 'Please choose at least one photo first.';
+        message.style.display = 'block';
+        return;
+      }
+
+      try{
+        const processed = await processImageFiles(files, 6);
+        const gallery = getStoredList(STORAGE_KEYS.guestPhotos);
+        const date = new Date().toLocaleDateString();
+
+        const newItems = processed.map(item => ({
+          src: item.src,
+          name: guestName || 'Guest Memory',
+          date
+        }));
+
+        const updated = [...newItems, ...gallery].slice(0, 18);
+        saveStoredList(STORAGE_KEYS.guestPhotos, updated);
+
+        renderGuestGallery();
+        renderOwnerDashboard();
+
+        message.className = 'form-message form-success';
+        message.textContent = 'Photos added to the guest gallery in this browser.';
+        message.style.display = 'block';
+
+        clearGuestPreview();
+      } catch(e){
+        message.className = 'form-message form-error';
+        message.textContent = 'Those photos could not be saved. Try fewer images or smaller photos.';
+        message.style.display = 'block';
+      }
+    }
+
+    async function previewTurnoverMedia(){
+      const container = document.getElementById('turnoverPreview');
       const files = document.getElementById('turnoverFiles').files;
-      const list = document.getElementById('turnoverFilesList');
 
       if(!files.length){
-        list.textContent = 'No files selected.';
+        container.innerHTML = '';
         return;
       }
 
-      list.innerHTML = Array.from(files).map(file => `<div>• ${escapeHtml(file.name)}</div>`).join('');
+      const processed = await processImageFiles(files, 6);
+      container.innerHTML = processed.map(item => `
+        <div class="preview-item">
+          <img src="${item.src}" alt="${escapeHtml(item.name)}">
+          <div>${escapeHtml(item.name)}</div>
+        </div>
+      `).join('');
     }
 
-    function submitTurnoverComplete(){
+    async function submitTurnoverComplete(){
       const cleaner = document.getElementById('turnoverCleaner').value.trim();
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
-      const files = Array.from(document.getElementById('turnoverFiles').files || []).map(file => file.name);
+      const files = document.getElementById('turnoverFiles').files;
 
-      if(!cleaner || !date) return;
+      const success = document.getElementById('turnoverSuccess');
+      const error = document.getElementById('turnoverError');
 
-      const list = getStoredList(STORAGE_KEYS.turnovers);
-      list.unshift({ cleaner, date, notes, files });
-      saveStoredList(STORAGE_KEYS.turnovers, list);
+      success.style.display = 'none';
+      error.style.display = 'none';
 
-      document.getElementById('turnoverSuccess').style.display = 'block';
-      document.getElementById('turnoverCleaner').value = '';
-      document.getElementById('turnoverDate').value = '';
-      document.getElementById('turnoverNotes').value = '';
-      document.getElementById('turnoverFiles').value = '';
-      document.getElementById('turnoverFilesList').textContent = 'No files selected.';
+      if(!cleaner || !date){
+        error.textContent = 'Please enter the cleaner name and turnover date.';
+        error.style.display = 'block';
+        return;
+      }
 
-      renderOwnerDashboard();
+      try{
+        const processed = await processImageFiles(files, 6);
+        const photoSources = processed.map(item => item.src);
+
+        const list = getStoredList(STORAGE_KEYS.turnovers);
+        list.unshift({ cleaner, date, notes, files: photoSources });
+        saveStoredList(STORAGE_KEYS.turnovers, list.slice(0, 12));
+
+        success.style.display = 'block';
+        document.getElementById('turnoverCleaner').value = '';
+        document.getElementById('turnoverDate').value = '';
+        document.getElementById('turnoverNotes').value = '';
+        document.getElementById('turnoverFiles').value = '';
+        document.getElementById('turnoverPreview').innerHTML = '';
+
+        renderOwnerDashboard();
+      } catch(e){
+        error.textContent = 'There was a problem saving the turnover submission. Try fewer or smaller photos.';
+        error.style.display = 'block';
+      }
     }
 
     function submitRequestToBook(){
       const name = document.getElementById('requestName').value.trim();
+      const phone = document.getElementById('requestPhone').value.trim();
       const arrival = document.getElementById('requestArrival').value.trim();
       const departure = document.getElementById('requestDeparture').value.trim();
       const guests = document.getElementById('requestGuests').value.trim();
@@ -1469,10 +1885,11 @@ Take final walkthrough photos`
       if(!name || !arrival || !departure) return;
 
       const list = getStoredList(STORAGE_KEYS.requests);
-      list.unshift({name, arrival, departure, guests, notes});
+      list.unshift({name, phone, arrival, departure, guests, notes});
       saveStoredList(STORAGE_KEYS.requests, list);
 
       document.getElementById('requestName').value = '';
+      document.getElementById('requestPhone').value = '';
       document.getElementById('requestArrival').value = '';
       document.getElementById('requestDeparture').value = '';
       document.getElementById('requestGuests').value = '';
@@ -1524,6 +1941,7 @@ Take final walkthrough photos`
     renderEditablePages();
     renderSupplyList();
     renderMaintenanceList();
+    renderGuestGallery();
     renderOwnerDashboard();
   </script>
 </body>
