@@ -556,6 +556,47 @@
       font-weight:600;
     }
 
+    .favorites-list{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .favorite-item{
+      padding-bottom:14px;
+      border-bottom:1px solid #e5d7c4;
+    }
+
+    .favorite-item:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+
+    .favorite-item h3{
+      margin:0 0 8px;
+      font-family:'Inter',sans-serif;
+      font-size:16px;
+      font-weight:700;
+      color:#3c2c1f;
+    }
+
+    .favorite-item p{
+      margin:0 0 8px;
+      font-size:15px;
+      line-height:1.6;
+      color:#4f3d2f;
+    }
+
+    .favorite-item a{
+      color:#8b5e3c;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    .favorite-item a:hover{
+      text-decoration:underline;
+    }
+
     @media (max-width: 768px){
       .pdf-frame{
         height:85vh;
@@ -960,9 +1001,113 @@ Cell service can be limited in the mountains depending on your carrier, so WiFi 
 Need More Info?
 
 Please refer to the guest guide for additional house information, tips for your stay, and local recommendations.`,
-      local: `Add your favorite Blue Ridge restaurants, coffee, breweries, shopping, scenic drives, and adventure spots here.`,
-      trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
+
+      local: `<div class="favorites-list">
+
+        <div class="favorite-item">
+          <h3>Harvest on Main</h3>
+          <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
+          <p>
+            <a href="https://harvestonmain.com/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Toccoa Riverside Restaurant</h3>
+          <p>Beautiful riverfront dining with mountain views and a scenic drive getting there.</p>
+          <p>
+            <a href="https://www.toccoariversiderestaurant.com/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Black Sheep Restaurant</h3>
+          <p>A historic home turned into a stylish spot for cocktails, brunch, and dinner.</p>
+          <p>
+            <a href="https://blacksheepblueridge.com/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Fightingtown Tavern</h3>
+          <p>A casual local favorite for burgers, drinks, and a laid-back Blue Ridge vibe.</p>
+          <p>
+            <a href="https://fightingtowntavern.webflow.io/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Fightingtown+Tavern+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Lake Blue Ridge</h3>
+          <p>A beautiful mountain lake for boating, fishing, swimming, or just relaxing by the water.</p>
+          <p>
+            <a href="https://www.blueridgemountains.com/things-to-do/outdoors/water-sports/lake-blue-ridge/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Blue Ridge Scenic Railway</h3>
+          <p>A classic Blue Ridge experience with mountain views and a fun day-trip feel.</p>
+          <p>
+            <a href="https://brscenic.com/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Blue+Ridge+Scenic+Railway+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Mercier Orchards</h3>
+          <p>A Blue Ridge favorite for baked goods, cider, shopping, and seasonal fruit picking.</p>
+          <p>
+            <a href="https://mercier-orchards.com/" target="_blank">Website</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Mercier+Orchards+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+      </div>`,
+
+      trail: `<div class="favorites-list">
+
+        <div class="favorite-item">
+          <h3>Green Mountain Trail Access</h3>
+          <p>Darby’s Ridge offers trail access right from the property, making it easy to step outside and start your hike without driving anywhere first.</p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>What to Expect</h3>
+          <p>The Green Mountain trail system is a popular mountain trail area near Lake Blue Ridge with hiking options that can range from shorter scenic stretches to longer, more moderate outings depending on how far you go.</p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Good to Know</h3>
+          <p>Please wear sturdy shoes, bring water, and use extra caution after rain since parts of the trail can be uneven, steep, or slick in spots. Cell service may be limited, so it’s smart to head out prepared.</p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Trail Links</h3>
+          <p>
+            <a href="https://www.askaadventure.com/green-mountain-loop/" target="_blank">Trail Info</a> |
+            <a href="https://www.alltrails.com/trail/us/georgia/green-mountain-via-whissenhunt-loop-to-toccoa-river" target="_blank">AllTrails</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Lake Blue Ridge</h3>
+          <p>If you continue exploring the area, you’ll find beautiful views and access points around Lake Blue Ridge, one of the prettiest spots in the area.</p>
+          <p>
+            <a href="https://www.blueridgemountains.com/things-to-do/outdoors/water-sports/lake-blue-ridge/" target="_blank">Lake Info</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
+          </p>
+        </div>
+
+      </div>`,
+
       photos: `We'd love to see your favorite moments from your stay. Feel free to upload a few favorite cabin memories here.`,
+
       checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
 Remove all food items that you brought with you.
@@ -975,6 +1120,7 @@ Lock all doors and windows before leaving.
 Turn thermostat to 72 in the summer and 68 in the winter.
 Text us when you depart so we can alert our cleaning team.
 Thank you for staying at Darby’s Ridge — we hope to host you again soon!`,
+
       checklist: `Make all beds and fluff pillows
 Clean and reset bathrooms
 Wipe kitchen counters and appliances
@@ -1059,8 +1205,8 @@ Take final walkthrough photos`
 
     function renderEditablePages(){
       document.getElementById('infoContent').innerHTML = formatInfoContent(getSectionContent('info'));
-      document.getElementById('localContent').innerText = getSectionContent('local');
-      document.getElementById('trailContent').innerText = getSectionContent('trail');
+      document.getElementById('localContent').innerHTML = getSectionContent('local');
+      document.getElementById('trailContent').innerHTML = getSectionContent('trail');
       document.getElementById('photosContent').innerText = getSectionContent('photos');
       document.getElementById('checkoutContent').innerHTML = formatCheckoutContent(getSectionContent('checkout'));
 
