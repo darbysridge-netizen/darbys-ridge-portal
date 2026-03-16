@@ -132,6 +132,13 @@
       font-size:18px;
     }
 
+    .single-line-title{
+      display:block;
+      font-family:'Playfair Display',serif;
+      font-size:16px !important;
+      white-space:nowrap;
+    }
+
     .wide-card{
       grid-column:1 / -1;
       aspect-ratio:auto;
@@ -507,6 +514,10 @@
       .mobile-open{
         display:block;
       }
+
+      .single-line-title{
+        font-size:15px !important;
+      }
     }
   </style>
 </head>
@@ -540,7 +551,7 @@
           <img src="essentials.jpg" alt="">
           <div class="menu-label">
             <span>STAY DETAILS</span>
-            <strong>WiFi & Cabin Essentials</strong>
+            <strong class="single-line-title">WiFi & Cabin Essentials</strong>
           </div>
         </div>
 
