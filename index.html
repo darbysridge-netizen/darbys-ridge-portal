@@ -40,7 +40,7 @@ background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55));
 
 .hero-text{
 position:absolute;
-bottom:60px;
+bottom:70px;
 left:28px;
 right:28px;
 color:white;
@@ -52,6 +52,7 @@ font-family:'Allura',cursive;
 font-size:64px;
 margin:0;
 text-shadow:0 4px 10px rgba(0,0,0,.35);
+line-height:.95;
 }
 
 .tagline{
@@ -134,6 +135,7 @@ margin-top:24px;
 background:#f7efe3;
 padding:18px;
 border-radius:16px;
+text-align:center;
 }
 
 .social h3{
@@ -141,15 +143,28 @@ font-family:'Playfair Display',serif;
 margin:0 0 10px;
 }
 
+.social p{
+margin-bottom:14px;
+}
+
+.social-links{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:10px;
+}
+
 .social-links a{
 display:block;
-margin-top:10px;
+width:100%;
+max-width:240px;
 padding:14px;
 background:#e9d9c5;
 border-radius:12px;
 text-decoration:none;
 color:#3c2c1f;
 font-weight:500;
+text-align:center;
 }
 
 .team-access{
@@ -371,6 +386,23 @@ color:#5f4d3d;
 .edit-box{
 margin-top:12px;
 }
+
+.comment-card{
+background:white;
+padding:14px;
+border-radius:12px;
+margin-top:10px;
+border:1px solid #eadbc8;
+}
+
+.comment-name{
+font-weight:600;
+margin-bottom:6px;
+}
+
+.center-button{
+margin-top:12px;
+}
 </style>
 </head>
 
@@ -423,19 +455,19 @@ margin-top:12px;
         </div>
       </div>
 
-      <div class="menu-card" onclick="showPage('photos')">
+      <div class="menu-card" onclick="showPage('guestUploads')">
         <img src="outdoor.jpg" alt="">
         <div class="menu-label">
           <span>MEMORIES</span>
-          <strong>Share Photos</strong>
+          <strong>Upload Photos</strong>
         </div>
       </div>
 
-      <div class="menu-card" onclick="showPage('checkout')">
+      <div class="menu-card" onclick="showPage('comments')">
         <img src="interior.jpg" alt="">
         <div class="menu-label">
-          <span>BEFORE YOU GO</span>
-          <strong>Checkout</strong>
+          <span>SHARE</span>
+          <strong>Trip Comments</strong>
         </div>
       </div>
     </div>
@@ -450,7 +482,15 @@ margin-top:12px;
       </div>
 
       <div class="team-access">
+        <button type="button" onclick="showPage('requestToBook')">Request to Book Again</button>
+      </div>
+
+      <div class="team-access" style="margin-top:10px;">
         <button type="button" onclick="showPage('login')">Team Access</button>
+      </div>
+
+      <div class="team-access" style="margin-top:10px;">
+        <button type="button" onclick="showPage('ownerLogin')">Owner Portal</button>
       </div>
     </div>
   </div>
@@ -488,19 +528,59 @@ margin-top:12px;
   </div>
 </div>
 
-<div id="photos" class="hidden page">
+<div id="guestUploads" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
-  <h1>Share Photos</h1>
+  <h1>Upload Photos</h1>
   <div class="panel">
-    <div id="photosContent"></div>
+    <label for="guestMediaFiles">Select Photos</label>
+    <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="showGuestMedia()">
+    <p class="small-note">Guests can choose photos here. This version shows the selected file names on the device.</p>
+    <div id="guestMediaList" class="media-list">No files selected.</div>
   </div>
 </div>
 
-<div id="checkout" class="hidden page">
+<div id="comments" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
-  <h1>Checkout</h1>
+  <h1>Trip Comments</h1>
+
   <div class="panel">
-    <div id="checkoutContent"></div>
+    <label for="guestCommentName">Your Name</label>
+    <input id="guestCommentName" type="text" placeholder="Enter your name">
+
+    <label for="guestCommentText">Tell us about your trip</label>
+    <textarea id="guestCommentText" rows="6" placeholder="What did you love about your stay?"></textarea>
+
+    <button class="action-btn center-button" type="button" onclick="addGuestComment()">Submit Comment</button>
+  </div>
+
+  <div class="panel">
+    <h3>Guest Notes</h3>
+    <div id="guestCommentsList" class="small-note">No comments yet.</div>
+  </div>
+</div>
+
+<div id="requestToBook" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Request to Book Again</h1>
+
+  <div class="panel">
+    <label for="requestName">Name</label>
+    <input id="requestName" type="text" placeholder="Your name">
+
+    <label for="requestArrival">Preferred Arrival Date</label>
+    <input id="requestArrival" type="text" placeholder="Enter date">
+
+    <label for="requestDeparture">Preferred Departure Date</label>
+    <input id="requestDeparture" type="text" placeholder="Enter date">
+
+    <label for="requestGuests">Number of Guests</label>
+    <input id="requestGuests" type="text" placeholder="How many guests?">
+
+    <label for="requestNotes">Notes</label>
+    <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
+
+    <div id="requestBookSuccess" class="form-message form-success">Request saved on this device.</div>
+    <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
   </div>
 </div>
 
@@ -513,6 +593,18 @@ margin-top:12px;
     <input id="teamPassword" type="password" placeholder="Enter password">
     <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
     <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
+  </div>
+</div>
+
+<div id="ownerLogin" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Owner Portal</h1>
+
+  <div class="panel">
+    <p style="margin-top:0;">Enter the owner password.</p>
+    <input id="ownerPassword" type="password" placeholder="Enter password">
+    <div id="ownerLoginError" class="form-message form-error">Incorrect password. Please try again.</div>
+    <button class="action-btn" type="button" onclick="checkOwnerLogin()">Enter Owner Dashboard</button>
   </div>
 </div>
 
@@ -542,7 +634,6 @@ margin-top:12px;
     <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
     <button class="action-btn secondary-btn" type="button" onclick="showPage('media')" style="margin-top:12px;">Upload Photos / Video</button>
     <button class="action-btn tertiary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Mark Turnover Complete</button>
-    <button class="action-btn" type="button" onclick="showPage('owner'); renderOwnerDashboard(); loadOwnerEditor();" style="margin-top:12px;">Owner Dashboard</button>
   </div>
 </div>
 
@@ -553,7 +644,7 @@ margin-top:12px;
   <div class="panel">
     <h3>Airbnb Calendar</h3>
     <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
-    <div id="calendarStatus" class="small-note">Loading calendar…</div>
+    <div id="calendarStatus" class="small-note">Loading calendar...</div>
   </div>
 
   <div class="panel">
@@ -605,7 +696,7 @@ margin-top:12px;
   <div class="panel">
     <label for="supplySimpleInput">Add Supply Item</label>
     <input id="supplySimpleInput" type="text" placeholder="Paper towels, dish pods, coffee pods...">
-    <button class="action-btn" type="button" onclick="addSupplyItem()" style="margin-top:12px;">Add Item</button>
+    <button class="action-btn center-button" type="button" onclick="addSupplyItem()">Add Item</button>
   </div>
 
   <div class="panel">
@@ -621,7 +712,7 @@ margin-top:12px;
   <div class="panel">
     <label for="maintenanceSimpleInput">Add Maintenance Item</label>
     <input id="maintenanceSimpleInput" type="text" placeholder="Loose rail, lamp out, faucet drip...">
-    <button class="action-btn" type="button" onclick="addMaintenanceItem()" style="margin-top:12px;">Add Issue</button>
+    <button class="action-btn center-button" type="button" onclick="addMaintenanceItem()">Add Issue</button>
   </div>
 
   <div class="panel">
@@ -658,12 +749,12 @@ margin-top:12px;
 
     <div id="turnoverSuccess" class="form-message form-success">Turnover marked complete.</div>
 
-    <button class="action-btn" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
+    <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Mark Complete</button>
   </div>
 </div>
 
 <div id="owner" class="hidden page">
-  <button class="back" type="button" onclick="showPage('team')">← Back</button>
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
   <h1>Owner Dashboard</h1>
 
   <div class="panel">
@@ -686,7 +777,7 @@ margin-top:12px;
 
     <textarea id="ownerSectionEditor" rows="10" class="edit-box"></textarea>
 
-    <button class="action-btn" type="button" onclick="saveOwnerContent()" style="margin-top:12px;">Save Changes</button>
+    <button class="action-btn center-button" type="button" onclick="saveOwnerContent()">Save Changes</button>
     <div id="ownerSaveMessage" class="form-message form-success">Changes saved.</div>
   </div>
 </div>
@@ -694,15 +785,20 @@ margin-top:12px;
 <div class="bottom-nav">
   <button type="button" onclick="showPage('home')">Home</button>
   <button type="button" onclick="showPage('local')">Favorites</button>
-  <button type="button" onclick="showPage('photos')">Photos</button>
-  <button type="button" onclick="showPage('checkout')">Checkout</button>
+  <button type="button" onclick="showPage('comments')">Comments</button>
+  <button type="button" onclick="showPage('requestToBook')">Book Again</button>
 </div>
 
 <script>
+const TEAM_PASSWORD = 'ridgecrew';
+const OWNER_PASSWORD_VALUE = 'darbysowner';
+
 const STORAGE_KEYS = {
   supplies: 'darbysridge_supplies',
   maintenance: 'darbysridge_maintenance',
-  content: 'darbysridge_content'
+  content: 'darbysridge_content',
+  comments: 'darbysridge_comments',
+  requests: 'darbysridge_requests'
 };
 
 const defaultContent = {
@@ -771,7 +867,7 @@ function saveOwnerContent(){
 }
 
 function showPage(page){
-  const pages = ['home','welcome','info','local','trail','photos','checkout','login','team','cleanings','inventory','supplies','maintenance','media','turnover','owner'];
+  const pages = ['home','welcome','info','local','trail','guestUploads','comments','requestToBook','login','ownerLogin','team','cleanings','inventory','supplies','maintenance','media','turnover','owner'];
 
   pages.forEach(id => {
     const el = document.getElementById(id);
@@ -790,15 +886,28 @@ function showPage(page){
     renderOwnerDashboard();
     loadOwnerEditor();
   }
+  if (page === 'comments') renderGuestComments();
 }
 
 function checkLogin(){
   const password = document.getElementById('teamPassword').value;
   const error = document.getElementById('loginError');
 
-  if (password === 'ridgecrew') {
+  if (password === TEAM_PASSWORD) {
     error.style.display = 'none';
     showPage('team');
+  } else {
+    error.style.display = 'block';
+  }
+}
+
+function checkOwnerLogin(){
+  const password = document.getElementById('ownerPassword').value;
+  const error = document.getElementById('ownerLoginError');
+
+  if (password === OWNER_PASSWORD_VALUE) {
+    error.style.display = 'none';
+    showPage('owner');
   } else {
     error.style.display = 'block';
   }
@@ -895,6 +1004,8 @@ function renderMaintenanceList(){
 function renderOwnerDashboard(){
   const supplyCount = getStoredList(STORAGE_KEYS.supplies).length;
   const maintenanceCount = getStoredList(STORAGE_KEYS.maintenance).length;
+  const commentCount = getStoredList(STORAGE_KEYS.comments).length;
+  const requestCount = getStoredList(STORAGE_KEYS.requests).length;
   const container = document.getElementById('ownerDashboardCounts');
 
   container.innerHTML = `
@@ -916,10 +1027,18 @@ function renderOwnerDashboard(){
 
     <div class="status-row">
       <div>
-        <strong>Guest Guide Content</strong><br>
-        <span class="small-note">Editable below</span>
+        <strong>Guest Comments</strong><br>
+        <span class="small-note">Saved on this device</span>
       </div>
-      <div class="status-pill soft">Ready</div>
+      <div class="status-pill">${commentCount}</div>
+    </div>
+
+    <div class="status-row">
+      <div>
+        <strong>Return Booking Requests</strong><br>
+        <span class="small-note">Saved on this device</span>
+      </div>
+      <div class="status-pill soft">${requestCount}</div>
     </div>
   `;
 }
@@ -936,11 +1055,79 @@ function showSelectedMedia(){
   list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
 }
 
+function showGuestMedia(){
+  const files = document.getElementById('guestMediaFiles').files;
+  const list = document.getElementById('guestMediaList');
+
+  if(!files.length){
+    list.textContent = 'No files selected.';
+    return;
+  }
+
+  list.innerHTML = Array.from(files).map(file => `<div>• ${file.name}</div>`).join('');
+}
+
 function submitTurnoverComplete(){
   document.getElementById('turnoverSuccess').style.display = 'block';
   document.getElementById('turnoverCleaner').value = '';
   document.getElementById('turnoverDate').value = '';
   document.getElementById('turnoverNotes').value = '';
+}
+
+function addGuestComment(){
+  const name = document.getElementById('guestCommentName').value.trim();
+  const text = document.getElementById('guestCommentText').value.trim();
+  if(!name || !text) return;
+
+  const list = getStoredList(STORAGE_KEYS.comments);
+  list.unshift({name, text});
+  saveStoredList(STORAGE_KEYS.comments, list);
+
+  document.getElementById('guestCommentName').value = '';
+  document.getElementById('guestCommentText').value = '';
+
+  renderGuestComments();
+  renderOwnerDashboard();
+}
+
+function renderGuestComments(){
+  const container = document.getElementById('guestCommentsList');
+  const list = getStoredList(STORAGE_KEYS.comments);
+
+  if(!list.length){
+    container.innerHTML = '<div class="small-note">No comments yet.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(comment => `
+    <div class="comment-card">
+      <div class="comment-name">${comment.name}</div>
+      <div>${comment.text}</div>
+    </div>
+  `).join('');
+}
+
+function submitRequestToBook(){
+  const name = document.getElementById('requestName').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+  const notes = document.getElementById('requestNotes').value.trim();
+
+  if(!name || !arrival || !departure) return;
+
+  const list = getStoredList(STORAGE_KEYS.requests);
+  list.unshift({name, arrival, departure, guests, notes});
+  saveStoredList(STORAGE_KEYS.requests, list);
+
+  document.getElementById('requestName').value = '';
+  document.getElementById('requestArrival').value = '';
+  document.getElementById('requestDeparture').value = '';
+  document.getElementById('requestGuests').value = '';
+  document.getElementById('requestNotes').value = '';
+
+  document.getElementById('requestBookSuccess').style.display = 'block';
+  renderOwnerDashboard();
 }
 
 async function loadCalendar(){
@@ -985,6 +1172,7 @@ async function loadCalendar(){
 renderEditablePages();
 renderSupplyList();
 renderMaintenanceList();
+renderGuestComments();
 renderOwnerDashboard();
 </script>
 
