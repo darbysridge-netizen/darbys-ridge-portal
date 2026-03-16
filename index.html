@@ -130,6 +130,7 @@
       display:block;
       font-family:'Playfair Display',serif;
       font-size:18px;
+      line-height:1.2;
     }
 
     .wide-card{
@@ -268,7 +269,9 @@
 
     .panel h3{
       margin-top:0;
-      font-family:'Playfair Display',serif;
+      font-family:'Inter',sans-serif;
+      font-size:17px;
+      font-weight:700;
     }
 
     button.action-btn{
@@ -465,15 +468,20 @@
       font-weight:600;
     }
 
-    .essentials-single{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
+    .essentials-panel{
+      background:#f7efe3;
+      padding:18px;
+      border-radius:16px;
+      margin-top:14px;
     }
 
     .essentials-block{
-      padding-bottom:16px;
+      padding:14px 0;
       border-bottom:1px solid #e5d7c4;
+    }
+
+    .essentials-block:first-child{
+      padding-top:0;
     }
 
     .essentials-block:last-child{
@@ -483,16 +491,19 @@
 
     .essentials-block h3{
       margin:0 0 8px;
-      font-family:'Playfair Display',serif;
-      font-size:22px;
+      font-family:'Inter',sans-serif;
+      font-size:16px;
+      font-weight:700;
       color:#3c2c1f;
+      letter-spacing:0;
     }
 
     .essentials-block p{
       margin:0;
-      line-height:1.7;
+      line-height:1.65;
       font-size:15px;
       font-family:'Inter',sans-serif;
+      font-weight:400;
       color:#4f3d2f;
       white-space:pre-line;
     }
@@ -500,6 +511,49 @@
     .highlight{
       font-weight:700;
       color:#2f241b;
+    }
+
+    .checkout-panel{
+      background:#f7efe3;
+      padding:18px;
+      border-radius:16px;
+      margin-top:14px;
+    }
+
+    .checkout-title{
+      margin:0 0 12px;
+      font-family:'Inter',sans-serif;
+      font-size:17px;
+      font-weight:700;
+      color:#3c2c1f;
+    }
+
+    .dash-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+
+    .dash-list li{
+      position:relative;
+      padding-left:16px;
+      margin-bottom:10px;
+      line-height:1.6;
+      font-size:15px;
+      color:#4f3d2f;
+    }
+
+    .dash-list li:last-child{
+      margin-bottom:0;
+    }
+
+    .dash-list li::before{
+      content:"-";
+      position:absolute;
+      left:0;
+      top:0;
+      color:#3c2c1f;
+      font-weight:600;
     }
 
     @media (max-width: 768px){
@@ -658,9 +712,7 @@
   <div id="checkout" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <h1>Before You Go</h1>
-    <div class="panel">
-      <div id="checkoutContent"></div>
-    </div>
+    <div id="checkoutContent"></div>
   </div>
 
   <div id="requestToBook" class="hidden page">
@@ -912,7 +964,6 @@ Please refer to the guest guide for additional house information, tips for your 
       trail: `Use this space for your Green Mountain trail notes, lake access details, what to wear, and safety reminders.`,
       photos: `We'd love to see your favorite moments from your stay. Feel free to upload a few favorite cabin memories here.`,
       checkout: `Checkout Checklist
-
 Please load any remaining dirty dishes and start the dishwasher.
 Remove all food items that you brought with you.
 Empty all trash cans and place bags in the bear-proof outdoor bin.
@@ -958,9 +1009,20 @@ Take final walkthrough photos`
       return raw.split('\n').map(item => item.trim()).filter(Boolean);
     }
 
+    function escapeHtml(text){
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function highlightLabels(text){
+      return text.replace(/(Network:|Password:|Gate Code:)/g, '<span class="highlight">$1</span>');
+    }
+
     function formatInfoContent(raw){
       const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
-      let html = '<div class="panel"><div class="essentials-single">';
+      let html = '<div class="essentials-panel">';
 
       for(let i = 0; i < sections.length; i += 2){
         const title = sections[i] || '';
@@ -974,19 +1036,25 @@ Take final walkthrough photos`
         `;
       }
 
-      html += '</div></div>';
+      html += '</div>';
       return html;
     }
 
-    function escapeHtml(text){
-      return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
+    function formatCheckoutContent(raw){
+      const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
+      if(!lines.length) return '';
 
-    function highlightLabels(text){
-      return text.replace(/(Network:|Password:|Gate Code:)/g, '<span class="highlight">$1</span>');
+      const title = lines[0];
+      const items = lines.slice(1);
+
+      return `
+        <div class="checkout-panel">
+          <h3 class="checkout-title">${escapeHtml(title)}</h3>
+          <ul class="dash-list">
+            ${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      `;
     }
 
     function renderEditablePages(){
@@ -994,7 +1062,7 @@ Take final walkthrough photos`
       document.getElementById('localContent').innerText = getSectionContent('local');
       document.getElementById('trailContent').innerText = getSectionContent('trail');
       document.getElementById('photosContent').innerText = getSectionContent('photos');
-      document.getElementById('checkoutContent').innerText = getSectionContent('checkout');
+      document.getElementById('checkoutContent').innerHTML = formatCheckoutContent(getSectionContent('checkout'));
 
       const checklistEl = document.getElementById('teamChecklistDisplay');
       if(checklistEl){
