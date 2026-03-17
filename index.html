@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darby's Ridge</title>
   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body{
@@ -972,7 +972,7 @@
       <label for="requestNotes">Notes</label>
       <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
 
-      <div id="requestBookSuccess" class="form-message form-success">Request saved on this device.</div>
+      <div id="requestBookSuccess" class="form-message form-success">Request submitted.</div>
       <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
     </div>
   </div>
@@ -1149,10 +1149,15 @@
   </div>
 
   <script>
-   const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
+    const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); 
+    let supabaseClient = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    });
+
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
@@ -1879,56 +1884,52 @@ Take final walkthrough photos`
       }
     }
 
-   async function submitRequestToBook(){
-  const name = document.getElementById('requestName').value.trim();
-  const phone = document.getElementById('requestPhone').value.trim();
-  const arrival = document.getElementById('requestArrival').value.trim();
-  const departure = document.getElementById('requestDeparture').value.trim();
-  const guests = document.getElementById('requestGuests').value.trim();
-  const notes = document.getElementById('requestNotes').value.trim();
+    async function submitRequestToBook(){
+      if(!supabaseClient){
+        alert('App not ready yet — refresh and try again.');
+        return;
+      }
 
-  if(!name || !arrival || !departure){
-    alert('Please fill in name, arrival date, and departure date.');
-    return;
-  }
+      const name = document.getElementById('requestName').value.trim();
+      const phone = document.getElementById('requestPhone').value.trim();
+      const arrival = document.getElementById('requestArrival').value.trim();
+      const departure = document.getElementById('requestDeparture').value.trim();
+      const guests = document.getElementById('requestGuests').value.trim();
+      const notes = document.getElementById('requestNotes').value.trim();
 
-  const { error } = await supabaseClient
-    .from('booking_requests')
-    .insert([
-      { name, phone, arrival, departure, guests, notes }
-    ]);
+      document.getElementById('requestBookSuccess').style.display = 'none';
 
-  if(error){
-    alert('Could not submit request.');
-    console.error(error);
-    return;
-  }
+      if(!name || !arrival || !departure){
+        alert('Please fill in name, arrival date, and departure date.');
+        return;
+      }
 
-  document.getElementById('requestName').value = '';
-  document.getElementById('requestPhone').value = '';
-  document.getElementById('requestArrival').value = '';
-  document.getElementById('requestDeparture').value = '';
-  document.getElementById('requestGuests').value = '';
-  document.getElementById('requestNotes').value = '';
+      try {
+        const { error } = await supabaseClient
+          .from('booking_requests')
+          .insert([
+            { name, phone, arrival, departure, guests, notes }
+          ]);
 
-  document.getElementById('requestBookSuccess').style.display = 'block';
-}
+        if(error){
+          console.error(error);
+          alert('Something went wrong saving request.');
+          return;
+        }
 
-      if(!name || !arrival || !departure) return;
+        document.getElementById('requestName').value = '';
+        document.getElementById('requestPhone').value = '';
+        document.getElementById('requestArrival').value = '';
+        document.getElementById('requestDeparture').value = '';
+        document.getElementById('requestGuests').value = '';
+        document.getElementById('requestNotes').value = '';
 
-      const list = getStoredList(STORAGE_KEYS.requests);
-      list.unshift({name, phone, arrival, departure, guests, notes});
-      saveStoredList(STORAGE_KEYS.requests, list);
-
-      document.getElementById('requestName').value = '';
-      document.getElementById('requestPhone').value = '';
-      document.getElementById('requestArrival').value = '';
-      document.getElementById('requestDeparture').value = '';
-      document.getElementById('requestGuests').value = '';
-      document.getElementById('requestNotes').value = '';
-
-      document.getElementById('requestBookSuccess').style.display = 'block';
-      renderOwnerDashboard();
+        document.getElementById('requestBookSuccess').style.display = 'block';
+        alert('Request submitted!');
+      } catch (e) {
+        console.error(e);
+        alert('Unexpected error occurred.');
+      }
     }
 
     async function loadCalendar(){
