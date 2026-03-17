@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darby's Ridge</title>
@@ -1148,6 +1149,10 @@
   </div>
 
   <script>
+   const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); 
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
