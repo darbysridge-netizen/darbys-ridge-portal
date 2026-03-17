@@ -9,23 +9,35 @@ export default async function handler(req, res) {
       });
     }
 
-    const response = await fetch(calendarUrl);
+    const response = await fetch(calendarUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    });
 
     if (!response.ok) {
       return res.status(500).json({
         success: false,
-        error: 'Could not fetch Airbnb calendar feed.'
+        error: `Could not fetch Airbnb calendar feed. Status: ${response.status}`
       });
     }
 
     const icsText = await response.text();
 
+    if (!icsText || !icsText.includes('BEGIN:VCALENDAR')) {
+      return res.status(500).json({
+        success: false,
+        error: 'Calendar feed did not return valid ICS data.'
+      });
+    }
+
     const events = parseICS(icsText);
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const bookings = events
-      .filter(event => event.checkOutDate && event.checkOutDate >= today)
+      .filter(event => event.checkOutDate instanceof Date && !isNaN(event.checkOutDate) && event.checkOutDate >= today)
       .sort((a, b) => a.checkInDate - b.checkInDate)
       .map(event => ({
         guestName: event.guestName || '',
@@ -45,7 +57,7 @@ export default async function handler(req, res) {
     console.error('Calendar API error:', error);
     return res.status(500).json({
       success: false,
-      error: 'Unable to load calendar.'
+      error: error?.message || 'Unable to load calendar.'
     });
   }
 }
@@ -56,34 +68,40 @@ function parseICS(icsText) {
   const events = [];
 
   for (const chunk of chunks) {
-    const eventText = chunk.split('END:VEVENT')[0];
+    try {
+      const eventText = chunk.split('END:VEVENT')[0];
 
-    const summary = getICSField(eventText, 'SUMMARY');
-    const description = getICSField(eventText, 'DESCRIPTION');
-    const dtStartRaw = getICSField(eventText, 'DTSTART');
-    const dtEndRaw = getICSField(eventText, 'DTEND');
+      const summary = getICSField(eventText, 'SUMMARY');
+      const description = getICSField(eventText, 'DESCRIPTION');
+      const dtStartRaw = getICSField(eventText, 'DTSTART');
+      const dtEndRaw = getICSField(eventText, 'DTEND');
 
-    const checkInDate = parseICSDate(dtStartRaw);
-    const checkOutDate = parseICSDate(dtEndRaw);
+      const checkInDate = parseICSDate(dtStartRaw);
+      const checkOutDate = parseICSDate(dtEndRaw);
 
-    if (!checkInDate || !checkOutDate) continue;
+      if (!checkInDate || !checkOutDate || isNaN(checkInDate) || isNaN(checkOutDate)) {
+        continue;
+      }
 
-    const guestName = extractGuestName(summary, description);
+      const guestName = extractGuestName(summary, description);
 
-    events.push({
-      summary,
-      description,
-      guestName,
-      checkInDate,
-      checkOutDate
-    });
+      events.push({
+        summary,
+        description,
+        guestName,
+        checkInDate,
+        checkOutDate
+      });
+    } catch (err) {
+      console.error('Error parsing VEVENT:', err);
+    }
   }
 
   return events;
 }
 
 function unfoldICSLines(text) {
-  return text.replace(/\r?\n[ \t]/g, '');
+  return String(text || '').replace(/\r?\n[ \t]/g, '');
 }
 
 function getICSField(block, fieldName) {
@@ -103,7 +121,7 @@ function decodeICSText(value) {
 function parseICSDate(value) {
   if (!value) return null;
 
-  const clean = value.trim();
+  const clean = String(value).trim();
 
   // Handles YYYYMMDD
   if (/^\d{8}$/.test(clean)) {
@@ -114,15 +132,20 @@ function parseICSDate(value) {
   }
 
   // Handles YYYYMMDDTHHMMSSZ or YYYYMMDDTHHMMSS
-  const match = clean.match(
-    /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/
-  );
+  const match = clean.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/);
 
   if (match) {
-    const [, y, m, d, hh, mm, ss] = match.map(Number);
+    const y = Number(match[1]);
+    const m = Number(match[2]);
+    const d = Number(match[3]);
+    const hh = Number(match[4]);
+    const mm = Number(match[5]);
+    const ss = Number(match[6]);
+
     if (clean.endsWith('Z')) {
       return new Date(Date.UTC(y, m - 1, d, hh, mm, ss));
     }
+
     return new Date(y, m - 1, d, hh, mm, ss);
   }
 
@@ -169,6 +192,7 @@ function isUsefulGuestName(value) {
   if (!value) return false;
 
   const text = value.trim();
+  const lower = text.toLowerCase();
 
   const blockedWords = [
     'airbnb',
@@ -182,8 +206,6 @@ function isUsefulGuestName(value) {
     'calendar',
     'stay'
   ];
-
-  const lower = text.toLowerCase();
 
   if (blockedWords.some(word => lower === word || lower.includes(word))) {
     return false;
