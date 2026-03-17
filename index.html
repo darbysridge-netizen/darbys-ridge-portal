@@ -389,11 +389,6 @@
       box-sizing:border-box;
     }
 
-    button.action-btn:disabled{
-      opacity:.65;
-      cursor:not-allowed;
-    }
-
     button.secondary-btn{
       background:#e9d9c5;
       color:#3c2c1f;
@@ -826,6 +821,8 @@
       margin-top:10px;
       display:flex;
       justify-content:flex-end;
+      gap:8px;
+      flex-wrap:wrap;
     }
 
     .mini-delete{
@@ -1046,7 +1043,7 @@
       <div id="guestPreview" class="preview-grid"></div>
 
       <div class="upload-actions">
-        <button id="guestUploadBtn" class="action-btn" type="button" onclick="addGuestMedia()">Add to Guest Gallery</button>
+        <button class="action-btn" type="button" onclick="addGuestMedia()">Add to Guest Gallery</button>
         <button class="action-btn secondary-btn" type="button" onclick="clearGuestPreview()">Clear</button>
       </div>
 
@@ -1087,20 +1084,19 @@
       <input id="requestPhone" type="tel" placeholder="Best phone number">
 
       <label for="requestArrival">Preferred Arrival Date</label>
-      <input id="requestArrival" type="date">
+      <input id="requestArrival" type="text" placeholder="Enter date">
 
       <label for="requestDeparture">Preferred Departure Date</label>
-      <input id="requestDeparture" type="date">
+      <input id="requestDeparture" type="text" placeholder="Enter date">
 
       <label for="requestGuests">Number of Guests</label>
-      <input id="requestGuests" type="number" min="1" placeholder="How many guests?">
+      <input id="requestGuests" type="text" placeholder="How many guests?">
 
       <label for="requestNotes">Notes</label>
       <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
 
       <div id="requestBookSuccess" class="form-message form-success">Request submitted.</div>
-      <div id="requestBookError" class="form-message form-error"></div>
-      <button id="requestSubmitBtn" class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
+      <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
     </div>
   </div>
 
@@ -1154,6 +1150,7 @@
       <h3>Airbnb Calendar</h3>
       <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
       <div id="calendarStatus" class="small-note">Loading calendar...</div>
+      <button class="action-btn tertiary-btn" type="button" onclick="loadCalendar()" style="margin-top:12px;">Refresh Calendar</button>
     </div>
 
     <div class="panel">
@@ -1205,7 +1202,7 @@
       <input id="turnoverCleaner" type="text" placeholder="Cleaner name">
 
       <label for="turnoverDate">Turnover Date</label>
-      <input id="turnoverDate" type="date">
+      <input id="turnoverDate" type="text" placeholder="Enter date">
 
       <label for="turnoverNotes">Turnover Notes</label>
       <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
@@ -1218,7 +1215,7 @@
       <div id="turnoverSuccess" class="form-message form-success">Turnover submission saved.</div>
       <div id="turnoverError" class="form-message form-error">There was a problem saving the turnover submission.</div>
 
-      <button id="turnoverSubmitBtn" class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Submit Turnover</button>
+      <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Submit Turnover</button>
     </div>
   </div>
 
@@ -1474,26 +1471,6 @@ Take final walkthrough photos`
       return text.replace(/(Network:|Password:|Gate Code:)/g, '<span class="highlight">$1</span>');
     }
 
-    function setMessage(id, type, text){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.className = `form-message ${type === 'error' ? 'form-error' : 'form-success'}`;
-      el.textContent = text;
-      el.style.display = 'block';
-    }
-
-    function hideMessage(id){
-      const el = document.getElementById(id);
-      if(el) el.style.display = 'none';
-    }
-
-    function setButtonLoading(buttonId, isLoading, loadingText, normalText){
-      const btn = document.getElementById(buttonId);
-      if(!btn) return;
-      btn.disabled = isLoading;
-      btn.textContent = isLoading ? loadingText : normalText;
-    }
-
     function formatInfoContent(raw){
       const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
       let html = '<div class="essentials-panel">';
@@ -1552,12 +1529,8 @@ Take final walkthrough photos`
       return `<img src="${escapeHtml(url)}" alt="Media">`;
     }
 
-    function isSupabaseReady(){
-      return !!supabaseClient;
-    }
-
     async function getSectionContent(section){
-      if(!isSupabaseReady()) return defaultContent[section] || '';
+      if(!supabaseClient) return defaultContent[section] || '';
 
       try{
         const { data, error } = await supabaseClient
@@ -1579,8 +1552,6 @@ Take final walkthrough photos`
     }
 
     async function saveSectionContent(section, value){
-      if(!isSupabaseReady()) throw new Error('Supabase not ready');
-
       const { error } = await supabaseClient
         .from('app_content')
         .upsert({ section, value }, { onConflict: 'section' });
@@ -1616,7 +1587,7 @@ Take final walkthrough photos`
     async function loadOwnerEditor(){
       const section = document.getElementById('ownerSectionSelect').value;
       document.getElementById('ownerSectionEditor').value = await getSectionContent(section);
-      hideMessage('ownerSaveMessage');
+      document.getElementById('ownerSaveMessage').style.display = 'none';
     }
 
     async function saveOwnerContent(){
@@ -1684,7 +1655,6 @@ Take final walkthrough photos`
     }
 
     async function addSupplyItem(){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
       const input = document.getElementById('supplySimpleInput');
       const value = input.value.trim();
       if(!value) return;
@@ -1705,8 +1675,6 @@ Take final walkthrough photos`
     }
 
     async function removeSupplyItem(id){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
-
       const { error } = await supabaseClient
         .from('supplies')
         .delete()
@@ -1725,10 +1693,6 @@ Take final walkthrough photos`
     async function renderSupplyList(){
       const container = document.getElementById('supplyListContainer');
       if(!container) return;
-      if(!isSupabaseReady()){
-        container.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       const { data, error } = await supabaseClient
         .from('supplies')
@@ -1749,7 +1713,6 @@ Take final walkthrough photos`
     }
 
     async function addMaintenanceItem(){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
       const input = document.getElementById('maintenanceSimpleInput');
       const value = input.value.trim();
       if(!value) return;
@@ -1770,8 +1733,6 @@ Take final walkthrough photos`
     }
 
     async function removeMaintenanceItem(id){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
-
       const { error } = await supabaseClient
         .from('maintenance')
         .delete()
@@ -1790,10 +1751,6 @@ Take final walkthrough photos`
     async function renderMaintenanceList(){
       const container = document.getElementById('maintenanceListContainer');
       if(!container) return;
-      if(!isSupabaseReady()){
-        container.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       const { data, error } = await supabaseClient
         .from('maintenance')
@@ -1828,13 +1785,32 @@ Take final walkthrough photos`
       `).join('');
     }
 
+    async function deleteBookingRequest(id){
+      const okay = confirm('Delete this booking request?');
+      if(!okay) return;
+
+      try{
+        const { error } = await supabaseClient
+          .from('booking_requests')
+          .delete()
+          .eq('id', id);
+
+        if(error){
+          console.error(error);
+          alert('Could not delete booking request.');
+          return;
+        }
+
+        await renderOwnerDashboard();
+      } catch(e){
+        console.error(e);
+        alert('Could not delete booking request.');
+      }
+    }
+
     async function renderOwnerRequests(){
       const container = document.getElementById('ownerRequestList');
       if(!container) return;
-      if(!isSupabaseReady()){
-        container.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       try{
         const { data, error } = await supabaseClient
@@ -1861,6 +1837,9 @@ Take final walkthrough photos`
             <p><strong>Departure:</strong> ${escapeHtml(item.departure || '')}</p>
             <p><strong>Guests:</strong> ${escapeHtml(item.guests || '')}</p>
             ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+            <div class="admin-actions">
+              <button class="mini-delete" type="button" onclick="deleteBookingRequest(${item.id})">Delete</button>
+            </div>
           </div>
         `).join('');
       } catch(e){
@@ -1872,7 +1851,6 @@ Take final walkthrough photos`
     async function deleteGuestMedia(id, imagePath){
       const okay = confirm('Delete this guest gallery item?');
       if(!okay) return;
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
 
       try{
         if(imagePath){
@@ -1904,7 +1882,6 @@ Take final walkthrough photos`
     async function deleteTurnoverMedia(id, imagePath){
       const okay = confirm('Delete this turnover media item?');
       if(!okay) return;
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
 
       try{
         if(imagePath){
@@ -1935,10 +1912,6 @@ Take final walkthrough photos`
     async function renderOwnerGuestGallery(){
       const container = document.getElementById('ownerGuestGalleryEntries');
       if(!container) return;
-      if(!isSupabaseReady()){
-        container.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       try{
         const { data, error } = await supabaseClient
@@ -1959,7 +1932,7 @@ Take final walkthrough photos`
             <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
             <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
             <div class="admin-actions">
-              <button class="mini-delete" type="button" onclick='deleteGuestMedia(${item.id}, ${JSON.stringify(item.image_path || "")})'>Delete</button>
+              <button class="mini-delete" type="button" onclick="deleteGuestMedia(${item.id}, '${escapeHtml(item.image_path || '')}')">Delete</button>
             </div>
           </div>
         `).join('');
@@ -1972,10 +1945,6 @@ Take final walkthrough photos`
     async function renderOwnerTurnovers(){
       const container = document.getElementById('ownerTurnoverEntries');
       if(!container) return;
-      if(!isSupabaseReady()){
-        container.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       const { data, error } = await supabaseClient
         .from('turnovers')
@@ -2006,7 +1975,7 @@ Take final walkthrough photos`
                   <div>
                     ${renderMediaPreviewTag(media.image_url, media.media_type || 'image/jpeg')}
                     <div class="admin-actions">
-                      <button class="mini-delete" type="button" onclick='deleteTurnoverMedia(${media.id}, ${JSON.stringify(media.image_path || "")})'>Delete</button>
+                      <button class="mini-delete" type="button" onclick="deleteTurnoverMedia(${media.id}, '${escapeHtml(media.image_path || '')}')">Delete</button>
                     </div>
                   </div>
                 `).join('')}
@@ -2031,8 +2000,6 @@ Take final walkthrough photos`
     }
 
     async function renderOwnerDashboard(){
-      if(!isSupabaseReady()) return;
-
       const [
         requestsRes,
         suppliesRes,
@@ -2134,7 +2101,7 @@ Take final walkthrough photos`
       };
     }
 
-    function previewGuestMedia(){
+    async function previewGuestMedia(){
       const container = document.getElementById('guestPreview');
       const files = document.getElementById('guestMediaFiles').files;
 
@@ -2156,16 +2123,12 @@ Take final walkthrough photos`
       document.getElementById('guestMediaFiles').value = '';
       document.getElementById('guestMemoryName').value = '';
       document.getElementById('guestPreview').innerHTML = '';
-      hideMessage('guestPhotoMessage');
+      document.getElementById('guestPhotoMessage').style.display = 'none';
     }
 
     async function renderGuestGallery(){
       const gallery = document.getElementById('guestGallery');
       if(!gallery) return;
-      if(!isSupabaseReady()){
-        gallery.innerHTML = '<div class="small-note">Supabase is not connected.</div>';
-        return;
-      }
 
       try{
         const { data, error } = await supabaseClient
@@ -2201,19 +2164,18 @@ Take final walkthrough photos`
     }
 
     async function addGuestMedia(){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
-
       const files = document.getElementById('guestMediaFiles').files;
       const guestName = document.getElementById('guestMemoryName').value.trim();
+      const message = document.getElementById('guestPhotoMessage');
 
-      hideMessage('guestPhotoMessage');
+      message.style.display = 'none';
 
       if(!files.length){
-        setMessage('guestPhotoMessage', 'error', 'Please choose at least one photo or video first.');
+        message.className = 'form-message form-error';
+        message.textContent = 'Please choose at least one photo or video first.';
+        message.style.display = 'block';
         return;
       }
-
-      setButtonLoading('guestUploadBtn', true, 'Uploading...', 'Add to Guest Gallery');
 
       try{
         const items = getSelectedMedia(files);
@@ -2236,20 +2198,22 @@ Take final walkthrough photos`
         await renderGuestGallery();
         await renderOwnerDashboard();
 
-        setMessage('guestPhotoMessage', 'success', 'Media added to the shared guest gallery.');
+        message.className = 'form-message form-success';
+        message.textContent = 'Media added to the shared guest gallery.';
+        message.style.display = 'block';
 
         document.getElementById('guestMediaFiles').value = '';
         document.getElementById('guestMemoryName').value = '';
         document.getElementById('guestPreview').innerHTML = '';
       } catch(e){
         console.error(e);
-        setMessage('guestPhotoMessage', 'error', 'Those files could not be uploaded. Check your Supabase guest gallery setup.');
-      } finally {
-        setButtonLoading('guestUploadBtn', false, 'Uploading...', 'Add to Guest Gallery');
+        message.className = 'form-message form-error';
+        message.textContent = 'Those files could not be uploaded. Check your Supabase guest gallery setup.';
+        message.style.display = 'block';
       }
     }
 
-    function previewTurnoverMedia(){
+    async function previewTurnoverMedia(){
       const container = document.getElementById('turnoverPreview');
       const files = document.getElementById('turnoverFiles').files;
 
@@ -2268,22 +2232,22 @@ Take final walkthrough photos`
     }
 
     async function submitTurnoverComplete(){
-      if(!isSupabaseReady()) return alert('Supabase is not connected.');
-
       const cleaner = document.getElementById('turnoverCleaner').value.trim();
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
       const files = document.getElementById('turnoverFiles').files;
 
-      hideMessage('turnoverSuccess');
-      hideMessage('turnoverError');
+      const success = document.getElementById('turnoverSuccess');
+      const error = document.getElementById('turnoverError');
+
+      success.style.display = 'none';
+      error.style.display = 'none';
 
       if(!cleaner || !date){
-        setMessage('turnoverError', 'error', 'Please enter the cleaner name and turnover date.');
+        error.textContent = 'Please enter the cleaner name and turnover date.';
+        error.style.display = 'block';
         return;
       }
-
-      setButtonLoading('turnoverSubmitBtn', true, 'Submitting...', 'Submit Turnover');
 
       try{
         const { data: turnoverInsert, error: insertError } = await supabaseClient
@@ -2294,7 +2258,8 @@ Take final walkthrough photos`
 
         if(insertError){
           console.error(insertError);
-          setMessage('turnoverError', 'error', 'There was a problem saving the turnover submission.');
+          error.textContent = 'There was a problem saving the turnover submission.';
+          error.style.display = 'block';
           return;
         }
 
@@ -2317,7 +2282,7 @@ Take final walkthrough photos`
           }
         }
 
-        setMessage('turnoverSuccess', 'success', 'Turnover submission saved.');
+        success.style.display = 'block';
         document.getElementById('turnoverCleaner').value = '';
         document.getElementById('turnoverDate').value = '';
         document.getElementById('turnoverNotes').value = '';
@@ -2327,18 +2292,14 @@ Take final walkthrough photos`
         await renderOwnerDashboard();
       } catch(e){
         console.error(e);
-        setMessage('turnoverError', 'error', 'There was a problem saving the turnover submission.');
-      } finally {
-        setButtonLoading('turnoverSubmitBtn', false, 'Submitting...', 'Submit Turnover');
+        error.textContent = 'There was a problem saving the turnover submission.';
+        error.style.display = 'block';
       }
     }
 
     async function submitRequestToBook(){
-      hideMessage('requestBookSuccess');
-      hideMessage('requestBookError');
-
-      if(!isSupabaseReady()){
-        setMessage('requestBookError', 'error', 'App not ready yet — refresh and try again.');
+      if(!supabaseClient){
+        alert('App not ready yet — refresh and try again.');
         return;
       }
 
@@ -2349,12 +2310,12 @@ Take final walkthrough photos`
       const guests = document.getElementById('requestGuests').value.trim();
       const notes = document.getElementById('requestNotes').value.trim();
 
+      document.getElementById('requestBookSuccess').style.display = 'none';
+
       if(!name || !arrival || !departure){
-        setMessage('requestBookError', 'error', 'Please fill in name, arrival date, and departure date.');
+        alert('Please fill in name, arrival date, and departure date.');
         return;
       }
-
-      setButtonLoading('requestSubmitBtn', true, 'Submitting...', 'Submit Request');
 
       try {
         const { error } = await supabaseClient
@@ -2365,7 +2326,7 @@ Take final walkthrough photos`
 
         if(error){
           console.error(error);
-          setMessage('requestBookError', 'error', 'Something went wrong saving request.');
+          alert('Something went wrong saving request.');
           return;
         }
 
@@ -2376,13 +2337,11 @@ Take final walkthrough photos`
         document.getElementById('requestGuests').value = '';
         document.getElementById('requestNotes').value = '';
 
-        setMessage('requestBookSuccess', 'success', 'Request submitted.');
+        document.getElementById('requestBookSuccess').style.display = 'block';
         await renderOwnerDashboard();
       } catch (e) {
         console.error(e);
-        setMessage('requestBookError', 'error', 'Unexpected error occurred.');
-      } finally {
-        setButtonLoading('requestSubmitBtn', false, 'Submitting...', 'Submit Request');
+        alert('Unexpected error occurred.');
       }
     }
 
@@ -2394,8 +2353,28 @@ Take final walkthrough photos`
       results.innerHTML = '<div class="small-note">Loading...</div>';
 
       try{
-        const response = await fetch('/api/airbnb-calendar');
-        const data = await response.json();
+        const response = await fetch('/api/airbnb-calendar', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if(!response.ok){
+          status.textContent = `Calendar sync error (${response.status})`;
+          results.innerHTML = '<div class="small-note">The Airbnb calendar API route is not responding correctly right now.</div>';
+          return;
+        }
+
+        let data;
+        try{
+          data = await response.json();
+        } catch(jsonError){
+          console.error(jsonError);
+          status.textContent = 'Calendar sync error';
+          results.innerHTML = '<div class="small-note">The calendar endpoint did not return valid JSON.</div>';
+          return;
+        }
 
         if(!data.success){
           status.textContent = data.error || 'Unable to load calendar.';
@@ -2430,13 +2409,11 @@ Take final walkthrough photos`
       } catch(e){
         console.error(e);
         status.textContent = 'Unable to load calendar.';
-        results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
+        results.innerHTML = '<div class="small-note">The Airbnb sync is failing. Most likely the Vercel /api/airbnb-calendar function is missing, broken, or not deployed.</div>';
       }
     }
 
     async function seedDefaultContentIfNeeded(){
-      if(!isSupabaseReady()) return;
-
       const sections = ['info','local','trail','photos','checkout','checklist'];
 
       for(const section of sections){
@@ -2463,36 +2440,15 @@ Take final walkthrough photos`
       }
     }
 
-    async function initSupabase(){
-      try{
-        if(!window.supabase || !window.supabase.createClient){
-          console.error('Supabase library did not load.');
-          return;
-        }
-
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      } catch(e){
-        console.error('Supabase init failed:', e);
-        supabaseClient = null;
-      }
-    }
-
     document.addEventListener('DOMContentLoaded', async function() {
-      await initSupabase();
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      try{
-        await seedDefaultContentIfNeeded();
-        await renderEditablePages();
-
-        if(isSupabaseReady()){
-          await renderSupplyList();
-          await renderMaintenanceList();
-          await renderGuestGallery();
-          await renderOwnerDashboard();
-        }
-      } catch(e){
-        console.error('App load error:', e);
-      }
+      await seedDefaultContentIfNeeded();
+      await renderEditablePages();
+      await renderSupplyList();
+      await renderMaintenanceList();
+      await renderGuestGallery();
+      await renderOwnerDashboard();
     });
   </script>
 </body>
