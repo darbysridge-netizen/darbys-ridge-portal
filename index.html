@@ -40,7 +40,7 @@
 
     .hero-text{
       position:absolute;
-      bottom:64px;
+      bottom:42px;
       left:26px;
       right:26px;
       color:white;
@@ -49,7 +49,7 @@
 
     .logo{
       font-family:'Allura',cursive;
-      font-size:56px;
+      font-size:50px;
       margin:0;
       text-shadow:0 6px 14px rgba(0,0,0,.45);
       line-height:1;
@@ -58,7 +58,7 @@
 
     .tagline{
       font-family:'Playfair Display',serif;
-      font-size:22px;
+      font-size:20px;
       margin-top:8px;
       font-weight:500;
       letter-spacing:.5px;
@@ -202,11 +202,11 @@
       align-items:center;
       gap:12px;
       padding:14px 16px;
-      background:white;
+      background:#d8c3aa;
       border-radius:14px;
       text-decoration:none;
       color:#3c2c1f;
-      border:1px solid #eadbc8;
+      border:1px solid #c9b299;
       box-shadow:0 4px 10px rgba(0,0,0,.04);
       transition:transform .15s ease, box-shadow .15s ease;
     }
@@ -214,6 +214,7 @@
     .social-link:hover{
       transform:translateY(-1px);
       box-shadow:0 8px 16px rgba(0,0,0,.08);
+      background:#ceb597;
     }
 
     .social-icon{
@@ -225,8 +226,8 @@
       justify-content:center;
       font-size:18px;
       flex-shrink:0;
-      background:#ead8c2;
-      color:#5b4636;
+      background:#5b4636;
+      color:#f7efe3;
     }
 
     .social-text{
@@ -241,7 +242,7 @@
     }
 
     .social-text small{
-      color:#8a725d;
+      color:#6f5846;
       font-size:12px;
       font-weight:600;
     }
@@ -323,6 +324,54 @@
       font-family:'Inter',sans-serif;
       font-size:17px;
       font-weight:700;
+    }
+
+    .page-banner{
+      position:relative;
+      height:180px;
+      border-radius:18px;
+      overflow:hidden;
+      margin-bottom:16px;
+      box-shadow:0 8px 18px rgba(0,0,0,.10);
+      background:#d8c3aa;
+    }
+
+    .page-banner img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .page-banner:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.10));
+    }
+
+    .page-banner-text{
+      position:absolute;
+      left:16px;
+      right:16px;
+      bottom:14px;
+      color:white;
+      z-index:2;
+    }
+
+    .page-banner-text strong{
+      display:block;
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      line-height:1.15;
+      margin-bottom:4px;
+    }
+
+    .page-banner-text span{
+      font-size:13px;
+      color:rgba(255,255,255,.92);
+      line-height:1.4;
+      display:block;
     }
 
     button.action-btn{
@@ -477,6 +526,18 @@
       margin:16px 0 8px;
       font-size:15px;
       color:#3c2c1f;
+    }
+
+    .owner-list-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .owner-list-row div:first-child{
+      flex:1;
+      min-width:0;
     }
 
     .pdf-wrap{
@@ -774,6 +835,25 @@
       width:auto;
     }
 
+    .owner-media-thumb{
+      width:100%;
+      max-width:220px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid #eadbc8;
+      background:#ddd;
+      margin-bottom:10px;
+    }
+
+    .owner-media-thumb img,
+    .owner-media-thumb video{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      display:block;
+      background:#ddd;
+    }
+
     @media (max-width: 768px){
       .pdf-frame{
         height:85vh;
@@ -907,13 +987,25 @@
 
   <div id="info" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>WiFi & Cabin Essentials</h1>
+    <div class="page-banner">
+      <img src="essentials.jpg" alt="">
+      <div class="page-banner-text">
+        <strong>WiFi & Cabin Essentials</strong>
+        <span>Everything you need for a smooth and cozy stay at Darby's Ridge.</span>
+      </div>
+    </div>
     <div id="infoContent"></div>
   </div>
 
   <div id="local" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Blue Ridge Guest Favorites</h1>
+    <div class="page-banner">
+      <img src="local.jpg" alt="">
+      <div class="page-banner-text">
+        <strong>Blue Ridge Guest Favorites</strong>
+        <span>A few of our favorite spots to eat, explore, and enjoy the area.</span>
+      </div>
+    </div>
     <div class="panel">
       <div id="localContent"></div>
     </div>
@@ -921,7 +1013,13 @@
 
   <div id="trail" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Trail to Lake</h1>
+    <div class="page-banner">
+      <img src="trail.jpg" alt="">
+      <div class="page-banner-text">
+        <strong>Trail to Lake</strong>
+        <span>Quick details before you head out toward the trail and Lake Blue Ridge.</span>
+      </div>
+    </div>
     <div class="panel">
       <div id="trailContent"></div>
     </div>
@@ -962,7 +1060,13 @@
 
   <div id="checkout" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Before You Go</h1>
+    <div class="page-banner">
+      <img src="interior.jpg" alt="">
+      <div class="page-banner-text">
+        <strong>Before You Go</strong>
+        <span>A quick checkout checklist to help us get ready for the next guests.</span>
+      </div>
+    </div>
     <div id="checkoutContent"></div>
   </div>
 
@@ -1663,11 +1767,19 @@ Take final walkthrough photos`
       `).join('');
     }
 
-    function renderSimpleOwnerList(list, emptyText){
-      if(!list.length){
+    function renderOwnerActionList(items, emptyText, type){
+      if(!items.length){
         return `<div class="small-note">${emptyText}</div>`;
       }
-      return list.map(item => `<div class="owner-list-card">${escapeHtml(item)}</div>`).join('');
+
+      return items.map(item => `
+        <div class="owner-list-card">
+          <div class="owner-list-row">
+            <div>${escapeHtml(item.item)}</div>
+            <button class="mini-delete" type="button" onclick="${type === 'supply' ? `removeSupplyItem(${item.id})` : `removeMaintenanceItem(${item.id})`}">Delete</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     async function renderOwnerRequests(){
@@ -1785,9 +1897,10 @@ Take final walkthrough photos`
 
         container.innerHTML = data.map(item => `
           <div class="submission-card">
-            ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
+            <div class="owner-media-thumb">
+              ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
+            </div>
             <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
-            <p><strong>Date:</strong> ${item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</p>
             <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
             <div class="admin-actions">
               <button class="mini-delete" type="button" onclick="deleteGuestMedia(${item.id}, '${escapeHtml(item.image_path || '')}')">Delete</button>
@@ -1875,8 +1988,8 @@ Take final walkthrough photos`
       const requestCount = requestsRes.count || 0;
       const turnoverCount = turnoversRes.count || 0;
       const guestPhotoCount = guestGalleryRes.count || 0;
-      const supplyList = (suppliesRes.data || []).map(x => x.item);
-      const maintenanceList = (maintenanceRes.data || []).map(x => x.item);
+      const supplyList = suppliesRes.data || [];
+      const maintenanceList = maintenanceRes.data || [];
 
       const snapshot = document.getElementById('ownerDashboardCounts');
       if(snapshot){
@@ -1909,12 +2022,12 @@ Take final walkthrough photos`
 
       const supplyEl = document.getElementById('ownerSupplyList');
       if(supplyEl){
-        supplyEl.innerHTML = renderSimpleOwnerList(supplyList, 'No supplies listed.');
+        supplyEl.innerHTML = renderOwnerActionList(supplyList, 'No supplies listed.', 'supply');
       }
 
       const maintenanceEl = document.getElementById('ownerMaintenanceList');
       if(maintenanceEl){
-        maintenanceEl.innerHTML = renderSimpleOwnerList(maintenanceList, 'No maintenance items listed.');
+        maintenanceEl.innerHTML = renderOwnerActionList(maintenanceList, 'No maintenance items listed.', 'maintenance');
       }
 
       await renderOwnerRequests();
@@ -2011,7 +2124,6 @@ Take final walkthrough photos`
               ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
               <div class="gallery-meta">
                 <strong>${escapeHtml(item.guest_name || 'Guest Memory')}</strong>
-                <div>${item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</div>
               </div>
             </div>
           `).join('')
@@ -2227,15 +2339,23 @@ Take final walkthrough photos`
           return;
         }
 
-        results.innerHTML = data.bookings.map((booking,index)=>`
-          <div class="status-row">
-            <div>
-              <strong>Booking ${index + 1}</strong><br>
-              <span class="small-note">Check-in: ${escapeHtml(booking.checkIn)}</span><br>
-              <span class="small-note">Check-out: ${escapeHtml(booking.checkOut)}</span>
+        results.innerHTML = data.bookings.map((booking,index)=>{
+          const guestLabel =
+            booking.guestName ||
+            booking.name ||
+            booking.summary ||
+            `Booking ${index + 1}`;
+
+          return `
+            <div class="status-row">
+              <div>
+                <strong>${escapeHtml(guestLabel)}</strong><br>
+                <span class="small-note">Check-in: ${escapeHtml(booking.checkIn || '')}</span><br>
+                <span class="small-note">Check-out: ${escapeHtml(booking.checkOut || '')}</span>
+              </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       } catch(e){
         console.error(e);
         status.textContent = 'Unable to load calendar.';
