@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darby's Ridge</title>
   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1879,13 +1879,40 @@ Take final walkthrough photos`
       }
     }
 
-    function submitRequestToBook(){
-      const name = document.getElementById('requestName').value.trim();
-      const phone = document.getElementById('requestPhone').value.trim();
-      const arrival = document.getElementById('requestArrival').value.trim();
-      const departure = document.getElementById('requestDeparture').value.trim();
-      const guests = document.getElementById('requestGuests').value.trim();
-      const notes = document.getElementById('requestNotes').value.trim();
+   async function submitRequestToBook(){
+  const name = document.getElementById('requestName').value.trim();
+  const phone = document.getElementById('requestPhone').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+  const notes = document.getElementById('requestNotes').value.trim();
+
+  if(!name || !arrival || !departure){
+    alert('Please fill in name, arrival date, and departure date.');
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('booking_requests')
+    .insert([
+      { name, phone, arrival, departure, guests, notes }
+    ]);
+
+  if(error){
+    alert('Could not submit request.');
+    console.error(error);
+    return;
+  }
+
+  document.getElementById('requestName').value = '';
+  document.getElementById('requestPhone').value = '';
+  document.getElementById('requestArrival').value = '';
+  document.getElementById('requestDeparture').value = '';
+  document.getElementById('requestGuests').value = '';
+  document.getElementById('requestNotes').value = '';
+
+  document.getElementById('requestBookSuccess').style.display = 'block';
+}
 
       if(!name || !arrival || !departure) return;
 
