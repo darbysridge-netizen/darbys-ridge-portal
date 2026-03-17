@@ -933,7 +933,7 @@
       <div id="guestPhotoMessage" class="form-message"></div>
 
       <p class="small-note" style="margin-top:12px;">
-        Photos saved here stay visible in this browser on this device. For a shared gallery across all guests and devices, you'd need cloud storage added later.
+        Photos saved here stay visible in this browser on this device. For a shared gallery across all guests and devices, cloud storage can be added later.
       </p>
     </div>
 
@@ -1158,11 +1158,6 @@
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
     const STORAGE_KEYS = {
-      supplies: 'darbysridge_supplies',
-      maintenance: 'darbysridge_maintenance',
-      content: 'darbysridge_content',
-      requests: 'darbysridge_requests',
-      turnovers: 'darbysridge_turnovers',
       guestPhotos: 'darbysridge_guest_photos'
     };
 
@@ -1334,44 +1329,8 @@ Sweep entry and check decks
 Take final walkthrough photos`
     };
 
-    function getContentStore(){
-      try{
-        return JSON.parse(localStorage.getItem(STORAGE_KEYS.content)) || {};
-      } catch(e){
-        return {};
-      }
-    }
-
-    function getSectionContent(section){
-      const store = getContentStore();
-      return store[section] || defaultContent[section] || '';
-    }
-
-    function saveSectionContent(section, value){
-      const store = getContentStore();
-      store[section] = value;
-      localStorage.setItem(STORAGE_KEYS.content, JSON.stringify(store));
-    }
-
-    function getChecklistItems(){
-      const raw = getSectionContent('checklist');
-      return raw.split('\n').map(item => item.trim()).filter(Boolean);
-    }
-
-    function getStoredList(key){
-      try{
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch(e){
-        return [];
-      }
-    }
-
-    function saveStoredList(key, list){
-      localStorage.setItem(key, JSON.stringify(list));
-    }
-
     function escapeHtml(text){
-      return String(text)
+      return String(text ?? '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
@@ -1418,32 +1377,91 @@ Take final walkthrough photos`
       `;
     }
 
-    function renderEditablePages(){
-      document.getElementById('infoContent').innerHTML = formatInfoContent(getSectionContent('info'));
-      document.getElementById('localContent').innerHTML = getSectionContent('local');
-      document.getElementById('trailContent').innerHTML = getSectionContent('trail');
-      document.getElementById('photosContent').innerText = getSectionContent('photos');
-      document.getElementById('checkoutContent').innerHTML = formatCheckoutContent(getSectionContent('checkout'));
+    async function getSectionContent(section){
+      if(!supabaseClient) return defaultContent[section] || '';
+
+      try{
+        const { data, error } = await supabaseClient
+          .from('app_content')
+          .select('value')
+          .eq('section', section)
+          .maybeSingle();
+
+        if(error){
+          console.error(error);
+          return defaultContent[section] || '';
+        }
+
+        return data?.value ?? defaultContent[section] ?? '';
+      } catch(e){
+        console.error(e);
+        return defaultContent[section] || '';
+      }
+    }
+
+    async function saveSectionContent(section, value){
+      const { error } = await supabaseClient
+        .from('app_content')
+        .upsert({ section, value }, { onConflict: 'section' });
+
+      if(error) throw error;
+    }
+
+    async function getChecklistItems(){
+      const raw = await getSectionContent('checklist');
+      return raw.split('\n').map(item => item.trim()).filter(Boolean);
+    }
+
+    async function renderEditablePages(){
+      const info = await getSectionContent('info');
+      const local = await getSectionContent('local');
+      const trail = await getSectionContent('trail');
+      const photos = await getSectionContent('photos');
+      const checkout = await getSectionContent('checkout');
+
+      document.getElementById('infoContent').innerHTML = formatInfoContent(info);
+      document.getElementById('localContent').innerHTML = local;
+      document.getElementById('trailContent').innerHTML = trail;
+      document.getElementById('photosContent').innerText = photos;
+      document.getElementById('checkoutContent').innerHTML = formatCheckoutContent(checkout);
 
       const checklistEl = document.getElementById('teamChecklistDisplay');
       if(checklistEl){
-        const items = getChecklistItems();
+        const items = await getChecklistItems();
         checklistEl.innerHTML = items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
       }
     }
 
-    function loadOwnerEditor(){
+    async function loadOwnerEditor(){
       const section = document.getElementById('ownerSectionSelect').value;
-      document.getElementById('ownerSectionEditor').value = getSectionContent(section);
+      document.getElementById('ownerSectionEditor').value = await getSectionContent(section);
       document.getElementById('ownerSaveMessage').style.display = 'none';
     }
 
-    function saveOwnerContent(){
+    async function saveOwnerContent(){
       const section = document.getElementById('ownerSectionSelect').value;
       const value = document.getElementById('ownerSectionEditor').value;
-      saveSectionContent(section, value);
-      renderEditablePages();
-      document.getElementById('ownerSaveMessage').style.display = 'block';
+
+      try{
+        await saveSectionContent(section, value);
+        await renderEditablePages();
+        document.getElementById('ownerSaveMessage').style.display = 'block';
+      } catch(e){
+        console.error(e);
+        alert('Could not save changes.');
+      }
+    }
+
+    function getStoredList(key){
+      try{
+        return JSON.parse(localStorage.getItem(key)) || [];
+      } catch(e){
+        return [];
+      }
+    }
+
+    function saveStoredList(key, list){
+      localStorage.setItem(key, JSON.stringify(list));
     }
 
     function showPage(page){
@@ -1496,78 +1514,118 @@ Take final walkthrough photos`
       }
     }
 
-    function addSupplyItem(){
+    async function addSupplyItem(){
       const input = document.getElementById('supplySimpleInput');
       const value = input.value.trim();
       if(!value) return;
 
-      const list = getStoredList(STORAGE_KEYS.supplies);
-      list.push(value);
-      saveStoredList(STORAGE_KEYS.supplies, list);
+      const { error } = await supabaseClient
+        .from('supplies')
+        .insert([{ item: value }]);
+
+      if(error){
+        console.error(error);
+        alert('Could not add supply item.');
+        return;
+      }
+
       input.value = '';
-      renderSupplyList();
-      renderOwnerDashboard();
+      await renderSupplyList();
+      await renderOwnerDashboard();
     }
 
-    function removeSupplyItem(index){
-      const list = getStoredList(STORAGE_KEYS.supplies);
-      list.splice(index,1);
-      saveStoredList(STORAGE_KEYS.supplies, list);
-      renderSupplyList();
-      renderOwnerDashboard();
+    async function removeSupplyItem(id){
+      const { error } = await supabaseClient
+        .from('supplies')
+        .delete()
+        .eq('id', id);
+
+      if(error){
+        console.error(error);
+        alert('Could not remove supply item.');
+        return;
+      }
+
+      await renderSupplyList();
+      await renderOwnerDashboard();
     }
 
-    function renderSupplyList(){
+    async function renderSupplyList(){
       const container = document.getElementById('supplyListContainer');
-      const list = getStoredList(STORAGE_KEYS.supplies);
+      if(!container) return;
 
-      if(!list.length){
+      const { data, error } = await supabaseClient
+        .from('supplies')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if(error || !data || !data.length){
         container.innerHTML = '<div class="small-note">No supplies listed.</div>';
         return;
       }
 
-      container.innerHTML = list.map((item,index)=>`
+      container.innerHTML = data.map(item => `
         <div class="list-row">
-          <div>${escapeHtml(item)}</div>
-          <button class="delete-btn" type="button" onclick="removeSupplyItem(${index})">Remove</button>
+          <div>${escapeHtml(item.item)}</div>
+          <button class="delete-btn" type="button" onclick="removeSupplyItem(${item.id})">Remove</button>
         </div>
       `).join('');
     }
 
-    function addMaintenanceItem(){
+    async function addMaintenanceItem(){
       const input = document.getElementById('maintenanceSimpleInput');
       const value = input.value.trim();
       if(!value) return;
 
-      const list = getStoredList(STORAGE_KEYS.maintenance);
-      list.push(value);
-      saveStoredList(STORAGE_KEYS.maintenance, list);
+      const { error } = await supabaseClient
+        .from('maintenance')
+        .insert([{ item: value }]);
+
+      if(error){
+        console.error(error);
+        alert('Could not add maintenance item.');
+        return;
+      }
+
       input.value = '';
-      renderMaintenanceList();
-      renderOwnerDashboard();
+      await renderMaintenanceList();
+      await renderOwnerDashboard();
     }
 
-    function removeMaintenanceItem(index){
-      const list = getStoredList(STORAGE_KEYS.maintenance);
-      list.splice(index,1);
-      saveStoredList(STORAGE_KEYS.maintenance, list);
-      renderMaintenanceList();
-      renderOwnerDashboard();
+    async function removeMaintenanceItem(id){
+      const { error } = await supabaseClient
+        .from('maintenance')
+        .delete()
+        .eq('id', id);
+
+      if(error){
+        console.error(error);
+        alert('Could not remove maintenance item.');
+        return;
+      }
+
+      await renderMaintenanceList();
+      await renderOwnerDashboard();
     }
 
-    function renderMaintenanceList(){
+    async function renderMaintenanceList(){
       const container = document.getElementById('maintenanceListContainer');
-      const list = getStoredList(STORAGE_KEYS.maintenance);
+      if(!container) return;
 
-      if(!list.length){
+      const { data, error } = await supabaseClient
+        .from('maintenance')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if(error || !data || !data.length){
         container.innerHTML = '<div class="small-note">No maintenance items listed.</div>';
         return;
       }
 
-      container.innerHTML = list.map((item,index)=>`
+      container.innerHTML = data.map(item => `
         <div class="list-row">
-          <div>${escapeHtml(item)}</div>
-          <button class="delete-btn" type="button" onclick="removeMaintenanceItem(${index})">Remove</button>
+          <div>${escapeHtml(item.item)}</div>
+          <button class="delete-btn" type="button" onclick="removeMaintenanceItem(${item.id})">Remove</button>
         </div>
       `).join('');
     }
@@ -1583,12 +1641,7 @@ Take final walkthrough photos`
       const container = document.getElementById('ownerRequestList');
       if(!container) return;
 
-      if(!supabaseClient){
-        container.innerHTML = '<div class="small-note">App not ready yet.</div>';
-        return;
-      }
-
-      try {
+      try{
         const { data, error } = await supabaseClient
           .from('booking_requests')
           .select('*')
@@ -1615,56 +1668,54 @@ Take final walkthrough photos`
             ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
           </div>
         `).join('');
-      } catch (e) {
+      } catch(e){
         console.error(e);
         container.innerHTML = '<div class="small-note">Could not load requests.</div>';
       }
     }
 
-    function renderOwnerTurnovers(){
+    async function renderOwnerTurnovers(){
       const container = document.getElementById('ownerTurnoverEntries');
       if(!container) return;
 
-      const list = getStoredList(STORAGE_KEYS.turnovers);
+      const { data, error } = await supabaseClient
+        .from('turnovers')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      if(!list.length){
+      if(error || !data || !data.length){
         container.innerHTML = '<div class="small-note">No turnover submissions yet.</div>';
         return;
       }
 
-      container.innerHTML = list.map(item => `
+      container.innerHTML = data.map(item => `
         <div class="submission-card">
           <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
-          <p><strong>Date:</strong> ${escapeHtml(item.date || '')}</p>
+          <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
           ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-          ${item.files && item.files.length ? `
-            <div class="submission-photos">
-              ${item.files.map(src => `<img src="${src}" alt="Turnover photo">`).join('')}
-            </div>
-          ` : '<p>No photos attached.</p>'}
+          <p class="small-note">Photos still save on the submitting device only for now.</p>
         </div>
       `).join('');
     }
 
     async function renderOwnerDashboard(){
-      const supplyList = getStoredList(STORAGE_KEYS.supplies);
-      const maintenanceList = getStoredList(STORAGE_KEYS.maintenance);
-      const turnoverCount = getStoredList(STORAGE_KEYS.turnovers).length;
+      const [
+        requestsRes,
+        suppliesRes,
+        maintenanceRes,
+        turnoversRes
+      ] = await Promise.all([
+        supabaseClient.from('booking_requests').select('*', { count: 'exact', head: true }),
+        supabaseClient.from('supplies').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('maintenance').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('turnovers').select('*', { count: 'exact', head: true })
+      ]);
+
+      const requestCount = requestsRes.count || 0;
+      const turnoverCount = turnoversRes.count || 0;
+      const supplyList = (suppliesRes.data || []).map(x => x.item);
+      const maintenanceList = (maintenanceRes.data || []).map(x => x.item);
       const guestPhotoCount = getStoredList(STORAGE_KEYS.guestPhotos).length;
-
-      let requestCount = 0;
-
-      if(supabaseClient){
-        try {
-          const { count } = await supabaseClient
-            .from('booking_requests')
-            .select('*', { count: 'exact', head: true });
-
-          requestCount = count || 0;
-        } catch(e){
-          console.error(e);
-        }
-      }
 
       const snapshot = document.getElementById('ownerDashboardCounts');
       if(snapshot){
@@ -1680,7 +1731,7 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Turnover Submissions</strong><br>
-              <span class="small-note">Saved in this browser</span>
+              <span class="small-note">Shared across devices</span>
             </div>
             <div class="status-pill">${turnoverCount}</div>
           </div>
@@ -1688,7 +1739,7 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Guest Gallery Photos</strong><br>
-              <span class="small-note">Saved in this browser</span>
+              <span class="small-note">Still local for now</span>
             </div>
             <div class="status-pill soft">${guestPhotoCount}</div>
           </div>
@@ -1706,7 +1757,7 @@ Take final walkthrough photos`
       }
 
       await renderOwnerRequests();
-      renderOwnerTurnovers();
+      await renderOwnerTurnovers();
     }
 
     function readFileAsDataURL(file){
@@ -1844,7 +1895,7 @@ Take final walkthrough photos`
         renderOwnerDashboard();
 
         message.className = 'form-message form-success';
-        message.textContent = 'Photos added to the guest gallery in this browser.';
+        message.textContent = 'Photos added to the guest gallery on this device.';
         message.style.display = 'block';
 
         clearGuestPreview();
@@ -1877,7 +1928,6 @@ Take final walkthrough photos`
       const cleaner = document.getElementById('turnoverCleaner').value.trim();
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
-      const files = document.getElementById('turnoverFiles').files;
 
       const success = document.getElementById('turnoverSuccess');
       const error = document.getElementById('turnoverError');
@@ -1892,12 +1942,16 @@ Take final walkthrough photos`
       }
 
       try{
-        const processed = await processImageFiles(files, 6);
-        const photoSources = processed.map(item => item.src);
+        const { error: insertError } = await supabaseClient
+          .from('turnovers')
+          .insert([{ cleaner, turnover_date: date, notes }]);
 
-        const list = getStoredList(STORAGE_KEYS.turnovers);
-        list.unshift({ cleaner, date, notes, files: photoSources });
-        saveStoredList(STORAGE_KEYS.turnovers, list.slice(0, 12));
+        if(insertError){
+          console.error(insertError);
+          error.textContent = 'There was a problem saving the turnover submission.';
+          error.style.display = 'block';
+          return;
+        }
 
         success.style.display = 'block';
         document.getElementById('turnoverCleaner').value = '';
@@ -1906,9 +1960,10 @@ Take final walkthrough photos`
         document.getElementById('turnoverFiles').value = '';
         document.getElementById('turnoverPreview').innerHTML = '';
 
-        renderOwnerDashboard();
+        await renderOwnerDashboard();
       } catch(e){
-        error.textContent = 'There was a problem saving the turnover submission. Try fewer or smaller photos.';
+        console.error(e);
+        error.textContent = 'There was a problem saving the turnover submission.';
         error.style.display = 'block';
       }
     }
@@ -1954,7 +2009,6 @@ Take final walkthrough photos`
         document.getElementById('requestNotes').value = '';
 
         document.getElementById('requestBookSuccess').style.display = 'block';
-        alert('Request submitted!');
       } catch (e) {
         console.error(e);
         alert('Unexpected error occurred.');
@@ -2000,12 +2054,40 @@ Take final walkthrough photos`
       }
     }
 
+    async function seedDefaultContentIfNeeded(){
+      const sections = ['info','local','trail','photos','checkout','checklist'];
+
+      for(const section of sections){
+        const { data, error } = await supabaseClient
+          .from('app_content')
+          .select('section')
+          .eq('section', section)
+          .maybeSingle();
+
+        if(error){
+          console.error(error);
+          continue;
+        }
+
+        if(!data){
+          const { error: insertError } = await supabaseClient
+            .from('app_content')
+            .insert([{ section, value: defaultContent[section] || '' }]);
+
+          if(insertError){
+            console.error(insertError);
+          }
+        }
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', async function() {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      renderEditablePages();
-      renderSupplyList();
-      renderMaintenanceList();
+      await seedDefaultContentIfNeeded();
+      await renderEditablePages();
+      await renderSupplyList();
+      await renderMaintenanceList();
       renderGuestGallery();
       await renderOwnerDashboard();
     });
