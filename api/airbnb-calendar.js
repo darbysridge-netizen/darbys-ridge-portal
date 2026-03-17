@@ -1,73 +1,207 @@
-const AIRBNB_ICAL_URL = "https://www.airbnb.com/calendar/ical/1467535611813456162.ics?t=54884f33dff140aa838034767fa94ce8";
+export default async function handler(req, res) {
+  try {
+    const calendarUrl = process.env.AIRBNB_ICAL_URL;
 
-function formatDate(dateValue) {
-  return new Date(dateValue).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
-}
+    if (!calendarUrl) {
+      return res.status(500).json({
+        success: false,
+        error: 'Missing AIRBNB_ICAL_URL environment variable.'
+      });
+    }
 
-function parseICalEvents(icsText) {
-  const blocks = icsText.split("BEGIN:VEVENT").slice(1);
-  const events = [];
+    const response = await fetch(calendarUrl);
 
-  for (const block of blocks) {
+    if (!response.ok) {
+      return res.status(500).json({
+        success: false,
+        error: 'Could not fetch Airbnb calendar feed.'
+      });
+    }
 
-    const startMatch = block.match(/DTSTART(?:;VALUE=DATE)?:(\d{8})/);
-    const endMatch = block.match(/DTEND(?:;VALUE=DATE)?:(\d{8})/);
-
-    if (!startMatch || !endMatch) continue;
-
-    const startRaw = startMatch[1];
-    const endRaw = endMatch[1];
-
-    const start = new Date(
-      `${startRaw.slice(0,4)}-${startRaw.slice(4,6)}-${startRaw.slice(6,8)}`
-    );
-
-    const end = new Date(
-      `${endRaw.slice(0,4)}-${endRaw.slice(4,6)}-${endRaw.slice(6,8)}`
-    );
-
-    events.push({ start, end });
-
-  }
-
-  return events.sort((a,b)=>a.start-b.start);
-}
-
-module.exports = async function handler(req,res){
-
-  try{
-
-    const response = await fetch(AIRBNB_ICAL_URL);
     const icsText = await response.text();
 
-    const events = parseICalEvents(icsText);
+    const events = parseICS(icsText);
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const bookings = events
-      .filter(event => event.end >= today)
+      .filter(event => event.checkOutDate && event.checkOutDate >= today)
+      .sort((a, b) => a.checkInDate - b.checkInDate)
       .map(event => ({
-        checkIn: formatDate(event.start),
-        checkOut: formatDate(event.end)
+        guestName: event.guestName || '',
+        name: event.guestName || '',
+        summary: event.summary || '',
+        checkIn: formatDate(event.checkInDate),
+        checkOut: formatDate(event.checkOutDate),
+        rawSummary: event.summary || '',
+        rawDescription: event.description || ''
       }));
 
-    res.status(200).json({
-      success:true,
+    return res.status(200).json({
+      success: true,
       bookings
     });
-
-  } catch(error){
-
-    console.error(error);
-
-    res.status(500).json({
-      success:false,
-      error:"Calendar failed to load"
+  } catch (error) {
+    console.error('Calendar API error:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Unable to load calendar.'
     });
+  }
+}
 
+function parseICS(icsText) {
+  const normalized = unfoldICSLines(icsText);
+  const chunks = normalized.split('BEGIN:VEVENT').slice(1);
+  const events = [];
+
+  for (const chunk of chunks) {
+    const eventText = chunk.split('END:VEVENT')[0];
+
+    const summary = getICSField(eventText, 'SUMMARY');
+    const description = getICSField(eventText, 'DESCRIPTION');
+    const dtStartRaw = getICSField(eventText, 'DTSTART');
+    const dtEndRaw = getICSField(eventText, 'DTEND');
+
+    const checkInDate = parseICSDate(dtStartRaw);
+    const checkOutDate = parseICSDate(dtEndRaw);
+
+    if (!checkInDate || !checkOutDate) continue;
+
+    const guestName = extractGuestName(summary, description);
+
+    events.push({
+      summary,
+      description,
+      guestName,
+      checkInDate,
+      checkOutDate
+    });
   }
 
-};
+  return events;
+}
+
+function unfoldICSLines(text) {
+  return text.replace(/\r?\n[ \t]/g, '');
+}
+
+function getICSField(block, fieldName) {
+  const regex = new RegExp(`^${fieldName}(?:;[^:\\n]*)?:(.*)$`, 'mi');
+  const match = block.match(regex);
+  return match ? decodeICSText(match[1].trim()) : '';
+}
+
+function decodeICSText(value) {
+  return String(value || '')
+    .replace(/\\n/g, '\n')
+    .replace(/\\,/g, ',')
+    .replace(/\\;/g, ';')
+    .replace(/\\\\/g, '\\');
+}
+
+function parseICSDate(value) {
+  if (!value) return null;
+
+  const clean = value.trim();
+
+  // Handles YYYYMMDD
+  if (/^\d{8}$/.test(clean)) {
+    const year = Number(clean.slice(0, 4));
+    const month = Number(clean.slice(4, 6)) - 1;
+    const day = Number(clean.slice(6, 8));
+    return new Date(year, month, day);
+  }
+
+  // Handles YYYYMMDDTHHMMSSZ or YYYYMMDDTHHMMSS
+  const match = clean.match(
+    /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/
+  );
+
+  if (match) {
+    const [, y, m, d, hh, mm, ss] = match.map(Number);
+    if (clean.endsWith('Z')) {
+      return new Date(Date.UTC(y, m - 1, d, hh, mm, ss));
+    }
+    return new Date(y, m - 1, d, hh, mm, ss);
+  }
+
+  return null;
+}
+
+function extractGuestName(summary, description) {
+  const combined = `${summary || ''}\n${description || ''}`.trim();
+
+  if (!combined) return '';
+
+  const cleaned = combined
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const patterns = [
+    /guest[:\s-]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i,
+    /reservation for[:\s-]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i,
+    /booking for[:\s-]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i,
+    /reserved for[:\s-]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})/i,
+    /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\s*-\s*/,
+    /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})$/
+  ];
+
+  for (const pattern of patterns) {
+    const match = cleaned.match(pattern);
+    if (match && match[1]) {
+      const candidate = match[1].trim();
+      if (isUsefulGuestName(candidate)) {
+        return candidate;
+      }
+    }
+  }
+
+  if (isUsefulGuestName(summary)) {
+    return summary.trim();
+  }
+
+  return '';
+}
+
+function isUsefulGuestName(value) {
+  if (!value) return false;
+
+  const text = value.trim();
+
+  const blockedWords = [
+    'airbnb',
+    'reserved',
+    'reservation',
+    'blocked',
+    'not available',
+    'unavailable',
+    'checkout',
+    'checkin',
+    'calendar',
+    'stay'
+  ];
+
+  const lower = text.toLowerCase();
+
+  if (blockedWords.some(word => lower === word || lower.includes(word))) {
+    return false;
+  }
+
+  if (text.length < 2 || text.length > 50) {
+    return false;
+  }
+
+  return true;
+}
+
+function formatDate(date) {
+  if (!(date instanceof Date) || isNaN(date)) return '';
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
