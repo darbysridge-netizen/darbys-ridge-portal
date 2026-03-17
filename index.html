@@ -666,11 +666,13 @@
       box-shadow:0 4px 10px rgba(0,0,0,.04);
     }
 
-    .gallery-card img{
+    .gallery-card img,
+    .gallery-card video{
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
       display:block;
+      background:#ddd;
     }
 
     .gallery-meta{
@@ -701,11 +703,13 @@
       border:1px solid #eadbc8;
     }
 
-    .preview-item img{
+    .preview-item img,
+    .preview-item video{
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
       display:block;
+      background:#ddd;
     }
 
     .preview-item div{
@@ -742,12 +746,32 @@
       margin-top:10px;
     }
 
-    .submission-photos img{
+    .submission-photos img,
+    .submission-photos video{
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
       border-radius:12px;
       display:block;
+      background:#ddd;
+    }
+
+    .admin-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .mini-delete{
+      background:#f6dfdb;
+      color:#8c2f21;
+      border:none;
+      border-radius:10px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      width:auto;
     }
 
     @media (max-width: 768px){
@@ -816,7 +840,7 @@
           <img src="outdoor.jpg" alt="">
           <div class="menu-label">
             <span>GUEST MEMORIES</span>
-            <strong>Photo Gallery</strong>
+            <strong>Photo + Video Gallery</strong>
           </div>
         </div>
 
@@ -913,26 +937,26 @@
       <label for="guestMemoryName">Your Name (Optional)</label>
       <input id="guestMemoryName" type="text" placeholder="Add your name">
 
-      <label for="guestMediaFiles">Select Photos</label>
-      <input id="guestMediaFiles" type="file" multiple accept="image/*" onchange="previewGuestMedia()">
+      <label for="guestMediaFiles">Select Photos or Videos</label>
+      <input id="guestMediaFiles" type="file" multiple accept="image/*,video/*" onchange="previewGuestMedia()">
 
       <div id="guestPreview" class="preview-grid"></div>
 
       <div class="upload-actions">
-        <button class="action-btn" type="button" onclick="addGuestPhotos()">Add to Guest Gallery</button>
+        <button class="action-btn" type="button" onclick="addGuestMedia()">Add to Guest Gallery</button>
         <button class="action-btn secondary-btn" type="button" onclick="clearGuestPreview()">Clear</button>
       </div>
 
       <div id="guestPhotoMessage" class="form-message"></div>
 
       <p class="small-note" style="margin-top:12px;">
-        Photos uploaded here are saved to the shared guest gallery and can be viewed across devices.
+        Photos and videos uploaded here are saved to the shared guest gallery and can be viewed across devices.
       </p>
     </div>
 
     <div class="panel">
-      <h3>Guest Photo Gallery</h3>
-      <div id="guestGallery" class="small-note">No guest photos yet.</div>
+      <h3>Guest Gallery</h3>
+      <div id="guestGallery" class="small-note">No guest media yet.</div>
     </div>
   </div>
 
@@ -1076,8 +1100,8 @@
       <label for="turnoverNotes">Turnover Notes</label>
       <textarea id="turnoverNotes" rows="5" placeholder="Anything the owner should know before the next guest"></textarea>
 
-      <label for="turnoverFiles">Upload Turnover Photos</label>
-      <input id="turnoverFiles" type="file" multiple accept="image/*" onchange="previewTurnoverMedia()">
+      <label for="turnoverFiles">Upload Turnover Photos or Videos</label>
+      <input id="turnoverFiles" type="file" multiple accept="image/*,video/*" onchange="previewTurnoverMedia()">
 
       <div id="turnoverPreview" class="preview-grid"></div>
 
@@ -1108,6 +1132,11 @@
 
       <div class="owner-subtitle">Maintenance Items</div>
       <div id="ownerMaintenanceList" class="small-note">No maintenance items listed.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Guest Gallery Manager</h3>
+      <div id="ownerGuestGalleryEntries" class="small-note">No guest media yet.</div>
     </div>
 
     <div class="panel">
@@ -1152,6 +1181,7 @@
 
     const GUEST_BUCKET = 'guest-bucket';
     const TURNOVER_BUCKET = 'turnover-bucket';
+    const MAX_MEDIA_ITEMS = 6;
 
     const defaultContent = {
       info: `WiFi
@@ -1296,7 +1326,7 @@ Please refer to the guest guide for additional house information, tips for your 
 
       </div>`,
 
-      photos: `We’d love to see your favorite moments from your stay. Add a few favorite photos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
+      photos: `We’d love to see your favorite moments from your stay. Add a few photos or videos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
 
       checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
@@ -1369,6 +1399,27 @@ Take final walkthrough photos`
           </ul>
         </div>
       `;
+    }
+
+    function getFileExtension(name){
+      const parts = String(name || '').split('.');
+      return parts.length > 1 ? parts.pop().toLowerCase() : '';
+    }
+
+    function isVideoType(type){
+      return String(type || '').startsWith('video/');
+    }
+
+    function renderMediaPreviewTag(url, mediaType, muted = false){
+      if(isVideoType(mediaType)){
+        return `
+          <video ${muted ? 'muted' : ''} controls playsinline preload="metadata">
+            <source src="${escapeHtml(url)}" type="${escapeHtml(mediaType || 'video/mp4')}">
+          </video>
+        `;
+      }
+
+      return `<img src="${escapeHtml(url)}" alt="Media">`;
     }
 
     async function getSectionContent(section){
@@ -1656,6 +1707,99 @@ Take final walkthrough photos`
       }
     }
 
+    async function deleteGuestMedia(id, imagePath){
+      const okay = confirm('Delete this guest gallery item?');
+      if(!okay) return;
+
+      try{
+        if(imagePath){
+          const { error: storageError } = await supabaseClient
+            .storage
+            .from(GUEST_BUCKET)
+            .remove([imagePath]);
+
+          if(storageError){
+            console.error(storageError);
+          }
+        }
+
+        const { error } = await supabaseClient
+          .from('guest_gallery')
+          .delete()
+          .eq('id', id);
+
+        if(error) throw error;
+
+        await renderGuestGallery();
+        await renderOwnerDashboard();
+      } catch(e){
+        console.error(e);
+        alert('Could not delete guest media.');
+      }
+    }
+
+    async function deleteTurnoverMedia(id, imagePath){
+      const okay = confirm('Delete this turnover media item?');
+      if(!okay) return;
+
+      try{
+        if(imagePath){
+          const { error: storageError } = await supabaseClient
+            .storage
+            .from(TURNOVER_BUCKET)
+            .remove([imagePath]);
+
+          if(storageError){
+            console.error(storageError);
+          }
+        }
+
+        const { error } = await supabaseClient
+          .from('turnover_photos')
+          .delete()
+          .eq('id', id);
+
+        if(error) throw error;
+
+        await renderOwnerDashboard();
+      } catch(e){
+        console.error(e);
+        alert('Could not delete turnover media.');
+      }
+    }
+
+    async function renderOwnerGuestGallery(){
+      const container = document.getElementById('ownerGuestGalleryEntries');
+      if(!container) return;
+
+      try{
+        const { data, error } = await supabaseClient
+          .from('guest_gallery')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if(error || !data || !data.length){
+          container.innerHTML = '<div class="small-note">No guest media yet.</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(item => `
+          <div class="submission-card">
+            ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
+            <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
+            <p><strong>Date:</strong> ${item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</p>
+            <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
+            <div class="admin-actions">
+              <button class="mini-delete" type="button" onclick="deleteGuestMedia(${item.id}, '${escapeHtml(item.image_path || '')}')">Delete</button>
+            </div>
+          </div>
+        `).join('');
+      } catch(e){
+        console.error(e);
+        container.innerHTML = '<div class="small-note">No guest media yet.</div>';
+      }
+    }
+
     async function renderOwnerTurnovers(){
       const container = document.getElementById('ownerTurnoverEntries');
       if(!container) return;
@@ -1673,18 +1817,26 @@ Take final walkthrough photos`
       let html = '';
 
       for(const item of data){
-        let photosHtml = '';
+        let mediaHtml = '';
+
         try{
-          const { data: photos } = await supabaseClient
+          const { data: mediaItems } = await supabaseClient
             .from('turnover_photos')
             .select('*')
             .eq('turnover_id', item.id)
             .order('created_at', { ascending: false });
 
-          if(photos && photos.length){
-            photosHtml = `
+          if(mediaItems && mediaItems.length){
+            mediaHtml = `
               <div class="submission-photos">
-                ${photos.map(photo => `<img src="${escapeHtml(photo.image_url)}" alt="Turnover photo">`).join('')}
+                ${mediaItems.map(media => `
+                  <div>
+                    ${renderMediaPreviewTag(media.image_url, media.media_type || 'image/jpeg')}
+                    <div class="admin-actions">
+                      <button class="mini-delete" type="button" onclick="deleteTurnoverMedia(${media.id}, '${escapeHtml(media.image_path || '')}')">Delete</button>
+                    </div>
+                  </div>
+                `).join('')}
               </div>
             `;
           }
@@ -1697,7 +1849,7 @@ Take final walkthrough photos`
             <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
             <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
             ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-            ${photosHtml}
+            ${mediaHtml}
           </div>
         `;
       }
@@ -1747,8 +1899,8 @@ Take final walkthrough photos`
 
           <div class="status-row">
             <div>
-              <strong>Guest Gallery Photos</strong><br>
-              <span class="small-note">Shared across devices</span>
+              <strong>Guest Gallery Items</strong><br>
+              <span class="small-note">Photos + videos shared across devices</span>
             </div>
             <div class="status-pill soft">${guestPhotoCount}</div>
           </div>
@@ -1766,85 +1918,31 @@ Take final walkthrough photos`
       }
 
       await renderOwnerRequests();
+      await renderOwnerGuestGallery();
       await renderOwnerTurnovers();
     }
 
-    function readFileAsDataURL(file){
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function dataUrlToBlob(dataUrl){
-      const arr = dataUrl.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new Blob([u8arr], { type: mime });
-    }
-
-    function resizeImageDataUrl(dataUrl, maxSize = 1200, quality = 0.82){
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          let width = img.width;
-          let height = img.height;
-
-          if(width > height && width > maxSize){
-            height = Math.round((height * maxSize) / width);
-            width = maxSize;
-          } else if(height >= width && height > maxSize){
-            width = Math.round((width * maxSize) / height);
-            height = maxSize;
-          }
-
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        };
-        img.onerror = reject;
-        img.src = dataUrl;
-      });
-    }
-
-    async function processImageFiles(fileList, maxItems = 6){
-      const files = Array.from(fileList || []).slice(0, maxItems);
-      const results = [];
-
-      for(const file of files){
-        if(!file.type.startsWith('image/')) continue;
-        const original = await readFileAsDataURL(file);
-        const resized = await resizeImageDataUrl(original);
-        results.push({
+    function getSelectedMedia(fileList, maxItems = MAX_MEDIA_ITEMS){
+      return Array.from(fileList || [])
+        .filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'))
+        .slice(0, maxItems)
+        .map(file => ({
+          file,
           name: file.name,
-          src: resized
-        });
-      }
-
-      return results;
+          mediaType: file.type,
+          previewUrl: URL.createObjectURL(file)
+        }));
     }
 
-    async function uploadDataUrlToBucket(bucket, dataUrl, filePrefix = 'image'){
-      const blob = dataUrlToBlob(dataUrl);
-      const filePath = `${filePrefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}.jpg`;
+    async function uploadFileToBucket(bucket, file, prefix = 'media'){
+      const ext = getFileExtension(file.name) || (isVideoType(file.type) ? 'mp4' : 'jpg');
+      const filePath = `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
 
       const { error: uploadError } = await supabaseClient
         .storage
         .from(bucket)
-        .upload(filePath, blob, {
-          contentType: 'image/jpeg',
+        .upload(filePath, file, {
+          contentType: file.type,
           upsert: false
         });
 
@@ -1870,10 +1968,10 @@ Take final walkthrough photos`
         return;
       }
 
-      const processed = await processImageFiles(files, 6);
-      container.innerHTML = processed.map(item => `
+      const items = getSelectedMedia(files);
+      container.innerHTML = items.map(item => `
         <div class="preview-item">
-          <img src="${item.src}" alt="${escapeHtml(item.name)}">
+          ${renderMediaPreviewTag(item.previewUrl, item.mediaType, true)}
           <div>${escapeHtml(item.name)}</div>
         </div>
       `).join('');
@@ -1883,6 +1981,7 @@ Take final walkthrough photos`
       document.getElementById('guestMediaFiles').value = '';
       document.getElementById('guestMemoryName').value = '';
       document.getElementById('guestPreview').innerHTML = '';
+      document.getElementById('guestPhotoMessage').style.display = 'none';
     }
 
     async function renderGuestGallery(){
@@ -1897,33 +1996,33 @@ Take final walkthrough photos`
 
         if(error){
           console.error(error);
-          gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+          gallery.innerHTML = '<div class="small-note">No guest media yet.</div>';
           return;
         }
 
         if(!data || !data.length){
-          gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+          gallery.innerHTML = '<div class="small-note">No guest media yet.</div>';
           return;
         }
 
         gallery.innerHTML = `<div class="gallery-grid">${
           data.map(item => `
             <div class="gallery-card">
-              <img src="${escapeHtml(item.image_url)}" alt="Guest memory">
+              ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
               <div class="gallery-meta">
                 <strong>${escapeHtml(item.guest_name || 'Guest Memory')}</strong>
-                <div>${new Date(item.created_at).toLocaleDateString()}</div>
+                <div>${item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</div>
               </div>
             </div>
           `).join('')
         }</div>`;
       } catch(e){
         console.error(e);
-        gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+        gallery.innerHTML = '<div class="small-note">No guest media yet.</div>';
       }
     }
 
-    async function addGuestPhotos(){
+    async function addGuestMedia(){
       const files = document.getElementById('guestMediaFiles').files;
       const guestName = document.getElementById('guestMemoryName').value.trim();
       const message = document.getElementById('guestPhotoMessage');
@@ -1932,23 +2031,24 @@ Take final walkthrough photos`
 
       if(!files.length){
         message.className = 'form-message form-error';
-        message.textContent = 'Please choose at least one photo first.';
+        message.textContent = 'Please choose at least one photo or video first.';
         message.style.display = 'block';
         return;
       }
 
       try{
-        const processed = await processImageFiles(files, 6);
+        const items = getSelectedMedia(files);
 
-        for(const item of processed){
-          const uploaded = await uploadDataUrlToBucket(GUEST_BUCKET, item.src, 'guest');
+        for(const item of items){
+          const uploaded = await uploadFileToBucket(GUEST_BUCKET, item.file, 'guest');
 
           const { error } = await supabaseClient
             .from('guest_gallery')
             .insert([{
               guest_name: guestName || 'Guest Memory',
               image_url: uploaded.url,
-              image_path: uploaded.path
+              image_path: uploaded.path,
+              media_type: item.mediaType
             }]);
 
           if(error) throw error;
@@ -1958,7 +2058,7 @@ Take final walkthrough photos`
         await renderOwnerDashboard();
 
         message.className = 'form-message form-success';
-        message.textContent = 'Photos added to the shared guest gallery.';
+        message.textContent = 'Media added to the shared guest gallery.';
         message.style.display = 'block';
 
         document.getElementById('guestMediaFiles').value = '';
@@ -1967,7 +2067,7 @@ Take final walkthrough photos`
       } catch(e){
         console.error(e);
         message.className = 'form-message form-error';
-        message.textContent = 'Those photos could not be uploaded. Check your Supabase guest gallery setup.';
+        message.textContent = 'Those files could not be uploaded. Check your Supabase guest gallery setup.';
         message.style.display = 'block';
       }
     }
@@ -1981,10 +2081,10 @@ Take final walkthrough photos`
         return;
       }
 
-      const processed = await processImageFiles(files, 6);
-      container.innerHTML = processed.map(item => `
+      const items = getSelectedMedia(files);
+      container.innerHTML = items.map(item => `
         <div class="preview-item">
-          <img src="${item.src}" alt="${escapeHtml(item.name)}">
+          ${renderMediaPreviewTag(item.previewUrl, item.mediaType, true)}
           <div>${escapeHtml(item.name)}</div>
         </div>
       `).join('');
@@ -2023,17 +2123,18 @@ Take final walkthrough photos`
         }
 
         if(files && files.length){
-          const processed = await processImageFiles(files, 6);
+          const items = getSelectedMedia(files);
 
-          for(const item of processed){
-            const uploaded = await uploadDataUrlToBucket(TURNOVER_BUCKET, item.src, 'turnover');
+          for(const item of items){
+            const uploaded = await uploadFileToBucket(TURNOVER_BUCKET, item.file, 'turnover');
 
             const { error: photoError } = await supabaseClient
               .from('turnover_photos')
               .insert([{
                 turnover_id: turnoverInsert.id,
                 image_url: uploaded.url,
-                image_path: uploaded.path
+                image_path: uploaded.path,
+                media_type: item.mediaType
               }]);
 
             if(photoError) throw photoError;
