@@ -1154,10 +1154,6 @@
 
     let supabaseClient = null;
 
-    document.addEventListener('DOMContentLoaded', function() {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    });
-
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
@@ -1583,26 +1579,46 @@ Take final walkthrough photos`
       return list.map(item => `<div class="owner-list-card">${escapeHtml(item)}</div>`).join('');
     }
 
-    function renderOwnerRequests(){
-      const requests = getStoredList(STORAGE_KEYS.requests);
+    async function renderOwnerRequests(){
       const container = document.getElementById('ownerRequestList');
       if(!container) return;
 
-      if(!requests.length){
-        container.innerHTML = '<div class="small-note">No requests yet.</div>';
+      if(!supabaseClient){
+        container.innerHTML = '<div class="small-note">App not ready yet.</div>';
         return;
       }
 
-      container.innerHTML = requests.map(item => `
-        <div class="submission-card">
-          <h4>${escapeHtml(item.name || 'Guest Request')}</h4>
-          <p><strong>Phone:</strong> ${escapeHtml(item.phone || 'Not provided')}</p>
-          <p><strong>Arrival:</strong> ${escapeHtml(item.arrival || '')}</p>
-          <p><strong>Departure:</strong> ${escapeHtml(item.departure || '')}</p>
-          <p><strong>Guests:</strong> ${escapeHtml(item.guests || '')}</p>
-          ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-        </div>
-      `).join('');
+      try {
+        const { data, error } = await supabaseClient
+          .from('booking_requests')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if(error){
+          console.error(error);
+          container.innerHTML = '<div class="small-note">Could not load requests.</div>';
+          return;
+        }
+
+        if(!data || !data.length){
+          container.innerHTML = '<div class="small-note">No requests yet.</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(item => `
+          <div class="submission-card">
+            <h4>${escapeHtml(item.name || 'Guest Request')}</h4>
+            <p><strong>Phone:</strong> ${escapeHtml(item.phone || 'Not provided')}</p>
+            <p><strong>Arrival:</strong> ${escapeHtml(item.arrival || '')}</p>
+            <p><strong>Departure:</strong> ${escapeHtml(item.departure || '')}</p>
+            <p><strong>Guests:</strong> ${escapeHtml(item.guests || '')}</p>
+            ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="small-note">Could not load requests.</div>';
+      }
     }
 
     function renderOwnerTurnovers(){
@@ -1630,12 +1646,25 @@ Take final walkthrough photos`
       `).join('');
     }
 
-    function renderOwnerDashboard(){
+    async function renderOwnerDashboard(){
       const supplyList = getStoredList(STORAGE_KEYS.supplies);
       const maintenanceList = getStoredList(STORAGE_KEYS.maintenance);
-      const requestCount = getStoredList(STORAGE_KEYS.requests).length;
       const turnoverCount = getStoredList(STORAGE_KEYS.turnovers).length;
       const guestPhotoCount = getStoredList(STORAGE_KEYS.guestPhotos).length;
+
+      let requestCount = 0;
+
+      if(supabaseClient){
+        try {
+          const { count } = await supabaseClient
+            .from('booking_requests')
+            .select('*', { count: 'exact', head: true });
+
+          requestCount = count || 0;
+        } catch(e){
+          console.error(e);
+        }
+      }
 
       const snapshot = document.getElementById('ownerDashboardCounts');
       if(snapshot){
@@ -1643,7 +1672,7 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Return Booking Requests</strong><br>
-              <span class="small-note">Saved in this browser</span>
+              <span class="small-note">Shared across devices</span>
             </div>
             <div class="status-pill soft">${requestCount}</div>
           </div>
@@ -1676,7 +1705,7 @@ Take final walkthrough photos`
         maintenanceEl.innerHTML = renderSimpleOwnerList(maintenanceList, 'No maintenance items listed.');
       }
 
-      renderOwnerRequests();
+      await renderOwnerRequests();
       renderOwnerTurnovers();
     }
 
@@ -1971,11 +2000,15 @@ Take final walkthrough photos`
       }
     }
 
-    renderEditablePages();
-    renderSupplyList();
-    renderMaintenanceList();
-    renderGuestGallery();
-    renderOwnerDashboard();
+    document.addEventListener('DOMContentLoaded', async function() {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      renderEditablePages();
+      renderSupplyList();
+      renderMaintenanceList();
+      renderGuestGallery();
+      await renderOwnerDashboard();
+    });
   </script>
 </body>
 </html>
