@@ -454,13 +454,6 @@
       flex-shrink:0;
     }
 
-    .media-list{
-      margin-top:12px;
-      font-size:14px;
-      line-height:1.6;
-      color:#5f4d3d;
-    }
-
     .edit-box{
       margin-top:12px;
     }
@@ -933,7 +926,7 @@
       <div id="guestPhotoMessage" class="form-message"></div>
 
       <p class="small-note" style="margin-top:12px;">
-        Photos saved here stay visible in this browser on this device. For a shared gallery across all guests and devices, cloud storage can be added later.
+        Photos uploaded here are saved to the shared guest gallery and can be viewed across devices.
       </p>
     </div>
 
@@ -1157,9 +1150,8 @@
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
-    const STORAGE_KEYS = {
-      guestPhotos: 'darbysridge_guest_photos'
-    };
+    const GUEST_BUCKET = 'guest-bucket';
+    const TURNOVER_BUCKET = 'turnover-bucket';
 
     const defaultContent = {
       info: `WiFi
@@ -1304,7 +1296,7 @@ Please refer to the guest guide for additional house information, tips for your 
 
       </div>`,
 
-      photos: `We’d love to see your favorite moments from your stay. Add a few favorite photos below and they’ll appear in the guest gallery saved on this device.`,
+      photos: `We’d love to see your favorite moments from your stay. Add a few favorite photos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
 
       checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
@@ -1333,7 +1325,9 @@ Take final walkthrough photos`
       return String(text ?? '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function highlightLabels(text){
@@ -1450,18 +1444,6 @@ Take final walkthrough photos`
         console.error(e);
         alert('Could not save changes.');
       }
-    }
-
-    function getStoredList(key){
-      try{
-        return JSON.parse(localStorage.getItem(key)) || [];
-      } catch(e){
-        return [];
-      }
-    }
-
-    function saveStoredList(key, list){
-      localStorage.setItem(key, JSON.stringify(list));
     }
 
     function showPage(page){
@@ -1688,14 +1670,39 @@ Take final walkthrough photos`
         return;
       }
 
-      container.innerHTML = data.map(item => `
-        <div class="submission-card">
-          <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
-          <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
-          ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-          <p class="small-note">Photos still save on the submitting device only for now.</p>
-        </div>
-      `).join('');
+      let html = '';
+
+      for(const item of data){
+        let photosHtml = '';
+        try{
+          const { data: photos } = await supabaseClient
+            .from('turnover_photos')
+            .select('*')
+            .eq('turnover_id', item.id)
+            .order('created_at', { ascending: false });
+
+          if(photos && photos.length){
+            photosHtml = `
+              <div class="submission-photos">
+                ${photos.map(photo => `<img src="${escapeHtml(photo.image_url)}" alt="Turnover photo">`).join('')}
+              </div>
+            `;
+          }
+        } catch(e){
+          console.error(e);
+        }
+
+        html += `
+          <div class="submission-card">
+            <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
+            <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
+            ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+            ${photosHtml}
+          </div>
+        `;
+      }
+
+      container.innerHTML = html || '<div class="small-note">No turnover submissions yet.</div>';
     }
 
     async function renderOwnerDashboard(){
@@ -1703,19 +1710,21 @@ Take final walkthrough photos`
         requestsRes,
         suppliesRes,
         maintenanceRes,
-        turnoversRes
+        turnoversRes,
+        guestGalleryRes
       ] = await Promise.all([
         supabaseClient.from('booking_requests').select('*', { count: 'exact', head: true }),
         supabaseClient.from('supplies').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('maintenance').select('*').order('created_at', { ascending: false }),
-        supabaseClient.from('turnovers').select('*', { count: 'exact', head: true })
+        supabaseClient.from('turnovers').select('*', { count: 'exact', head: true }),
+        supabaseClient.from('guest_gallery').select('*', { count: 'exact', head: true })
       ]);
 
       const requestCount = requestsRes.count || 0;
       const turnoverCount = turnoversRes.count || 0;
+      const guestPhotoCount = guestGalleryRes.count || 0;
       const supplyList = (suppliesRes.data || []).map(x => x.item);
       const maintenanceList = (maintenanceRes.data || []).map(x => x.item);
-      const guestPhotoCount = getStoredList(STORAGE_KEYS.guestPhotos).length;
 
       const snapshot = document.getElementById('ownerDashboardCounts');
       if(snapshot){
@@ -1739,7 +1748,7 @@ Take final walkthrough photos`
           <div class="status-row">
             <div>
               <strong>Guest Gallery Photos</strong><br>
-              <span class="small-note">Still local for now</span>
+              <span class="small-note">Shared across devices</span>
             </div>
             <div class="status-pill soft">${guestPhotoCount}</div>
           </div>
@@ -1767,6 +1776,18 @@ Take final walkthrough photos`
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
+    }
+
+    function dataUrlToBlob(dataUrl){
+      const arr = dataUrl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
     }
 
     function resizeImageDataUrl(dataUrl, maxSize = 1200, quality = 0.82){
@@ -1815,6 +1836,31 @@ Take final walkthrough photos`
       return results;
     }
 
+    async function uploadDataUrlToBucket(bucket, dataUrl, filePrefix = 'image'){
+      const blob = dataUrlToBlob(dataUrl);
+      const filePath = `${filePrefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}.jpg`;
+
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from(bucket)
+        .upload(filePath, blob, {
+          contentType: 'image/jpeg',
+          upsert: false
+        });
+
+      if(uploadError) throw uploadError;
+
+      const { data: publicData } = supabaseClient
+        .storage
+        .from(bucket)
+        .getPublicUrl(filePath);
+
+      return {
+        path: filePath,
+        url: publicData.publicUrl
+      };
+    }
+
     async function previewGuestMedia(){
       const container = document.getElementById('guestPreview');
       const files = document.getElementById('guestMediaFiles').files;
@@ -1837,38 +1883,52 @@ Take final walkthrough photos`
       document.getElementById('guestMediaFiles').value = '';
       document.getElementById('guestMemoryName').value = '';
       document.getElementById('guestPreview').innerHTML = '';
-      const msg = document.getElementById('guestPhotoMessage');
-      msg.style.display = 'none';
     }
 
-    function renderGuestGallery(){
+    async function renderGuestGallery(){
       const gallery = document.getElementById('guestGallery');
       if(!gallery) return;
 
-      const photos = getStoredList(STORAGE_KEYS.guestPhotos);
+      try{
+        const { data, error } = await supabaseClient
+          .from('guest_gallery')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if(!photos.length){
-        gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
-        return;
-      }
+        if(error){
+          console.error(error);
+          gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+          return;
+        }
 
-      gallery.innerHTML = `<div class="gallery-grid">${
-        photos.map(item => `
-          <div class="gallery-card">
-            <img src="${item.src}" alt="Guest memory">
-            <div class="gallery-meta">
-              <strong>${escapeHtml(item.name || 'Guest Memory')}</strong>
-              <div>${escapeHtml(item.date || '')}</div>
+        if(!data || !data.length){
+          gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+          return;
+        }
+
+        gallery.innerHTML = `<div class="gallery-grid">${
+          data.map(item => `
+            <div class="gallery-card">
+              <img src="${escapeHtml(item.image_url)}" alt="Guest memory">
+              <div class="gallery-meta">
+                <strong>${escapeHtml(item.guest_name || 'Guest Memory')}</strong>
+                <div>${new Date(item.created_at).toLocaleDateString()}</div>
+              </div>
             </div>
-          </div>
-        `).join('')
-      }</div>`;
+          `).join('')
+        }</div>`;
+      } catch(e){
+        console.error(e);
+        gallery.innerHTML = '<div class="small-note">No guest photos yet.</div>';
+      }
     }
 
     async function addGuestPhotos(){
       const files = document.getElementById('guestMediaFiles').files;
       const guestName = document.getElementById('guestMemoryName').value.trim();
       const message = document.getElementById('guestPhotoMessage');
+
+      message.style.display = 'none';
 
       if(!files.length){
         message.className = 'form-message form-error';
@@ -1879,29 +1939,35 @@ Take final walkthrough photos`
 
       try{
         const processed = await processImageFiles(files, 6);
-        const gallery = getStoredList(STORAGE_KEYS.guestPhotos);
-        const date = new Date().toLocaleDateString();
 
-        const newItems = processed.map(item => ({
-          src: item.src,
-          name: guestName || 'Guest Memory',
-          date
-        }));
+        for(const item of processed){
+          const uploaded = await uploadDataUrlToBucket(GUEST_BUCKET, item.src, 'guest');
 
-        const updated = [...newItems, ...gallery].slice(0, 18);
-        saveStoredList(STORAGE_KEYS.guestPhotos, updated);
+          const { error } = await supabaseClient
+            .from('guest_gallery')
+            .insert([{
+              guest_name: guestName || 'Guest Memory',
+              image_url: uploaded.url,
+              image_path: uploaded.path
+            }]);
 
-        renderGuestGallery();
-        renderOwnerDashboard();
+          if(error) throw error;
+        }
+
+        await renderGuestGallery();
+        await renderOwnerDashboard();
 
         message.className = 'form-message form-success';
-        message.textContent = 'Photos added to the guest gallery on this device.';
+        message.textContent = 'Photos added to the shared guest gallery.';
         message.style.display = 'block';
 
-        clearGuestPreview();
+        document.getElementById('guestMediaFiles').value = '';
+        document.getElementById('guestMemoryName').value = '';
+        document.getElementById('guestPreview').innerHTML = '';
       } catch(e){
+        console.error(e);
         message.className = 'form-message form-error';
-        message.textContent = 'Those photos could not be saved. Try fewer images or smaller photos.';
+        message.textContent = 'Those photos could not be uploaded. Check your Supabase guest gallery setup.';
         message.style.display = 'block';
       }
     }
@@ -1928,6 +1994,7 @@ Take final walkthrough photos`
       const cleaner = document.getElementById('turnoverCleaner').value.trim();
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
+      const files = document.getElementById('turnoverFiles').files;
 
       const success = document.getElementById('turnoverSuccess');
       const error = document.getElementById('turnoverError');
@@ -1942,15 +2009,35 @@ Take final walkthrough photos`
       }
 
       try{
-        const { error: insertError } = await supabaseClient
+        const { data: turnoverInsert, error: insertError } = await supabaseClient
           .from('turnovers')
-          .insert([{ cleaner, turnover_date: date, notes }]);
+          .insert([{ cleaner, turnover_date: date, notes }])
+          .select()
+          .single();
 
         if(insertError){
           console.error(insertError);
           error.textContent = 'There was a problem saving the turnover submission.';
           error.style.display = 'block';
           return;
+        }
+
+        if(files && files.length){
+          const processed = await processImageFiles(files, 6);
+
+          for(const item of processed){
+            const uploaded = await uploadDataUrlToBucket(TURNOVER_BUCKET, item.src, 'turnover');
+
+            const { error: photoError } = await supabaseClient
+              .from('turnover_photos')
+              .insert([{
+                turnover_id: turnoverInsert.id,
+                image_url: uploaded.url,
+                image_path: uploaded.path
+              }]);
+
+            if(photoError) throw photoError;
+          }
         }
 
         success.style.display = 'block';
@@ -2049,6 +2136,7 @@ Take final walkthrough photos`
           </div>
         `).join('');
       } catch(e){
+        console.error(e);
         status.textContent = 'Unable to load calendar.';
         results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
       }
@@ -2088,7 +2176,7 @@ Take final walkthrough photos`
       await renderEditablePages();
       await renderSupplyList();
       await renderMaintenanceList();
-      renderGuestGallery();
+      await renderGuestGallery();
       await renderOwnerDashboard();
     });
   </script>
