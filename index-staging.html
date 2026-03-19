@@ -1615,8 +1615,7 @@ Take final walkthrough photos`
     }
 
     async function renderEditablePages(){
-      document.getElementById('infoContent').innerHTML =
-  '<div class="panel"><h3>DEBUG</h3><p><strong>PROPERTY_KEY:</strong> ' + escapeHtml(PROPERTY_KEY) + '</p><pre style="white-space:pre-wrap;">' + escapeHtml(info) + '</pre></div>';
+    document.getElementById('infoContent').innerHTML = formatInfoContent(info);
       const local = await getSectionContent('local');
       const trail = await getSectionContent('trail');
       const photos = await getSectionContent('photos');
