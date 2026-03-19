@@ -1306,11 +1306,6 @@ async function loadCurrentProperty() {
   return data;
 }
     
-    let supabaseClient = null;
-
-   const PROPERTY_KEY =
-  new URLSearchParams(window.location.search).get('property') || 'darbys-ridge';
-
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
@@ -2512,16 +2507,15 @@ Take final walkthrough photos`
       }
     }
 
-    document.addEventListener('DOMContentLoaded', async function() {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      await seedDefaultContentIfNeeded();
-      await renderEditablePages();
-      await renderSupplyList();
-      await renderMaintenanceList();
-      await renderGuestGallery();
-      await renderOwnerDashboard();
-    });
+   document.addEventListener('DOMContentLoaded', async function() {
+  await loadCurrentProperty();
+  await seedDefaultContentIfNeeded();
+  await renderEditablePages();
+  await renderSupplyList();
+  await renderMaintenanceList();
+  await renderGuestGallery();
+  await renderOwnerDashboard();
+});
   </script>
 </body>
 </html>
