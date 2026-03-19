@@ -874,10 +874,10 @@
   <div id="home" class="phone">
     <div class="hero">
       <div class="hero-text">
-        <h1 class="logo">Darby's Ridge</h1>
-        <div class="tagline">Your Blue Ridge Escape • Staging</div>
-        <div class="description">
-          Your guide to the cabin, local favorites, and everything you need for your stay in Blue Ridge.
+        <h1 class="logo" id="homeLogo">Darby's Ridge</h1>
+        <div class="tagline" id="homeTagline">Your Blue Ridge Escape • Staging</div>
+        <div class="description" id="homeDescription">
+          Your guide to the cabin, local favorites, and everything you need for your stay.
         </div>
       </div>
     </div>
@@ -889,7 +889,7 @@
         <div class="menu-card" onclick="showPage('guidebook')">
           <img src="cabin-exterior.jpg" alt="">
           <div class="menu-label">
-            <span>DARBY'S RIDGE</span>
+            <span id="guideLabelTop">PROPERTY GUIDE</span>
             <strong>Guest Guide</strong>
           </div>
         </div>
@@ -905,7 +905,7 @@
         <div class="menu-card" onclick="showPage('local')">
           <img src="local.jpg" alt="">
           <div class="menu-label">
-            <span>BLUE RIDGE</span>
+            <span>LOCAL FAVORITES</span>
             <strong>Guest Favorites</strong>
           </div>
         </div>
@@ -914,7 +914,7 @@
           <img src="trail.jpg" alt="">
           <div class="menu-label">
             <span>ADVENTURE</span>
-            <strong>Trail to Lake</strong>
+            <strong>Area Info</strong>
           </div>
         </div>
 
@@ -946,8 +946,8 @@
 
       <div class="social">
         <div class="social-kicker">STAY CONNECTED</div>
-        <h3>Follow Darby's Ridge</h3>
-        <p>See cabin moments, Blue Ridge favorites, and updates from the ridge.</p>
+        <h3 id="socialTitle">Follow Darby's Ridge</h3>
+        <p id="socialText">See property moments, local favorites, and updates.</p>
 
         <div class="social-links">
           <a class="social-link" href="https://instagram.com/darbysridge" target="_blank">
@@ -982,7 +982,7 @@
       <iframe
         class="pdf-frame"
         src="darbys-guidebook.pdf#toolbar=0&navpanes=0&scrollbar=0"
-        title="Darby's Ridge Guest Guide">
+        title="Guest Guide">
       </iframe>
     </div>
   </div>
@@ -992,8 +992,8 @@
     <div class="page-banner">
       <img src="essentials.jpg" alt="">
       <div class="page-banner-text">
-        <strong>WiFi & Cabin Essentials</strong>
-        <span>Everything you need for a smooth and cozy stay at Darby's Ridge.</span>
+        <strong>WiFi & Essentials</strong>
+        <span>Everything you need for a smooth stay.</span>
       </div>
     </div>
     <div id="infoContent"></div>
@@ -1004,8 +1004,8 @@
     <div class="page-banner">
       <img src="local.jpg" alt="">
       <div class="page-banner-text">
-        <strong>Blue Ridge Guest Favorites</strong>
-        <span>A few of our favorite spots to eat, explore, and enjoy the area.</span>
+        <strong>Guest Favorites</strong>
+        <span>A few favorite spots to eat, explore, and enjoy the area.</span>
       </div>
     </div>
     <div class="panel">
@@ -1018,8 +1018,8 @@
     <div class="page-banner">
       <img src="trail.jpg" alt="">
       <div class="page-banner-text">
-        <strong>Trail to Lake</strong>
-        <span>Quick details before you head out toward the trail and Lake Blue Ridge.</span>
+        <strong>Area Info</strong>
+        <span>Quick details before you head out and explore.</span>
       </div>
     </div>
     <div class="panel">
@@ -1256,9 +1256,9 @@
 
       <label for="ownerSectionSelect">Choose Section</label>
       <select id="ownerSectionSelect" onchange="loadOwnerEditor()">
-        <option value="info">WiFi & Cabin Essentials</option>
-        <option value="local">Blue Ridge Guest Favorites</option>
-        <option value="trail">Trail to Lake</option>
+        <option value="info">WiFi & Essentials</option>
+        <option value="local">Guest Favorites</option>
+        <option value="trail">Area Info</option>
         <option value="photos">Guest Memories Intro</option>
         <option value="checkout">Checkout Instructions</option>
         <option value="checklist">Turnover Checklist</option>
@@ -1280,32 +1280,16 @@
   <script>
     const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const CURRENT_PROPERTY_KEY =
+      new URLSearchParams(window.location.search).get('property') || 'darbys-ridge';
 
-const CURRENT_PROPERTY_KEY =
-  new URLSearchParams(window.location.search).get('property') || 'darbys-ridge';
-    
-const PROPERTY_KEY = CURRENT_PROPERTY_KEY;
-    
-let CURRENT_PROPERTY_ID = null;
+    const PROPERTY_KEY = CURRENT_PROPERTY_KEY;
 
-async function loadCurrentProperty() {
-  const { data, error } = await supabaseClient
-    .from('properties')
-    .select('id, slug, name')
-    .eq('slug', CURRENT_PROPERTY_KEY)
-    .single();
+    let CURRENT_PROPERTY_ID = null;
+    let CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
 
-  if (error) {
-    console.error('Property load error:', error);
-    return null;
-  }
-
-  CURRENT_PROPERTY_ID = data.id;
-  return data;
-}
-    
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
 
@@ -1372,7 +1356,6 @@ Need More Info?
 Please refer to the guest guide for additional house information, tips for your stay, and local recommendations.`,
 
       local: `<div class="favorites-list">
-
         <div class="favorite-item">
           <h3>Harvest on Main</h3>
           <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
@@ -1399,69 +1382,13 @@ Please refer to the guest guide for additional house information, tips for your 
             <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
           </p>
         </div>
-
-        <div class="favorite-item">
-          <h3>Fightingtown Tavern</h3>
-          <p>A casual local favorite for burgers, drinks, and a laid-back Blue Ridge vibe.</p>
-          <p>
-            <a href="https://fightingtowntavern.webflow.io/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Fightingtown+Tavern+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Lake Blue Ridge</h3>
-          <p>A beautiful mountain lake for boating, fishing, swimming, or just relaxing by the water.</p>
-          <p>
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Blue Ridge Scenic Railway</h3>
-          <p>A classic Blue Ridge experience with mountain views and a fun day-trip feel.</p>
-          <p>
-            <a href="https://brscenic.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Blue+Ridge+Scenic+Railway+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Mercier Orchards</h3>
-          <p>A Blue Ridge favorite for baked goods, cider, shopping, and seasonal fruit picking.</p>
-          <p>
-            <a href="https://mercier-orchards.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Mercier+Orchards+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-
       </div>`,
 
       trail: `<div class="favorites-list">
-
         <div class="favorite-item">
-          <h3>Green Mountain Trail Access</h3>
-          <p>Darby’s Ridge offers trail access right from the property, making it easy to step outside and begin your hike without having to drive anywhere first.</p>
+          <h3>Area Information</h3>
+          <p>Use this section for trail details, beach access info, parking notes, or anything guests need before heading out.</p>
         </div>
-
-        <div class="favorite-item">
-          <h3>Trail to Lake</h3>
-          <p>This trail system is a beautiful way to explore the mountain setting around the cabin and make your way toward the Lake Blue Ridge area. Trail conditions can vary depending on weather and recent rainfall.</p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>What to Bring</h3>
-          <p>We recommend sturdy shoes, water, and your phone before heading out. Cell service can be limited in the mountains, so it’s best to hike prepared and use extra caution on uneven or slick sections.</p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Helpful Links</h3>
-          <p>
-            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA" target="_blank">Trail Map</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Lake Map</a>
-          </p>
-        </div>
-
       </div>`,
 
       photos: `We’d love to see your favorite moments from your stay. Add a few photos or videos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
@@ -1469,24 +1396,23 @@ Please refer to the guest guide for additional house information, tips for your 
       checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
 Remove all food items that you brought with you.
-Empty all trash cans and place bags in the bear-proof outdoor bin.
+Empty all trash cans and place bags in the outdoor bin.
 Place used towels in the laundry area.
 Leave beds that were used unmade.
 Double-check drawers, outlets, and outdoor areas for personal belongings.
 If you moved any décor or items, please return them to their original spots.
 Lock all doors and windows before leaving.
-Turn thermostat to 72 in the summer and 68 in the winter.
+Set thermostat to the owner’s preferred checkout setting.
 Text us when you depart so we can alert our cleaning team.
-Thank you for staying at Darby’s Ridge — we hope to host you again soon!`,
+Thank you for staying with us — we hope to host you again soon!`,
 
       checklist: `Make all beds and fluff pillows
 Clean and reset bathrooms
 Wipe kitchen counters and appliances
 Check refrigerator and remove leftover items
 Restock paper goods, soaps, and coffee items
-Check hot tub cover and outdoor areas
-Sweep entry and check decks
-Take final walkthrough photos`
+Check outdoor areas
+Sweep entry and do final walkthrough`
     };
 
     function escapeHtml(text){
@@ -1509,7 +1435,8 @@ Take final walkthrough photos`
     }
 
     function formatInfoContent(raw){
-      const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
+      const safeRaw = String(raw ?? '');
+      const sections = safeRaw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
       let html = '<div class="essentials-panel">';
 
       for(let i = 0; i < sections.length; i += 2){
@@ -1529,7 +1456,8 @@ Take final walkthrough photos`
     }
 
     function formatCheckoutContent(raw){
-      const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
+      const safeRaw = String(raw ?? '');
+      const lines = safeRaw.split('\n').map(line => line.trim()).filter(Boolean);
       if(!lines.length) return '';
 
       const title = lines[0];
@@ -1570,9 +1498,47 @@ Take final walkthrough photos`
       return `${PROPERTY_KEY}:${section}`;
     }
 
-    async function getSectionContent(section){
-      if(!supabaseClient) return defaultContent[section] || '';
+    async function loadCurrentProperty() {
+      try{
+        const { data, error } = await supabaseClient
+          .from('properties')
+          .select('id, slug, name')
+          .eq('slug', CURRENT_PROPERTY_KEY)
+          .single();
 
+        if (error || !data) {
+          console.error('Property load error:', error);
+          CURRENT_PROPERTY_ID = null;
+          CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
+          return null;
+        }
+
+        CURRENT_PROPERTY_ID = data.id;
+        CURRENT_PROPERTY_NAME = data.name || 'Property';
+        return data;
+      } catch(e){
+        console.error('Property load error:', e);
+        CURRENT_PROPERTY_ID = null;
+        CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
+        return null;
+      }
+    }
+
+    function applyPropertyBranding(){
+      document.title = `${CURRENT_PROPERTY_NAME} Staging`;
+
+      const homeLogo = document.getElementById('homeLogo');
+      const homeTagline = document.getElementById('homeTagline');
+      const socialTitle = document.getElementById('socialTitle');
+      const guideLabelTop = document.getElementById('guideLabelTop');
+
+      if(homeLogo) homeLogo.textContent = CURRENT_PROPERTY_NAME;
+      if(homeTagline) homeTagline.textContent = `${CURRENT_PROPERTY_NAME} • Staging`;
+      if(socialTitle) socialTitle.textContent = `Follow ${CURRENT_PROPERTY_NAME}`;
+      if(guideLabelTop) guideLabelTop.textContent = CURRENT_PROPERTY_NAME.toUpperCase();
+    }
+
+    async function getSectionContent(section){
       try{
         const { data, error } = await supabaseClient
           .from(CONTENT_TABLE)
@@ -1586,7 +1552,7 @@ Take final walkthrough photos`
           return defaultContent[section] || '';
         }
 
-        return data?.value ?? defaultContent[section] ?? '';
+        return String(data?.value ?? defaultContent[section] ?? '');
       } catch(e){
         console.error(e);
         return defaultContent[section] || '';
@@ -1599,6 +1565,7 @@ Take final walkthrough photos`
         .upsert(
           {
             property_key: PROPERTY_KEY,
+            property_id: CURRENT_PROPERTY_ID,
             section,
             section_key: contentKey(section),
             value
@@ -1611,11 +1578,11 @@ Take final walkthrough photos`
 
     async function getChecklistItems(){
       const raw = await getSectionContent('checklist');
-      return raw.split('\n').map(item => item.trim()).filter(Boolean);
+      return String(raw).split('\n').map(item => item.trim()).filter(Boolean);
     }
 
     async function renderEditablePages(){
-    document.getElementById('infoContent').innerHTML = formatInfoContent(info);
+      const info = await getSectionContent('info');
       const local = await getSectionContent('local');
       const trail = await getSectionContent('trail');
       const photos = await getSectionContent('photos');
@@ -1711,7 +1678,7 @@ Take final walkthrough photos`
 
       const { error } = await supabaseClient
         .from(SUPPLIES_TABLE)
-        .insert([{ property_key: PROPERTY_KEY, item: value }]);
+        .insert([{ property_key: PROPERTY_KEY, property_id: CURRENT_PROPERTY_ID, item: value }]);
 
       if(error){
         console.error(error);
@@ -1771,7 +1738,7 @@ Take final walkthrough photos`
 
       const { error } = await supabaseClient
         .from(MAINTENANCE_TABLE)
-        .insert([{ property_key: PROPERTY_KEY, item: value }]);
+        .insert([{ property_key: PROPERTY_KEY, property_id: CURRENT_PROPERTY_ID, item: value }]);
 
       if(error){
         console.error(error);
@@ -2247,6 +2214,7 @@ Take final walkthrough photos`
             .from(GUEST_GALLERY_TABLE)
             .insert([{
               property_key: PROPERTY_KEY,
+              property_id: CURRENT_PROPERTY_ID,
               guest_name: guestName || 'Guest Memory',
               image_url: uploaded.url,
               image_path: uploaded.path,
@@ -2313,7 +2281,7 @@ Take final walkthrough photos`
       try{
         const { data: turnoverInsert, error: insertError } = await supabaseClient
           .from(TURNOVERS_TABLE)
-          .insert([{ property_key: PROPERTY_KEY, cleaner, turnover_date: date, notes }])
+          .insert([{ property_key: PROPERTY_KEY, property_id: CURRENT_PROPERTY_ID, cleaner, turnover_date: date, notes }])
           .select()
           .single();
 
@@ -2359,11 +2327,6 @@ Take final walkthrough photos`
     }
 
     async function submitRequestToBook(){
-      if(!supabaseClient){
-        alert('App not ready yet — refresh and try again.');
-        return;
-      }
-
       const name = document.getElementById('requestName').value.trim();
       const phone = document.getElementById('requestPhone').value.trim();
       const arrival = document.getElementById('requestArrival').value.trim();
@@ -2382,7 +2345,7 @@ Take final walkthrough photos`
         const { error } = await supabaseClient
           .from(BOOKING_REQUESTS_TABLE)
           .insert([
-            { property_key: PROPERTY_KEY, name, phone, arrival, departure, guests, notes }
+            { property_key: PROPERTY_KEY, property_id: CURRENT_PROPERTY_ID, name, phone, arrival, departure, guests, notes }
           ]);
 
         if(error){
@@ -2414,7 +2377,7 @@ Take final walkthrough photos`
       results.innerHTML = '<div class="small-note">Loading...</div>';
 
       try{
-        const response = await fetch('/api/staging-airbnb-calendar?property=darbys-ridge', {
+        const response = await fetch(`/api/staging-airbnb-calendar?property=${encodeURIComponent(PROPERTY_KEY)}`, {
           method: 'GET',
           headers: {
             'Accept': 'application/json'
@@ -2427,15 +2390,7 @@ Take final walkthrough photos`
           return;
         }
 
-        let data;
-        try{
-          data = await response.json();
-        } catch(jsonError){
-          console.error(jsonError);
-          status.textContent = 'Calendar sync error';
-          results.innerHTML = '<div class="small-note">The calendar endpoint did not return valid JSON.</div>';
-          return;
-        }
+        const data = await response.json();
 
         if(!data.success){
           status.textContent = data.error || 'Unable to load calendar.';
@@ -2495,6 +2450,7 @@ Take final walkthrough photos`
             .from(CONTENT_TABLE)
             .insert([{
               property_key: PROPERTY_KEY,
+              property_id: CURRENT_PROPERTY_ID,
               section,
               section_key: contentKey(section),
               value: defaultContent[section] || ''
@@ -2507,15 +2463,16 @@ Take final walkthrough photos`
       }
     }
 
-   document.addEventListener('DOMContentLoaded', async function() {
-  await loadCurrentProperty();
-  await seedDefaultContentIfNeeded();
-  await renderEditablePages();
-  await renderSupplyList();
-  await renderMaintenanceList();
-  await renderGuestGallery();
-  await renderOwnerDashboard();
-});
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadCurrentProperty();
+      applyPropertyBranding();
+      await seedDefaultContentIfNeeded();
+      await renderEditablePages();
+      await renderSupplyList();
+      await renderMaintenanceList();
+      await renderGuestGallery();
+      await renderOwnerDashboard();
+    });
   </script>
 </body>
 </html>
