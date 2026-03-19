@@ -1306,7 +1306,8 @@ async function loadCurrentProperty() {
     
     let supabaseClient = null;
 
-    const PROPERTY_KEY = 'darbys-ridge';
+   const PROPERTY_KEY =
+  new URLSearchParams(window.location.search).get('property') || 'darbys-ridge';
 
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
