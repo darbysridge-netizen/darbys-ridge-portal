@@ -1285,7 +1285,9 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const CURRENT_PROPERTY_KEY =
   new URLSearchParams(window.location.search).get('property') || 'darbys-ridge';
-
+    
+const PROPERTY_KEY = CURRENT_PROPERTY_KEY;
+    
 let CURRENT_PROPERTY_ID = null;
 
 async function loadCurrentProperty() {
