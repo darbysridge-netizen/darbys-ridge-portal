@@ -1,11 +1,17 @@
 export default async function handler(req, res) {
   try {
-    const calendarUrl = process.env.AIRBNB_ICAL_URL;
+    const property = String(req.query.property || 'darbys-ridge').trim();
+
+    const calendarMap = {
+      'darbys-ridge': process.env.AIRBNB_ICAL_URL_DARBYS_RIDGE
+    };
+
+    const calendarUrl = calendarMap[property];
 
     if (!calendarUrl) {
       return res.status(500).json({
         success: false,
-        error: 'Missing AIRBNB_ICAL_URL environment variable.'
+        error: `Missing staging calendar URL for property: ${property}`
       });
     }
 
@@ -51,6 +57,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
+      property,
       bookings
     });
   } catch (error) {
@@ -123,7 +130,6 @@ function parseICSDate(value) {
 
   const clean = String(value).trim();
 
-  // Handles YYYYMMDD
   if (/^\d{8}$/.test(clean)) {
     const year = Number(clean.slice(0, 4));
     const month = Number(clean.slice(4, 6)) - 1;
@@ -131,7 +137,6 @@ function parseICSDate(value) {
     return new Date(year, month, day);
   }
 
-  // Handles YYYYMMDDTHHMMSSZ or YYYYMMDDTHHMMSS
   const match = clean.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$/);
 
   if (match) {
