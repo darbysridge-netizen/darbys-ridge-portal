@@ -7,17 +7,39 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    :root{
+      --app-bg:#e2d2bd;
+      --phone-bg:#efe4d3;
+      --panel-bg:#f7efe3;
+      --text-main:#3c2c1f;
+      --text-soft:#5b4636;
+      --text-muted:#6d5a49;
+      --line:#e5d7c4;
+      --line-strong:#d3c2aa;
+      --accent:#445b49;
+      --accent-soft:#d8c3aa;
+      --accent-soft-2:#e9d9c5;
+      --social-bg-1:#f7efe3;
+      --social-bg-2:#f1e4d2;
+      --social-btn:#d8c3aa;
+      --social-btn-border:#c9b299;
+      --social-btn-hover:#ceb597;
+      --social-icon:#5b4636;
+      --chip-bg:rgba(255,255,255,.18);
+      --chip-border:rgba(255,255,255,.28);
+    }
+
     body{
       margin:0;
-      background:#e2d2bd;
+      background:var(--app-bg);
       font-family:'Inter',sans-serif;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .phone{
       max-width:430px;
       margin:auto;
-      background:#efe4d3;
+      background:var(--phone-bg);
       min-height:100vh;
       padding-bottom:80px;
     }
@@ -36,6 +58,25 @@
       position:absolute;
       inset:0;
       background:linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,.46));
+    }
+
+    .property-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:var(--chip-bg);
+      color:white;
+      border:1px solid var(--chip-border);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+      box-shadow:0 4px 14px rgba(0,0,0,.12);
     }
 
     .hero-text{
@@ -68,7 +109,7 @@
       margin-top:10px;
       font-size:12px;
       line-height:1.4;
-      max-width:220px;
+      max-width:240px;
       color:rgba(255,255,255,.94);
     }
 
@@ -79,7 +120,14 @@
     .section-title{
       font-family:'Playfair Display',serif;
       font-size:24px;
-      margin-bottom:16px;
+      margin-bottom:6px;
+    }
+
+    .section-subtitle{
+      margin:0 0 18px;
+      font-size:13px;
+      line-height:1.5;
+      color:var(--text-soft);
     }
 
     .card-grid{
@@ -161,7 +209,7 @@
 
     .social{
       margin-top:24px;
-      background:linear-gradient(145deg, #f7efe3, #f1e4d2);
+      background:linear-gradient(145deg, var(--social-bg-1), var(--social-bg-2));
       padding:20px;
       border-radius:20px;
       box-shadow:0 8px 18px rgba(0,0,0,.06);
@@ -181,13 +229,13 @@
       font-family:'Playfair Display',serif;
       margin:0 0 8px;
       font-size:24px;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .social p{
       margin:0 0 16px;
       line-height:1.55;
-      color:#5b4636;
+      color:var(--text-soft);
       font-size:14px;
     }
 
@@ -202,11 +250,11 @@
       align-items:center;
       gap:12px;
       padding:14px 16px;
-      background:#d8c3aa;
+      background:var(--social-btn);
       border-radius:14px;
       text-decoration:none;
-      color:#3c2c1f;
-      border:1px solid #c9b299;
+      color:var(--text-main);
+      border:1px solid var(--social-btn-border);
       box-shadow:0 4px 10px rgba(0,0,0,.04);
       transition:transform .15s ease, box-shadow .15s ease;
     }
@@ -214,7 +262,7 @@
     .social-link:hover{
       transform:translateY(-1px);
       box-shadow:0 8px 16px rgba(0,0,0,.08);
-      background:#ceb597;
+      background:var(--social-btn-hover);
     }
 
     .social-icon{
@@ -226,7 +274,7 @@
       justify-content:center;
       font-size:18px;
       flex-shrink:0;
-      background:#5b4636;
+      background:var(--social-icon);
       color:#f7efe3;
     }
 
@@ -238,7 +286,7 @@
 
     .social-text strong{
       font-size:15px;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .social-text small{
@@ -254,8 +302,8 @@
       transform:translateX(-50%);
       max-width:430px;
       width:100%;
-      background:#e2d2bd;
-      border-top:1px solid #d3c2aa;
+      background:var(--app-bg);
+      border-top:1px solid var(--line-strong);
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -267,14 +315,14 @@
     .bottom-nav button{
       background:none;
       border:none;
-      color:#5b4636;
+      color:var(--text-soft);
       font-size:13px;
       font-weight:600;
       cursor:pointer;
     }
 
     .bottom-home{
-      background:#445b49 !important;
+      background:var(--accent) !important;
       color:white !important;
       border-radius:30px;
       padding:10px 20px;
@@ -289,7 +337,7 @@
       max-width:430px;
       margin:auto;
       padding:22px;
-      background:#efe4d3;
+      background:var(--phone-bg);
       min-height:100vh;
       padding-bottom:110px;
     }
@@ -307,13 +355,13 @@
       cursor:pointer;
       background:none;
       border:none;
-      color:#3c2c1f;
+      color:var(--text-main);
       padding:0;
       font-size:16px;
     }
 
     .panel{
-      background:#f7efe3;
+      background:var(--panel-bg);
       padding:18px;
       border-radius:16px;
       margin-top:14px;
@@ -380,7 +428,7 @@
       padding:14px;
       border:none;
       border-radius:12px;
-      background:#445b49;
+      background:var(--accent);
       color:white;
       font-size:15px;
       font-weight:600;
@@ -390,20 +438,20 @@
     }
 
     button.secondary-btn{
-      background:#e9d9c5;
-      color:#3c2c1f;
+      background:var(--accent-soft-2);
+      color:var(--text-main);
     }
 
     button.tertiary-btn{
-      background:#d8c3aa;
-      color:#3c2c1f;
+      background:var(--accent-soft);
+      color:var(--text-main);
     }
 
     input, select, textarea{
       width:100%;
       padding:14px;
       border-radius:12px;
-      border:1px solid #d3c2aa;
+      border:1px solid var(--line-strong);
       font-size:15px;
       margin-top:8px;
       box-sizing:border-box;
@@ -440,7 +488,7 @@
 
     .small-note{
       font-size:13px;
-      color:#6d5a49;
+      color:var(--text-muted);
       line-height:1.5;
     }
 
@@ -450,7 +498,7 @@
       align-items:center;
       gap:12px;
       padding:14px 0;
-      border-bottom:1px solid #e5d7c4;
+      border-bottom:1px solid var(--line);
     }
 
     .status-row:last-child{
@@ -458,7 +506,7 @@
     }
 
     .status-pill{
-      background:#445b49;
+      background:var(--accent);
       color:white;
       padding:6px 10px;
       border-radius:999px;
@@ -469,7 +517,7 @@
 
     .status-pill.soft{
       background:#c9b299;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .check-list{
@@ -484,7 +532,7 @@
       justify-content:space-between;
       gap:10px;
       padding:12px 0;
-      border-bottom:1px solid #e5d7c4;
+      border-bottom:1px solid var(--line);
     }
 
     .list-row:last-child{
@@ -525,7 +573,7 @@
       font-weight:600;
       margin:16px 0 8px;
       font-size:15px;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .owner-list-row{
@@ -541,7 +589,7 @@
     }
 
     .pdf-wrap{
-      background:#f7efe3;
+      background:var(--panel-bg);
       border-radius:16px;
       overflow:hidden;
       margin-top:14px;
@@ -566,7 +614,7 @@
     .open-guide-btn{
       display:inline-block;
       padding:14px 22px;
-      background:#445b49;
+      background:var(--accent);
       color:white;
       border-radius:12px;
       text-decoration:none;
@@ -574,7 +622,7 @@
     }
 
     .essentials-panel{
-      background:#f7efe3;
+      background:var(--panel-bg);
       padding:18px;
       border-radius:16px;
       margin-top:14px;
@@ -582,7 +630,7 @@
 
     .essentials-block{
       padding:14px 0;
-      border-bottom:1px solid #e5d7c4;
+      border-bottom:1px solid var(--line);
     }
 
     .essentials-block:first-child{
@@ -599,7 +647,7 @@
       font-family:'Inter',sans-serif;
       font-size:16px;
       font-weight:700;
-      color:#3c2c1f;
+      color:var(--text-main);
       letter-spacing:0;
     }
 
@@ -619,7 +667,7 @@
     }
 
     .checkout-panel{
-      background:#f7efe3;
+      background:var(--panel-bg);
       padding:18px;
       border-radius:16px;
       margin-top:14px;
@@ -630,7 +678,7 @@
       font-family:'Inter',sans-serif;
       font-size:17px;
       font-weight:700;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .dash-list{
@@ -657,7 +705,7 @@
       position:absolute;
       left:0;
       top:0;
-      color:#3c2c1f;
+      color:var(--text-main);
       font-weight:600;
     }
 
@@ -669,7 +717,7 @@
 
     .favorite-item{
       padding-bottom:14px;
-      border-bottom:1px solid #e5d7c4;
+      border-bottom:1px solid var(--line);
     }
 
     .favorite-item:last-child{
@@ -682,7 +730,7 @@
       font-family:'Inter',sans-serif;
       font-size:16px;
       font-weight:700;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .favorite-item p{
@@ -740,13 +788,13 @@
       padding:10px;
       font-size:12px;
       line-height:1.45;
-      color:#6d5a49;
+      color:var(--text-muted);
     }
 
     .gallery-meta strong{
       display:block;
       font-size:13px;
-      color:#3c2c1f;
+      color:var(--text-main);
       margin-bottom:4px;
     }
 
@@ -776,7 +824,7 @@
     .preview-item div{
       padding:8px;
       font-size:12px;
-      color:#6d5a49;
+      color:var(--text-muted);
     }
 
     .submission-card{
@@ -790,7 +838,7 @@
     .submission-card h4{
       margin:0 0 6px;
       font-size:15px;
-      color:#3c2c1f;
+      color:var(--text-main);
     }
 
     .submission-card p{
@@ -872,8 +920,9 @@
 <body>
 
   <div id="home" class="phone">
-    <div class="hero">
+    <div class="hero" id="homeHero">
       <div class="hero-text">
+        <div class="property-chip" id="propertyChip">STAGING PROPERTY</div>
         <h1 class="logo" id="homeLogo">Darby's Ridge</h1>
         <div class="tagline" id="homeTagline">Your Blue Ridge Escape • Staging</div>
         <div class="description" id="homeDescription">
@@ -884,18 +933,19 @@
 
     <div class="content">
       <div class="section-title">Guest Guide</div>
+      <p class="section-subtitle" id="guestGuideSubtitle">Everything guests need, organized by property.</p>
 
       <div class="card-grid">
         <div class="menu-card" onclick="showPage('guidebook')">
-          <img src="cabin-exterior.jpg" alt="">
+          <img id="guideCardImage" src="cabin-exterior.jpg" alt="">
           <div class="menu-label">
             <span id="guideLabelTop">PROPERTY GUIDE</span>
-            <strong>Guest Guide</strong>
+            <strong id="guideCardTitle">Guest Guide</strong>
           </div>
         </div>
 
         <div class="menu-card" onclick="showPage('info')">
-          <img src="essentials.jpg" alt="">
+          <img id="infoCardImage" src="essentials.jpg" alt="">
           <div class="menu-label">
             <span>STAY DETAILS</span>
             <strong>WiFi + Essentials</strong>
@@ -903,7 +953,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('local')">
-          <img src="local.jpg" alt="">
+          <img id="localCardImage" src="local.jpg" alt="">
           <div class="menu-label">
             <span>LOCAL FAVORITES</span>
             <strong>Guest Favorites</strong>
@@ -911,7 +961,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('trail')">
-          <img src="trail.jpg" alt="">
+          <img id="trailCardImage" src="trail.jpg" alt="">
           <div class="menu-label">
             <span>ADVENTURE</span>
             <strong>Area Info</strong>
@@ -919,7 +969,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('guestMemories')">
-          <img src="outdoor.jpg" alt="">
+          <img id="memoriesCardImage" src="outdoor.jpg" alt="">
           <div class="menu-label">
             <span>GUEST MEMORIES</span>
             <strong>Photo + Video Gallery</strong>
@@ -927,7 +977,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('checkout')">
-          <img src="interior.jpg" alt="">
+          <img id="checkoutCardImage" src="interior.jpg" alt="">
           <div class="menu-label">
             <span>BEFORE YOU GO</span>
             <strong>Checkout</strong>
@@ -935,7 +985,7 @@
         </div>
 
         <div class="menu-card wide-card" onclick="showPage('requestToBook')">
-          <img src="mountains.jpg" alt="">
+          <img id="requestCardImage" src="mountains.jpg" alt="">
           <div class="menu-label">
             <span>RETURN STAY</span>
             <strong>Request to Book Again</strong>
@@ -950,19 +1000,19 @@
         <p id="socialText">See property moments, local favorites, and updates.</p>
 
         <div class="social-links">
-          <a class="social-link" href="https://instagram.com/darbysridge" target="_blank">
-            <div class="social-icon">📸</div>
+          <a class="social-link" id="socialLink1" href="https://instagram.com/darbysridge" target="_blank">
+            <div class="social-icon" id="socialIcon1">📸</div>
             <div class="social-text">
-              <strong>Instagram</strong>
-              <small>@darbysridge</small>
+              <strong id="socialLabel1">Instagram</strong>
+              <small id="socialHandle1">@darbysridge</small>
             </div>
           </a>
 
-          <a class="social-link" href="https://www.facebook.com/darbysridge/" target="_blank">
-            <div class="social-icon">👍</div>
+          <a class="social-link" id="socialLink2" href="https://www.facebook.com/darbysridge/" target="_blank">
+            <div class="social-icon" id="socialIcon2">👍</div>
             <div class="social-text">
-              <strong>Facebook</strong>
-              <small>Darby's Ridge</small>
+              <strong id="socialLabel2">Facebook</strong>
+              <small id="socialHandle2">Darby's Ridge</small>
             </div>
           </a>
         </div>
@@ -972,14 +1022,15 @@
 
   <div id="guidebook" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back to Home</button>
-    <h1>Guest Guide</h1>
+    <h1 id="guidebookPageTitle">Guest Guide</h1>
 
     <div class="pdf-wrap">
       <div class="mobile-open">
-        <a href="darbys-guidebook.pdf" target="_blank" class="open-guide-btn">Open Guest Guide</a>
+        <a id="guidebookOpenLink" href="darbys-guidebook.pdf" target="_blank" class="open-guide-btn">Open Guest Guide</a>
       </div>
 
       <iframe
+        id="guidebookFrame"
         class="pdf-frame"
         src="darbys-guidebook.pdf#toolbar=0&navpanes=0&scrollbar=0"
         title="Guest Guide">
@@ -990,7 +1041,7 @@
   <div id="info" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="essentials.jpg" alt="">
+      <img id="infoBannerImage" src="essentials.jpg" alt="">
       <div class="page-banner-text">
         <strong>WiFi & Essentials</strong>
         <span>Everything you need for a smooth stay.</span>
@@ -1002,7 +1053,7 @@
   <div id="local" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="local.jpg" alt="">
+      <img id="localBannerImage" src="local.jpg" alt="">
       <div class="page-banner-text">
         <strong>Guest Favorites</strong>
         <span>A few favorite spots to eat, explore, and enjoy the area.</span>
@@ -1016,7 +1067,7 @@
   <div id="trail" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="trail.jpg" alt="">
+      <img id="trailBannerImage" src="trail.jpg" alt="">
       <div class="page-banner-text">
         <strong>Area Info</strong>
         <span>Quick details before you head out and explore.</span>
@@ -1029,7 +1080,7 @@
 
   <div id="guestMemories" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Guest Memories</h1>
+    <h1 id="guestMemoriesTitle">Guest Memories</h1>
 
     <div class="panel">
       <div id="photosContent" class="small-note" style="margin-bottom:10px;"></div>
@@ -1063,7 +1114,7 @@
   <div id="checkout" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="interior.jpg" alt="">
+      <img id="checkoutBannerImage" src="interior.jpg" alt="">
       <div class="page-banner-text">
         <strong>Before You Go</strong>
         <span>A quick checkout checklist to help us get ready for the next guests.</span>
@@ -1074,7 +1125,7 @@
 
   <div id="requestToBook" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Request to Book Again</h1>
+    <h1 id="requestPageTitle">Request to Book Again</h1>
 
     <div class="panel">
       <label for="requestName">Name</label>
@@ -1288,7 +1339,7 @@
     const PROPERTY_KEY = CURRENT_PROPERTY_KEY;
 
     let CURRENT_PROPERTY_ID = null;
-    let CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
+    let CURRENT_PROPERTY_NAME = "Darby's Ridge";
 
     const TEAM_PASSWORD = 'ridgecrew';
     const OWNER_PASSWORD_VALUE = 'darbysowner';
@@ -1305,8 +1356,122 @@
     const TURNOVER_BUCKET = 'turnover-bucket-staging';
     const MAX_MEDIA_ITEMS = 6;
 
-    const defaultContent = {
-      info: `WiFi
+    const PROPERTY_CONFIG = {
+      'darbys-ridge': {
+        displayName: "Darby's Ridge",
+        chipLabel: 'BLUE RIDGE CABIN',
+        tagline: 'Your Blue Ridge Escape • Staging',
+        description: 'Your guide to the cabin, local favorites, and everything you need for your stay.',
+        guidebookPdf: 'darbys-guidebook.pdf',
+        guidebookTitle: "Darby's Ridge Guest Guide",
+        socialTitle: "Follow Darby's Ridge",
+        socialText: 'See property moments, local favorites, and updates.',
+        theme: {
+          appBg: '#e2d2bd',
+          phoneBg: '#efe4d3',
+          panelBg: '#f7efe3',
+          textMain: '#3c2c1f',
+          textSoft: '#5b4636',
+          textMuted: '#6d5a49',
+          line: '#e5d7c4',
+          lineStrong: '#d3c2aa',
+          accent: '#445b49',
+          accentSoft: '#d8c3aa',
+          accentSoft2: '#e9d9c5',
+          socialBg1: '#f7efe3',
+          socialBg2: '#f1e4d2',
+          socialBtn: '#d8c3aa',
+          socialBtnBorder: '#c9b299',
+          socialBtnHover: '#ceb597',
+          socialIcon: '#5b4636',
+          chipBg: 'rgba(255,255,255,.18)',
+          chipBorder: 'rgba(255,255,255,.28)'
+        },
+        images: {
+          hero: 'hero.jpg',
+          guide: 'cabin-exterior.jpg',
+          info: 'essentials.jpg',
+          local: 'local.jpg',
+          trail: 'trail.jpg',
+          memories: 'outdoor.jpg',
+          checkout: 'interior.jpg',
+          request: 'mountains.jpg'
+        },
+        socialLinks: [
+          {
+            label: 'Instagram',
+            handle: '@darbysridge',
+            url: 'https://instagram.com/darbysridge',
+            icon: '📸'
+          },
+          {
+            label: 'Facebook',
+            handle: "Darby's Ridge",
+            url: 'https://www.facebook.com/darbysridge/',
+            icon: '👍'
+          }
+        ]
+      },
+      'stellar-beach-house': {
+        displayName: 'Stellar Beach House',
+        chipLabel: 'COASTAL STAY',
+        tagline: 'Your Coastal Escape • Staging',
+        description: 'Your guide to the beach house, local spots, and everything guests need for an easy stay.',
+        guidebookPdf: 'stellar-guidebook.pdf',
+        guidebookTitle: 'Stellar Beach House Guest Guide',
+        socialTitle: 'Follow Stellar Beach House',
+        socialText: 'See beach house updates, local favorites, and stay inspiration.',
+        theme: {
+          appBg: '#d8e1e8',
+          phoneBg: '#f5f1ea',
+          panelBg: '#fff8f0',
+          textMain: '#2f3a44',
+          textSoft: '#52606b',
+          textMuted: '#6d7882',
+          line: '#e2d8ca',
+          lineStrong: '#d6c7b4',
+          accent: '#5d7a8a',
+          accentSoft: '#d7c7b5',
+          accentSoft2: '#ece1d3',
+          socialBg1: '#fff8f0',
+          socialBg2: '#f2eadf',
+          socialBtn: '#ddcfbf',
+          socialBtnBorder: '#cbb9a6',
+          socialBtnHover: '#d2c0ad',
+          socialIcon: '#5d7a8a',
+          chipBg: 'rgba(255,255,255,.22)',
+          chipBorder: 'rgba(255,255,255,.30)'
+        },
+        images: {
+          hero: 'stellar-hero.jpg',
+          guide: 'stellar-guide.jpg',
+          info: 'stellar-essentials.jpg',
+          local: 'stellar-local.jpg',
+          trail: 'stellar-area.jpg',
+          memories: 'stellar-memories.jpg',
+          checkout: 'stellar-checkout.jpg',
+          request: 'stellar-request.jpg'
+        },
+        socialLinks: [
+          {
+            label: 'Instagram',
+            handle: '@stellarbeachhouse',
+            url: 'https://instagram.com/stellarbeachhouse',
+            icon: '📸'
+          },
+          {
+            label: 'Facebook',
+            handle: 'Stellar Beach House',
+            url: 'https://facebook.com/stellarbeachhouse',
+            icon: '👍'
+          }
+        ]
+      }
+    };
+
+    const DEFAULT_CONTENT_BY_PROPERTY = {
+      'darbys-ridge': {
+        info: `WiFi
 
 Network: NETGEAR56
 Password: elegantboat149
@@ -1355,45 +1520,45 @@ Need More Info?
 
 Please refer to the guest guide for additional house information, tips for your stay, and local recommendations.`,
 
-      local: `<div class="favorites-list">
-        <div class="favorite-item">
-          <h3>Harvest on Main</h3>
-          <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
-          <p>
-            <a href="https://harvestonmain.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
+        local: `<div class="favorites-list">
+          <div class="favorite-item">
+            <h3>Harvest on Main</h3>
+            <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
+            <p>
+              <a href="https://harvestonmain.com/" target="_blank">Website</a> |
+              <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA" target="_blank">Map</a>
+            </p>
+          </div>
 
-        <div class="favorite-item">
-          <h3>Toccoa Riverside Restaurant</h3>
-          <p>Beautiful riverfront dining with mountain views and a scenic drive getting there.</p>
-          <p>
-            <a href="https://www.toccoariversiderestaurant.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
+          <div class="favorite-item">
+            <h3>Toccoa Riverside Restaurant</h3>
+            <p>Beautiful riverfront dining with mountain views and a scenic drive getting there.</p>
+            <p>
+              <a href="https://www.toccoariversiderestaurant.com/" target="_blank">Website</a> |
+              <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+            </p>
+          </div>
 
-        <div class="favorite-item">
-          <h3>Black Sheep Restaurant</h3>
-          <p>A historic home turned into a stylish spot for cocktails, brunch, and dinner.</p>
-          <p>
-            <a href="https://blacksheepblueridge.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
-          </p>
-        </div>
-      </div>`,
+          <div class="favorite-item">
+            <h3>Black Sheep Restaurant</h3>
+            <p>A historic home turned into a stylish spot for cocktails, brunch, and dinner.</p>
+            <p>
+              <a href="https://blacksheepblueridge.com/" target="_blank">Website</a> |
+              <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+            </p>
+          </div>
+        </div>`,
 
-      trail: `<div class="favorites-list">
-        <div class="favorite-item">
-          <h3>Area Information</h3>
-          <p>Use this section for trail details, beach access info, parking notes, or anything guests need before heading out.</p>
-        </div>
-      </div>`,
+        trail: `<div class="favorites-list">
+          <div class="favorite-item">
+            <h3>Area Information</h3>
+            <p>Use this section for trail details, lake notes, parking info, or anything guests need before heading out.</p>
+          </div>
+        </div>`,
 
-      photos: `We’d love to see your favorite moments from your stay. Add a few photos or videos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
+        photos: `We’d love to see your favorite moments from your stay. Add a few photos or videos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
 
-      checkout: `Checkout Checklist
+        checkout: `Checkout Checklist
 Please load any remaining dirty dishes and start the dishwasher.
 Remove all food items that you brought with you.
 Empty all trash cans and place bags in the outdoor bin.
@@ -1406,14 +1571,100 @@ Set thermostat to the owner’s preferred checkout setting.
 Text us when you depart so we can alert our cleaning team.
 Thank you for staying with us — we hope to host you again soon!`,
 
-      checklist: `Make all beds and fluff pillows
+        checklist: `Make all beds and fluff pillows
 Clean and reset bathrooms
 Wipe kitchen counters and appliances
 Check refrigerator and remove leftover items
 Restock paper goods, soaps, and coffee items
 Check outdoor areas
 Sweep entry and do final walkthrough`
+      },
+
+      'stellar-beach-house': {
+        info: `WiFi
+
+Network: Add Beach WiFi
+Password: Add Beach Password
+
+Front Door Lock
+
+The front door lock code and arrival details will be provided before check-in.
+
+TV
+
+The TVs are smart TVs and ready for you to enjoy. Please remember to log out of your streaming apps before checkout.
+
+Kitchen Basics
+
+The kitchen is stocked with cookware, dishes, utensils, and a few starter essentials to help you settle in.
+
+Dishwasher & Cleanup
+
+Dishwasher pods, trash bags, and paper towels are provided to get you started. We simply ask that you load and start the dishwasher before checkout.
+
+Washer & Dryer
+
+A washer and dryer are available for your use during your stay, and laundry detergent is provided.
+
+Beach Gear
+
+Please return any beach gear, chairs, or extras neatly after use so the next guests can enjoy them too.
+
+Heat & Air
+
+Please keep doors and windows closed while the air is running and avoid setting the thermostat to extreme temperatures.
+
+Need More Info?
+
+Please refer to the guest guide for additional house information, stay tips, and local recommendations.`,
+
+        local: `<div class="favorites-list">
+          <div class="favorite-item">
+            <h3>Guest Favorites</h3>
+            <p>Use this section for your beach house restaurant picks, coffee stops, and favorite local spots.</p>
+          </div>
+        </div>`,
+
+        trail: `<div class="favorites-list">
+          <div class="favorite-item">
+            <h3>Area Information</h3>
+            <p>Use this section for beach access, parking notes, local rules, and quick area tips for guests.</p>
+          </div>
+        </div>`,
+
+        photos: `We’d love to see your favorite beach memories from your stay. Add a few photos or videos below and they’ll appear in the shared guest gallery for future guests to enjoy.`,
+
+        checkout: `Checkout Checklist
+Please load any remaining dirty dishes and start the dishwasher.
+Remove all food items that you brought with you.
+Empty all trash cans and place bags in the outdoor bin.
+Place used towels in the laundry area.
+Leave beds that were used unmade.
+Double-check drawers, outlets, and outdoor areas for personal belongings.
+Return any beach gear neatly to its place.
+Lock all doors and windows before leaving.
+Set thermostat to the owner’s preferred checkout setting.
+Text us when you depart so we can alert our cleaning team.
+Thank you for staying with us — we hope to host you again soon!`,
+
+        checklist: `Make all beds and fluff pillows
+Clean and reset bathrooms
+Wipe kitchen counters and appliances
+Check refrigerator and remove leftover items
+Restock paper goods, soaps, and coffee items
+Check beach gear and outdoor areas
+Sweep entry and do final walkthrough`
+      }
     };
+
+    function getPropertyConfig(){
+      return PROPERTY_CONFIG[PROPERTY_KEY] || PROPERTY_CONFIG['darbys-ridge'];
+    }
+
+    function getDefaultContent(section){
+      const propertyDefaults = DEFAULT_CONTENT_BY_PROPERTY[PROPERTY_KEY] || DEFAULT_CONTENT_BY_PROPERTY['darbys-ridge'];
+      return propertyDefaults[section] || '';
+    }
 
     function escapeHtml(text){
       return String(text ?? '')
@@ -1498,6 +1749,124 @@ Sweep entry and do final walkthrough`
       return `${PROPERTY_KEY}:${section}`;
     }
 
+    function setRootTheme(theme){
+      if(!theme) return;
+      document.documentElement.style.setProperty('--app-bg', theme.appBg || '#e2d2bd');
+      document.documentElement.style.setProperty('--phone-bg', theme.phoneBg || '#efe4d3');
+      document.documentElement.style.setProperty('--panel-bg', theme.panelBg || '#f7efe3');
+      document.documentElement.style.setProperty('--text-main', theme.textMain || '#3c2c1f');
+      document.documentElement.style.setProperty('--text-soft', theme.textSoft || '#5b4636');
+      document.documentElement.style.setProperty('--text-muted', theme.textMuted || '#6d5a49');
+      document.documentElement.style.setProperty('--line', theme.line || '#e5d7c4');
+      document.documentElement.style.setProperty('--line-strong', theme.lineStrong || '#d3c2aa');
+      document.documentElement.style.setProperty('--accent', theme.accent || '#445b49');
+      document.documentElement.style.setProperty('--accent-soft', theme.accentSoft || '#d8c3aa');
+      document.documentElement.style.setProperty('--accent-soft-2', theme.accentSoft2 || '#e9d9c5');
+      document.documentElement.style.setProperty('--social-bg-1', theme.socialBg1 || '#f7efe3');
+      document.documentElement.style.setProperty('--social-bg-2', theme.socialBg2 || '#f1e4d2');
+      document.documentElement.style.setProperty('--social-btn', theme.socialBtn || '#d8c3aa');
+      document.documentElement.style.setProperty('--social-btn-border', theme.socialBtnBorder || '#c9b299');
+      document.documentElement.style.setProperty('--social-btn-hover', theme.socialBtnHover || '#ceb597');
+      document.documentElement.style.setProperty('--social-icon', theme.socialIcon || '#5b4636');
+      document.documentElement.style.setProperty('--chip-bg', theme.chipBg || 'rgba(255,255,255,.18)');
+      document.documentElement.style.setProperty('--chip-border', theme.chipBorder || 'rgba(255,255,255,.28)');
+    }
+
+    function setImageWithFallback(id, primarySrc, fallbackSrc){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.onerror = function(){
+        if(fallbackSrc && el.src.indexOf(fallbackSrc) === -1){
+          el.src = fallbackSrc;
+        }
+      };
+      el.src = primarySrc || fallbackSrc || '';
+    }
+
+    function applySocialLink(slotNumber, linkData, fallbackData){
+      const linkEl = document.getElementById(`socialLink${slotNumber}`);
+      const iconEl = document.getElementById(`socialIcon${slotNumber}`);
+      const labelEl = document.getElementById(`socialLabel${slotNumber}`);
+      const handleEl = document.getElementById(`socialHandle${slotNumber}`);
+
+      const data = linkData || fallbackData;
+      if(!linkEl || !iconEl || !labelEl || !handleEl || !data) return;
+
+      linkEl.href = data.url || '#';
+      iconEl.textContent = data.icon || '•';
+      labelEl.textContent = data.label || '';
+      handleEl.textContent = data.handle || '';
+
+      if(data.url){
+        linkEl.style.display = 'flex';
+      } else {
+        linkEl.style.display = 'none';
+      }
+    }
+
+    function applyPropertyBranding(){
+      const config = getPropertyConfig();
+      const fallbackConfig = PROPERTY_CONFIG['darbys-ridge'];
+      const propertyName = CURRENT_PROPERTY_NAME || config.displayName || fallbackConfig.displayName;
+
+      document.title = `${propertyName} Staging`;
+
+      setRootTheme(config.theme);
+
+      const homeHero = document.getElementById('homeHero');
+      const homeLogo = document.getElementById('homeLogo');
+      const homeTagline = document.getElementById('homeTagline');
+      const homeDescription = document.getElementById('homeDescription');
+      const propertyChip = document.getElementById('propertyChip');
+      const socialTitle = document.getElementById('socialTitle');
+      const socialText = document.getElementById('socialText');
+      const guideLabelTop = document.getElementById('guideLabelTop');
+      const guideCardTitle = document.getElementById('guideCardTitle');
+      const guestGuideSubtitle = document.getElementById('guestGuideSubtitle');
+      const guidebookPageTitle = document.getElementById('guidebookPageTitle');
+      const guidebookOpenLink = document.getElementById('guidebookOpenLink');
+      const guidebookFrame = document.getElementById('guidebookFrame');
+      const requestPageTitle = document.getElementById('requestPageTitle');
+      const guestMemoriesTitle = document.getElementById('guestMemoriesTitle');
+
+      if(homeHero){
+        homeHero.style.backgroundImage = `url('${config.images?.hero || fallbackConfig.images.hero}')`;
+      }
+
+      if(homeLogo) homeLogo.textContent = propertyName;
+      if(homeTagline) homeTagline.textContent = config.tagline || `${propertyName} • Staging`;
+      if(homeDescription) homeDescription.textContent = config.description || '';
+      if(propertyChip) propertyChip.textContent = config.chipLabel || 'STAGING PROPERTY';
+      if(socialTitle) socialTitle.textContent = config.socialTitle || `Follow ${propertyName}`;
+      if(socialText) socialText.textContent = config.socialText || '';
+      if(guideLabelTop) guideLabelTop.textContent = propertyName.toUpperCase();
+      if(guideCardTitle) guideCardTitle.textContent = 'Guest Guide';
+      if(guestGuideSubtitle) guestGuideSubtitle.textContent = `Everything guests need for ${propertyName}.`;
+      if(guidebookPageTitle) guidebookPageTitle.textContent = config.guidebookTitle || `${propertyName} Guest Guide`;
+      if(requestPageTitle) requestPageTitle.textContent = `Request to Book ${propertyName} Again`;
+      if(guestMemoriesTitle) guestMemoriesTitle.textContent = `${propertyName} Guest Memories`;
+
+      const guidebookPdf = config.guidebookPdf || fallbackConfig.guidebookPdf;
+      if(guidebookOpenLink) guidebookOpenLink.href = guidebookPdf;
+      if(guidebookFrame) guidebookFrame.src = `${guidebookPdf}#toolbar=0&navpanes=0&scrollbar=0`;
+
+      setImageWithFallback('guideCardImage', config.images?.guide, fallbackConfig.images.guide);
+      setImageWithFallback('infoCardImage', config.images?.info, fallbackConfig.images.info);
+      setImageWithFallback('localCardImage', config.images?.local, fallbackConfig.images.local);
+      setImageWithFallback('trailCardImage', config.images?.trail, fallbackConfig.images.trail);
+      setImageWithFallback('memoriesCardImage', config.images?.memories, fallbackConfig.images.memories);
+      setImageWithFallback('checkoutCardImage', config.images?.checkout, fallbackConfig.images.checkout);
+      setImageWithFallback('requestCardImage', config.images?.request, fallbackConfig.images.request);
+
+      setImageWithFallback('infoBannerImage', config.images?.info, fallbackConfig.images.info);
+      setImageWithFallback('localBannerImage', config.images?.local, fallbackConfig.images.local);
+      setImageWithFallback('trailBannerImage', config.images?.trail, fallbackConfig.images.trail);
+      setImageWithFallback('checkoutBannerImage', config.images?.checkout, fallbackConfig.images.checkout);
+
+      applySocialLink(1, config.socialLinks?.[0], fallbackConfig.socialLinks?.[0]);
+      applySocialLink(2, config.socialLinks?.[1], fallbackConfig.socialLinks?.[1]);
+    }
+
     async function loadCurrentProperty() {
       try{
         const { data, error } = await supabaseClient
@@ -1509,33 +1878,19 @@ Sweep entry and do final walkthrough`
         if (error || !data) {
           console.error('Property load error:', error);
           CURRENT_PROPERTY_ID = null;
-          CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
+          CURRENT_PROPERTY_NAME = getPropertyConfig().displayName || "Darby's Ridge";
           return null;
         }
 
         CURRENT_PROPERTY_ID = data.id;
-        CURRENT_PROPERTY_NAME = data.name || 'Property';
+        CURRENT_PROPERTY_NAME = data.name || getPropertyConfig().displayName || 'Property';
         return data;
       } catch(e){
         console.error('Property load error:', e);
         CURRENT_PROPERTY_ID = null;
-        CURRENT_PROPERTY_NAME = 'Darby\'s Ridge';
+        CURRENT_PROPERTY_NAME = getPropertyConfig().displayName || "Darby's Ridge";
         return null;
       }
-    }
-
-    function applyPropertyBranding(){
-      document.title = `${CURRENT_PROPERTY_NAME} Staging`;
-
-      const homeLogo = document.getElementById('homeLogo');
-      const homeTagline = document.getElementById('homeTagline');
-      const socialTitle = document.getElementById('socialTitle');
-      const guideLabelTop = document.getElementById('guideLabelTop');
-
-      if(homeLogo) homeLogo.textContent = CURRENT_PROPERTY_NAME;
-      if(homeTagline) homeTagline.textContent = `${CURRENT_PROPERTY_NAME} • Staging`;
-      if(socialTitle) socialTitle.textContent = `Follow ${CURRENT_PROPERTY_NAME}`;
-      if(guideLabelTop) guideLabelTop.textContent = CURRENT_PROPERTY_NAME.toUpperCase();
     }
 
     async function getSectionContent(section){
@@ -1549,13 +1904,13 @@ Sweep entry and do final walkthrough`
 
         if(error){
           console.error(error);
-          return defaultContent[section] || '';
+          return getDefaultContent(section);
         }
 
-        return String(data?.value ?? defaultContent[section] ?? '');
+        return String(data?.value ?? getDefaultContent(section));
       } catch(e){
         console.error(e);
-        return defaultContent[section] || '';
+        return getDefaultContent(section);
       }
     }
 
@@ -2453,7 +2808,7 @@ Sweep entry and do final walkthrough`
               property_id: CURRENT_PROPERTY_ID,
               section,
               section_key: contentKey(section),
-              value: defaultContent[section] || ''
+              value: getDefaultContent(section)
             }]);
 
           if(insertError){
