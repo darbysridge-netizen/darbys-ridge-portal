@@ -1364,27 +1364,55 @@ Sweep entry and do final walkthrough`
     }
 
     async function submitRequestToBook(){
-      const name = document.getElementById('requestName').value.trim();
-      const phone = document.getElementById('requestPhone').value.trim();
-      const arrival = document.getElementById('requestArrival').value.trim();
-      const departure = document.getElementById('requestDeparture').value.trim();
-      const guests = document.getElementById('requestGuests').value.trim();
-      const notes = document.getElementById('requestNotes').value.trim();
-      document.getElementById('requestBookSuccess').style.display = 'none';
-      if(!name || !arrival || !departure){ alert('Please fill in name, arrival date, and departure date.'); return; }
-      const { error } = await supabaseClient.from(BOOKING_REQUESTS_TABLE).insert([
-  { property_key: PROPERTY_KEY, name, phone, arrival, departure, guests, notes }
-])
-      if(error){ alert('Something went wrong saving request.'); return; }
-      document.getElementById('requestName').value = '';
-      document.getElementById('requestPhone').value = '';
-      document.getElementById('requestArrival').value = '';
-      document.getElementById('requestDeparture').value = '';
-      document.getElementById('requestGuests').value = '';
-      document.getElementById('requestNotes').value = '';
-      document.getElementById('requestBookSuccess').style.display = 'block';
-      await renderOwnerDashboard();
-    }
+  const name = document.getElementById('requestName').value.trim();
+  const phone = document.getElementById('requestPhone').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+  const notes = document.getElementById('requestNotes').value.trim();
+
+  document.getElementById('requestBookSuccess').style.display = 'none';
+
+  if(!name || !arrival || !departure){
+    alert('Please fill in name, arrival date, and departure date.');
+    return;
+  }
+
+  const payload = {
+    property_key: PROPERTY_KEY,
+    name,
+    phone,
+    arrival,
+    departure,
+    guests,
+    notes
+  };
+
+  console.log('BOOKING PAYLOAD:', payload);
+
+  const { data, error } = await supabaseClient
+    .from(BOOKING_REQUESTS_TABLE)
+    .insert([payload])
+    .select();
+
+  console.log('BOOKING RESPONSE DATA:', data);
+  console.log('BOOKING RESPONSE ERROR:', error);
+
+  if(error){
+    alert(`Booking save failed: ${error.message}`);
+    return;
+  }
+
+  document.getElementById('requestName').value = '';
+  document.getElementById('requestPhone').value = '';
+  document.getElementById('requestArrival').value = '';
+  document.getElementById('requestDeparture').value = '';
+  document.getElementById('requestGuests').value = '';
+  document.getElementById('requestNotes').value = '';
+
+  document.getElementById('requestBookSuccess').style.display = 'block';
+  await renderOwnerDashboard();
+}
 
     async function loadCalendar(){
       const status = document.getElementById('calendarStatus');
