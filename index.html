@@ -563,7 +563,8 @@
       text-align:center;
     }
 
-    .open-guide-btn{
+    .open-guide-btn,
+    .link-btn{
       display:inline-block;
       padding:14px 22px;
       background:#445b49;
@@ -571,6 +572,16 @@
       border-radius:12px;
       text-decoration:none;
       font-weight:600;
+      border:none;
+      text-align:center;
+      box-sizing:border-box;
+    }
+
+    .link-btn.secondary{
+      background:#d8c3aa;
+      color:#3c2c1f;
+      margin-top:12px;
+      width:100%;
     }
 
     .essentials-panel{
@@ -633,32 +644,32 @@
       color:#3c2c1f;
     }
 
-    .dash-list{
+    .checkmark-list{
       margin:0;
       padding:0;
       list-style:none;
     }
 
-    .dash-list li{
+    .checkmark-list li{
       position:relative;
-      padding-left:16px;
+      padding-left:24px;
       margin-bottom:10px;
       line-height:1.6;
       font-size:15px;
       color:#4f3d2f;
     }
 
-    .dash-list li:last-child{
+    .checkmark-list li:last-child{
       margin-bottom:0;
     }
 
-    .dash-list li::before{
-      content:"-";
+    .checkmark-list li::before{
+      content:"✓";
       position:absolute;
       left:0;
       top:0;
-      color:#3c2c1f;
-      font-weight:600;
+      color:#445b49;
+      font-weight:700;
     }
 
     .favorites-list{
@@ -856,6 +867,52 @@
       background:#ddd;
     }
 
+    .owner-gallery-strip{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      padding-bottom:6px;
+      margin-top:8px;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .owner-gallery-strip .submission-card{
+      min-width:180px;
+      max-width:180px;
+      flex:0 0 180px;
+      padding:10px;
+      margin-top:0;
+    }
+
+    .owner-gallery-strip .owner-media-thumb{
+      max-width:none;
+      margin-bottom:8px;
+    }
+
+    .owner-gallery-strip .owner-media-thumb img,
+    .owner-gallery-strip .owner-media-thumb video{
+      height:120px;
+    }
+
+    .request-note{
+      margin-top:0;
+      margin-bottom:14px;
+    }
+
+    .map-note{
+      margin-top:10px;
+      font-size:12px;
+      color:#7a6553;
+    }
+
+    .button-stack button{
+      margin-top:12px;
+    }
+
+    .button-stack button:first-child{
+      margin-top:0;
+    }
+
     @media (max-width: 768px){
       .pdf-frame{
         height:85vh;
@@ -872,7 +929,7 @@
 <body>
 
   <div id="home" class="phone">
-    <div class="hero">
+    <div class="hero" id="heroSection">
       <div class="hero-text">
         <h1 class="logo">Darby's Ridge</h1>
         <div class="tagline">Your Blue Ridge Escape</div>
@@ -887,7 +944,7 @@
 
       <div class="card-grid">
         <div class="menu-card" onclick="showPage('guidebook')">
-          <img src="cabin-exterior.jpg" alt="">
+          <img id="imgHomeGuide" src="cabin-exterior.jpg" alt="">
           <div class="menu-label">
             <span>DARBY'S RIDGE</span>
             <strong>Guest Guide</strong>
@@ -895,7 +952,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('info')">
-          <img src="essentials.jpg" alt="">
+          <img id="imgHomeInfo" src="essentials.jpg" alt="">
           <div class="menu-label">
             <span>STAY DETAILS</span>
             <strong>WiFi + Essentials</strong>
@@ -903,7 +960,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('local')">
-          <img src="local.jpg" alt="">
+          <img id="imgHomeLocal" src="local.jpg" alt="">
           <div class="menu-label">
             <span>BLUE RIDGE</span>
             <strong>Guest Favorites</strong>
@@ -911,7 +968,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('trail')">
-          <img src="trail.jpg" alt="">
+          <img id="imgHomeTrail" src="trail.jpg" alt="">
           <div class="menu-label">
             <span>ADVENTURE</span>
             <strong>Trail to Lake</strong>
@@ -919,7 +976,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('guestMemories')">
-          <img src="outdoor.jpg" alt="">
+          <img id="imgHomeMemories" src="outdoor.jpg" alt="">
           <div class="menu-label">
             <span>GUEST MEMORIES</span>
             <strong>Photo + Video Gallery</strong>
@@ -927,7 +984,7 @@
         </div>
 
         <div class="menu-card" onclick="showPage('checkout')">
-          <img src="interior.jpg" alt="">
+          <img id="imgHomeCheckout" src="interior.jpg" alt="">
           <div class="menu-label">
             <span>BEFORE YOU GO</span>
             <strong>Checkout</strong>
@@ -935,7 +992,7 @@
         </div>
 
         <div class="menu-card wide-card" onclick="showPage('requestToBook')">
-          <img src="mountains.jpg" alt="">
+          <img id="imgHomeRequest" src="mountains.jpg" alt="">
           <div class="menu-label">
             <span>RETURN STAY</span>
             <strong>Request to Book Again</strong>
@@ -990,7 +1047,7 @@
   <div id="info" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="essentials.jpg" alt="">
+      <img id="imgBannerInfo" src="essentials.jpg" alt="">
       <div class="page-banner-text">
         <strong>WiFi & Cabin Essentials</strong>
         <span>Everything you need for a smooth and cozy stay at Darby's Ridge.</span>
@@ -1002,7 +1059,7 @@
   <div id="local" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="local.jpg" alt="">
+      <img id="imgBannerLocal" src="local.jpg" alt="">
       <div class="page-banner-text">
         <strong>Blue Ridge Guest Favorites</strong>
         <span>A few of our favorite spots to eat, explore, and enjoy the area.</span>
@@ -1010,13 +1067,14 @@
     </div>
     <div class="panel">
       <div id="localContent"></div>
+      <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
     </div>
   </div>
 
   <div id="trail" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="trail.jpg" alt="">
+      <img id="imgBannerTrail" src="trail.jpg" alt="">
       <div class="page-banner-text">
         <strong>Trail to Lake</strong>
         <span>Quick details before you head out toward the trail and Lake Blue Ridge.</span>
@@ -1024,6 +1082,7 @@
     </div>
     <div class="panel">
       <div id="trailContent"></div>
+      <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
     </div>
   </div>
 
@@ -1063,7 +1122,7 @@
   <div id="checkout" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <div class="page-banner">
-      <img src="interior.jpg" alt="">
+      <img id="imgBannerCheckout" src="interior.jpg" alt="">
       <div class="page-banner-text">
         <strong>Before You Go</strong>
         <span>A quick checkout checklist to help us get ready for the next guests.</span>
@@ -1077,6 +1136,12 @@
     <h1>Request to Book Again</h1>
 
     <div class="panel">
+      <p class="small-note request-note">
+        Returning guests are welcome to submit a stay request here. You can also book directly on Airbnb using the button below, and we’ll send an updated returning guest discount quote when available.
+      </p>
+
+      <a id="airbnbBookLink" class="link-btn secondary hidden" href="#" target="_blank" rel="noopener noreferrer">Book on Airbnb</a>
+
       <label for="requestName">Name</label>
       <input id="requestName" type="text" placeholder="Your name">
 
@@ -1129,16 +1194,18 @@
     <h1>Team Portal</h1>
 
     <div class="panel">
-      <h3>Turnover Checklist</h3>
-      <ul class="check-list" id="teamChecklistDisplay"></ul>
+      <h3>Operations</h3>
+      <div class="button-stack">
+        <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
+        <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')">Supplies Needed</button>
+        <button class="action-btn" type="button" onclick="showPage('maintenance')">Maintenance Log</button>
+        <button class="action-btn secondary-btn" type="button" onclick="showPage('turnover')">Turnover Submission</button>
+      </div>
     </div>
 
     <div class="panel">
-      <h3>Operations</h3>
-      <button class="action-btn" type="button" onclick="showPage('cleanings'); loadCalendar();">Upcoming Cleanings</button>
-      <button class="action-btn tertiary-btn" type="button" onclick="showPage('supplies')" style="margin-top:12px;">Supplies Needed</button>
-      <button class="action-btn" type="button" onclick="showPage('maintenance')" style="margin-top:12px;">Maintenance Log</button>
-      <button class="action-btn secondary-btn" type="button" onclick="showPage('turnover')" style="margin-top:12px;">Turnover Submission</button>
+      <h3>Turnover Checklist</h3>
+      <ul class="check-list" id="teamChecklistDisplay"></ul>
     </div>
   </div>
 
@@ -1224,7 +1291,7 @@
     <h1>Owner Dashboard</h1>
 
     <div class="panel">
-      <h3>Today’s Snapshot</h3>
+      <h3>Snapshot</h3>
       <div id="ownerDashboardCounts"></div>
     </div>
 
@@ -1249,6 +1316,31 @@
     <div class="panel">
       <h3>Recent Turnover Submissions</h3>
       <div id="ownerTurnoverEntries" class="small-note">No turnover submissions yet.</div>
+    </div>
+
+    <div class="panel">
+      <h3>Edit Photos + Booking Link</h3>
+
+      <label for="ownerImageSelect">Choose Image or Link</label>
+      <select id="ownerImageSelect" onchange="loadOwnerImageEditor()">
+        <option value="hero_image">Home Hero Image</option>
+        <option value="home_guide_image">Home Card — Guest Guide</option>
+        <option value="home_info_image">Home Card — WiFi + Essentials</option>
+        <option value="home_local_image">Home Card — Guest Favorites</option>
+        <option value="home_trail_image">Home Card — Trail to Lake</option>
+        <option value="home_memories_image">Home Card — Guest Memories</option>
+        <option value="home_checkout_image">Home Card — Checkout</option>
+        <option value="home_request_image">Home Card — Request to Book</option>
+        <option value="banner_info_image">Page Banner — WiFi + Essentials</option>
+        <option value="banner_local_image">Page Banner — Guest Favorites</option>
+        <option value="banner_trail_image">Page Banner — Trail to Lake</option>
+        <option value="banner_checkout_image">Page Banner — Checkout</option>
+        <option value="book_again_airbnb_link">Book Again — Airbnb Link</option>
+      </select>
+
+      <input id="ownerImageEditor" type="text" placeholder="Enter image URL, local file name, or Airbnb link">
+      <button class="action-btn center-button" type="button" onclick="saveOwnerImageSetting()">Save Photo / Link</button>
+      <div id="ownerImageSaveMessage" class="form-message form-success">Photo or link saved.</div>
     </div>
 
     <div class="panel">
@@ -1347,7 +1439,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
           <p>
             <a href="https://harvestonmain.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1356,7 +1448,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>Beautiful riverfront dining with mountain views and a scenic drive getting there.</p>
           <p>
             <a href="https://www.toccoariversiderestaurant.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1365,7 +1457,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>A historic home turned into a stylish spot for cocktails, brunch, and dinner.</p>
           <p>
             <a href="https://blacksheepblueridge.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1374,7 +1466,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>A casual local favorite for burgers, drinks, and a laid-back Blue Ridge vibe.</p>
           <p>
             <a href="https://fightingtowntavern.webflow.io/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Fightingtown+Tavern+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Fightingtown+Tavern+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1382,7 +1474,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <h3>Lake Blue Ridge</h3>
           <p>A beautiful mountain lake for boating, fishing, swimming, or just relaxing by the water.</p>
           <p>
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1391,7 +1483,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>A classic Blue Ridge experience with mountain views and a fun day-trip feel.</p>
           <p>
             <a href="https://brscenic.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Blue+Ridge+Scenic+Railway+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Blue+Ridge+Scenic+Railway+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1400,7 +1492,7 @@ Please refer to the guest guide for additional house information, tips for your 
           <p>A Blue Ridge favorite for baked goods, cider, shopping, and seasonal fruit picking.</p>
           <p>
             <a href="https://mercier-orchards.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Mercier+Orchards+Blue+Ridge+GA" target="_blank">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Mercier+Orchards+Blue+Ridge+GA">Map</a>
           </p>
         </div>
 
@@ -1426,8 +1518,8 @@ Please refer to the guest guide for additional house information, tips for your 
         <div class="favorite-item">
           <h3>Helpful Links</h3>
           <p>
-            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA" target="_blank">Trail Map</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA" target="_blank">Lake Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Green+Mountain+Trail+Blue+Ridge+GA">Trail Map</a> |
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA">Lake Map</a>
           </p>
         </div>
 
@@ -1455,7 +1547,21 @@ Check refrigerator and remove leftover items
 Restock paper goods, soaps, and coffee items
 Check hot tub cover and outdoor areas
 Sweep entry and check decks
-Take final walkthrough photos`
+Take final walkthrough photos`,
+
+      hero_image: `hero.jpg`,
+      home_guide_image: `cabin-exterior.jpg`,
+      home_info_image: `essentials.jpg`,
+      home_local_image: `local.jpg`,
+      home_trail_image: `trail.jpg`,
+      home_memories_image: `outdoor.jpg`,
+      home_checkout_image: `interior.jpg`,
+      home_request_image: `mountains.jpg`,
+      banner_info_image: `essentials.jpg`,
+      banner_local_image: `local.jpg`,
+      banner_trail_image: `trail.jpg`,
+      banner_checkout_image: `interior.jpg`,
+      book_again_airbnb_link: ``
     };
 
     function escapeHtml(text){
@@ -1501,7 +1607,7 @@ Take final walkthrough photos`
       return `
         <div class="checkout-panel">
           <h3 class="checkout-title">${escapeHtml(title)}</h3>
-          <ul class="dash-list">
+          <ul class="checkmark-list">
             ${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
           </ul>
         </div>
@@ -1564,6 +1670,75 @@ Take final walkthrough photos`
       return raw.split('\n').map(item => item.trim()).filter(Boolean);
     }
 
+    function applyMapLinkBehavior(containerId){
+      const container = document.getElementById(containerId);
+      if(!container) return;
+
+      const links = container.querySelectorAll('a[href]');
+      links.forEach(link => {
+        const href = String(link.getAttribute('href') || '').toLowerCase();
+        const isMapLink =
+          href.includes('google.com/maps') ||
+          href.includes('google.com/maps/search') ||
+          href.includes('api=1&query') ||
+          href.includes('maps.apple.com');
+
+        if(isMapLink){
+          link.setAttribute('target', '_self');
+          link.removeAttribute('rel');
+        }
+      });
+    }
+
+    async function renderDynamicImages(){
+      const keys = [
+        'hero_image',
+        'home_guide_image',
+        'home_info_image',
+        'home_local_image',
+        'home_trail_image',
+        'home_memories_image',
+        'home_checkout_image',
+        'home_request_image',
+        'banner_info_image',
+        'banner_local_image',
+        'banner_trail_image',
+        'banner_checkout_image',
+        'book_again_airbnb_link'
+      ];
+
+      const values = {};
+      for(const key of keys){
+        values[key] = await getSectionContent(key);
+      }
+
+      document.getElementById('heroSection').style.backgroundImage = `url("${values.hero_image || defaultContent.hero_image}")`;
+
+      document.getElementById('imgHomeGuide').src = values.home_guide_image || defaultContent.home_guide_image;
+      document.getElementById('imgHomeInfo').src = values.home_info_image || defaultContent.home_info_image;
+      document.getElementById('imgHomeLocal').src = values.home_local_image || defaultContent.home_local_image;
+      document.getElementById('imgHomeTrail').src = values.home_trail_image || defaultContent.home_trail_image;
+      document.getElementById('imgHomeMemories').src = values.home_memories_image || defaultContent.home_memories_image;
+      document.getElementById('imgHomeCheckout').src = values.home_checkout_image || defaultContent.home_checkout_image;
+      document.getElementById('imgHomeRequest').src = values.home_request_image || defaultContent.home_request_image;
+
+      document.getElementById('imgBannerInfo').src = values.banner_info_image || defaultContent.banner_info_image;
+      document.getElementById('imgBannerLocal').src = values.banner_local_image || defaultContent.banner_local_image;
+      document.getElementById('imgBannerTrail').src = values.banner_trail_image || defaultContent.banner_trail_image;
+      document.getElementById('imgBannerCheckout').src = values.banner_checkout_image || defaultContent.banner_checkout_image;
+
+      const airbnbLink = document.getElementById('airbnbBookLink');
+      const bookingUrl = String(values.book_again_airbnb_link || '').trim();
+
+      if(bookingUrl){
+        airbnbLink.href = bookingUrl;
+        airbnbLink.classList.remove('hidden');
+      } else {
+        airbnbLink.href = '#';
+        airbnbLink.classList.add('hidden');
+      }
+    }
+
     async function renderEditablePages(){
       const info = await getSectionContent('info');
       const local = await getSectionContent('local');
@@ -1577,11 +1752,16 @@ Take final walkthrough photos`
       document.getElementById('photosContent').innerText = photos;
       document.getElementById('checkoutContent').innerHTML = formatCheckoutContent(checkout);
 
+      applyMapLinkBehavior('localContent');
+      applyMapLinkBehavior('trailContent');
+
       const checklistEl = document.getElementById('teamChecklistDisplay');
       if(checklistEl){
         const items = await getChecklistItems();
         checklistEl.innerHTML = items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
       }
+
+      await renderDynamicImages();
     }
 
     async function loadOwnerEditor(){
@@ -1601,6 +1781,26 @@ Take final walkthrough photos`
       } catch(e){
         console.error(e);
         alert('Could not save changes.');
+      }
+    }
+
+    async function loadOwnerImageEditor(){
+      const key = document.getElementById('ownerImageSelect').value;
+      document.getElementById('ownerImageEditor').value = await getSectionContent(key);
+      document.getElementById('ownerImageSaveMessage').style.display = 'none';
+    }
+
+    async function saveOwnerImageSetting(){
+      const key = document.getElementById('ownerImageSelect').value;
+      const value = document.getElementById('ownerImageEditor').value.trim();
+
+      try{
+        await saveSectionContent(key, value);
+        await renderDynamicImages();
+        document.getElementById('ownerImageSaveMessage').style.display = 'block';
+      } catch(e){
+        console.error(e);
+        alert('Could not save photo or link.');
       }
     }
 
@@ -1627,6 +1827,7 @@ Take final walkthrough photos`
       if (page === 'owner') {
         renderOwnerDashboard();
         loadOwnerEditor();
+        loadOwnerImageEditor();
       }
     }
 
@@ -1924,18 +2125,22 @@ Take final walkthrough photos`
           return;
         }
 
-        container.innerHTML = data.map(item => `
-          <div class="submission-card">
-            <div class="owner-media-thumb">
-              ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
-            </div>
-            <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
-            <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
-            <div class="admin-actions">
-              <button class="mini-delete" type="button" onclick="deleteGuestMedia(${item.id}, '${escapeHtml(item.image_path || '')}')">Delete</button>
-            </div>
+        container.innerHTML = `
+          <div class="owner-gallery-strip">
+            ${data.map(item => `
+              <div class="submission-card">
+                <div class="owner-media-thumb">
+                  ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
+                </div>
+                <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
+                <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
+                <div class="admin-actions">
+                  <button class="mini-delete" type="button" onclick="deleteGuestMedia(${item.id}, '${escapeHtml(item.image_path || '')}')">Delete</button>
+                </div>
+              </div>
+            `).join('')}
           </div>
-        `).join('');
+        `;
       } catch(e){
         console.error(e);
         container.innerHTML = '<div class="small-note">No guest media yet.</div>';
@@ -2414,7 +2619,22 @@ Take final walkthrough photos`
     }
 
     async function seedDefaultContentIfNeeded(){
-      const sections = ['info','local','trail','photos','checkout','checklist'];
+      const sections = [
+        'info','local','trail','photos','checkout','checklist',
+        'hero_image',
+        'home_guide_image',
+        'home_info_image',
+        'home_local_image',
+        'home_trail_image',
+        'home_memories_image',
+        'home_checkout_image',
+        'home_request_image',
+        'banner_info_image',
+        'banner_local_image',
+        'banner_trail_image',
+        'banner_checkout_image',
+        'book_again_airbnb_link'
+      ];
 
       for(const section of sections){
         const { data, error } = await supabaseClient
@@ -2449,6 +2669,8 @@ Take final walkthrough photos`
       await renderMaintenanceList();
       await renderGuestGallery();
       await renderOwnerDashboard();
+      await loadOwnerEditor();
+      await loadOwnerImageEditor();
     });
   </script>
 </body>
