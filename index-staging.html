@@ -1372,7 +1372,9 @@ Sweep entry and do final walkthrough`
       const notes = document.getElementById('requestNotes').value.trim();
       document.getElementById('requestBookSuccess').style.display = 'none';
       if(!name || !arrival || !departure){ alert('Please fill in name, arrival date, and departure date.'); return; }
-      const { error } = await supabaseClient.from(BOOKING_REQUESTS_TABLE).insert([{ property_key: PROPERTY_KEY, property_id: CURRENT_PROPERTY_ID, name, phone, arrival, departure, guests, notes }]);
+      const { error } = await supabaseClient.from(BOOKING_REQUESTS_TABLE).insert([
+  { property_key: PROPERTY_KEY, name, phone, arrival, departure, guests, notes }
+])
       if(error){ alert('Something went wrong saving request.'); return; }
       document.getElementById('requestName').value = '';
       document.getElementById('requestPhone').value = '';
