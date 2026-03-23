@@ -95,6 +95,8 @@
       position:relative;
       cursor:pointer;
       box-shadow:0 8px 18px rgba(0,0,0,.15);
+      transition:transform .15s ease, box-shadow .15s ease;
+      -webkit-tap-highlight-color:transparent;
     }
 
     .menu-card img{
@@ -102,6 +104,7 @@
       height:100%;
       object-fit:cover;
       display:block;
+      transition:transform .18s ease, filter .18s ease;
     }
 
     .menu-card:after{
@@ -109,6 +112,21 @@
       position:absolute;
       inset:0;
       background:linear-gradient(to top, rgba(0,0,0,.68), rgba(0,0,0,.08));
+      transition:background .18s ease;
+    }
+
+    .menu-card:active{
+      transform:scale(.985);
+      box-shadow:0 6px 14px rgba(0,0,0,.18);
+    }
+
+    .menu-card:active img{
+      transform:scale(1.02);
+      filter:brightness(.82);
+    }
+
+    .menu-card:active:after{
+      background:linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.22));
     }
 
     .menu-label{
@@ -166,6 +184,7 @@
       border-radius:20px;
       box-shadow:0 8px 18px rgba(0,0,0,.06);
       border:1px solid #eadbc8;
+      text-align:center;
     }
 
     .social-kicker{
@@ -175,6 +194,7 @@
       color:#8f6a4c;
       font-weight:700;
       margin-bottom:8px;
+      text-align:center;
     }
 
     .social h3{
@@ -182,6 +202,7 @@
       margin:0 0 8px;
       font-size:24px;
       color:#3c2c1f;
+      text-align:center;
     }
 
     .social p{
@@ -189,6 +210,7 @@
       line-height:1.55;
       color:#5b4636;
       font-size:14px;
+      text-align:center;
     }
 
     .social-links{
@@ -208,13 +230,21 @@
       color:#3c2c1f;
       border:1px solid #c9b299;
       box-shadow:0 4px 10px rgba(0,0,0,.04);
-      transition:transform .15s ease, box-shadow .15s ease;
+      transition:transform .15s ease, box-shadow .15s ease, background .15s ease, filter .15s ease;
+      -webkit-tap-highlight-color:transparent;
     }
 
     .social-link:hover{
       transform:translateY(-1px);
       box-shadow:0 8px 16px rgba(0,0,0,.08);
       background:#ceb597;
+    }
+
+    .social-link:active{
+      background:#bfa282;
+      box-shadow:0 4px 10px rgba(0,0,0,.08);
+      transform:scale(.99);
+      filter:brightness(.95);
     }
 
     .social-icon{
@@ -234,6 +264,7 @@
       display:flex;
       flex-direction:column;
       gap:2px;
+      text-align:left;
     }
 
     .social-text strong{
@@ -271,14 +302,29 @@
       font-size:13px;
       font-weight:600;
       cursor:pointer;
+      transition:background .15s ease, color .15s ease, transform .15s ease;
+      border-radius:20px;
+      padding:8px 12px;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .bottom-nav button:active{
+      background:rgba(60,44,31,.12);
+      color:#2f241b;
+      transform:scale(.98);
     }
 
     .bottom-home{
       background:#445b49 !important;
       color:white !important;
       border-radius:30px;
-      padding:10px 20px;
+      padding:10px 20px !important;
       font-size:14px !important;
+    }
+
+    .bottom-home:active{
+      background:#314136 !important;
+      color:white !important;
     }
 
     .hidden{
@@ -387,6 +433,14 @@
       cursor:pointer;
       text-align:center;
       box-sizing:border-box;
+      transition:background .15s ease, transform .15s ease, filter .15s ease;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    button.action-btn:active{
+      background:#314136;
+      transform:scale(.99);
+      filter:brightness(.95);
     }
 
     button.secondary-btn{
@@ -394,9 +448,19 @@
       color:#3c2c1f;
     }
 
+    button.secondary-btn:active{
+      background:#d8c3aa;
+      color:#2f241b;
+    }
+
     button.tertiary-btn{
       background:#d8c3aa;
       color:#3c2c1f;
+    }
+
+    button.tertiary-btn:active{
+      background:#c9b299;
+      color:#2f241b;
     }
 
     input, select, textarea{
@@ -575,6 +639,15 @@
       border:none;
       text-align:center;
       box-sizing:border-box;
+      transition:background .15s ease, transform .15s ease, filter .15s ease;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .open-guide-btn:active,
+    .link-btn:active{
+      background:#314136;
+      transform:scale(.99);
+      filter:brightness(.95);
     }
 
     .link-btn.secondary{
@@ -582,6 +655,11 @@
       color:#3c2c1f;
       margin-top:12px;
       width:100%;
+    }
+
+    .link-btn.secondary:active{
+      background:#c9b299;
+      color:#2f241b;
     }
 
     .essentials-panel{
@@ -1002,8 +1080,8 @@
       </div>
 
       <div class="social">
-        <div class="social-kicker">STAY CONNECTED</div>
-        <h3>Follow Darby's Ridge</h3>
+        <div class="social-kicker">GET AND STAY CONNECTED</div>
+        <h3>Follow us Darby's Ridge</h3>
         <p>See cabin moments, Blue Ridge favorites, and updates from the ridge.</p>
 
         <div class="social-links">
@@ -1215,7 +1293,7 @@
 
     <div class="panel">
       <h3>Airbnb Calendar</h3>
-      <p class="small-note">Pulled from your Airbnb calendar link through Vercel.</p>
+      <p class="small-note">Upcoming booking calendar.</p>
       <div id="calendarStatus" class="small-note">Loading calendar...</div>
       <button class="action-btn tertiary-btn" type="button" onclick="loadCalendar()" style="margin-top:12px;">Refresh Calendar</button>
     </div>
