@@ -331,14 +331,14 @@
       display:none !important;
     }
 
-    .page{
-      max-width:430px;
-      margin:auto;
-      padding:22px;
-      background:#efe4d3;
-      min-height:100vh;
-      padding-bottom:110px;
-    }
+   .panel{
+  background:#f2e5d4;
+  padding:18px;
+  border-radius:16px;
+  margin-top:14px;
+  box-shadow:0 6px 14px rgba(0,0,0,.05);
+  border:1px solid #e2cfb8;
+} 
 
     .page h1{
       font-family:'Playfair Display',serif;
@@ -389,12 +389,12 @@
       display:block;
     }
 
-    .page-banner:after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.10));
-    }
+   .page-banner:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.68), rgba(0,0,0,.18));
+}
 
     .page-banner-text{
       position:absolute;
@@ -1037,21 +1037,21 @@
           </div>
         </div>
 
-        <div class="menu-card" onclick="showPage('local')">
-          <img id="imgHomeLocal" src="local.jpg" alt="">
-          <div class="menu-label">
-            <span>BLUE RIDGE</span>
-            <strong>Guest Favorites</strong>
-          </div>
-        </div>
+      <div class="menu-card" onclick="showPage('local')">
+  <img id="imgHomeLocal" src="local.jpg" alt="">
+  <div class="menu-label">
+    <span>BLUE RIDGE</span>
+    <strong>Plan Your Perfect Day</strong>
+  </div>
+</div>  
 
-        <div class="menu-card" onclick="showPage('trail')">
-          <img id="imgHomeTrail" src="trail.jpg" alt="">
-          <div class="menu-label">
-            <span>ADVENTURE</span>
-            <strong>Trail to Lake</strong>
-          </div>
-        </div>
+   <div class="menu-card" onclick="showPage('trail')">
+  <img id="imgHomeTrail" src="trail.jpg" alt="">
+  <div class="menu-label">
+    <span>GREEN MOUNTAIN TRAIL</span>
+    <strong>Trail Access</strong>
+  </div>
+</div>     
 
         <div class="menu-card" onclick="showPage('guestMemories')">
           <img id="imgHomeMemories" src="outdoor.jpg" alt="">
@@ -1069,14 +1069,14 @@
           </div>
         </div>
 
-        <div class="menu-card wide-card" onclick="showPage('requestToBook')">
-          <img id="imgHomeRequest" src="mountains.jpg" alt="">
-          <div class="menu-label">
-            <span>RETURN STAY</span>
-            <strong>Request to Book Again</strong>
-            <div class="request-subtext">Returning guests request your next stay here</div>
-          </div>
-        </div>
+    <div class="menu-card wide-card" onclick="showPage('requestToBook')">
+  <img id="imgHomeRequest" src="mountains.jpg" alt="">
+  <div class="menu-label">
+    <span>RETURNING GUESTS</span>
+    <strong>Unlock Returning Guest Discounts</strong>
+    <div class="request-subtext">Submit your stay request and we’ll send back an updated discounted quote</div>
+  </div>
+</div>    
       </div>
 
       <div class="social">
@@ -1134,30 +1134,30 @@
     <div id="infoContent"></div>
   </div>
 
-  <div id="local" class="hidden page">
-    <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <div class="page-banner">
-      <img id="imgBannerLocal" src="local.jpg" alt="">
-      <div class="page-banner-text">
-        <strong>Blue Ridge Guest Favorites</strong>
-        <span>A few of our favorite spots to eat, explore, and enjoy the area.</span>
-      </div>
+ <div id="local" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <div class="page-banner">
+    <img id="imgBannerLocal" src="local.jpg" alt="">
+    <div class="page-banner-text">
+      <strong>Plan Your Perfect Blue Ridge Day</strong>
+      <span>Choose the kind of day you want and explore our favorite ideas for couples, families, and adventure lovers.</span>
     </div>
+  </div>
     <div class="panel">
       <div id="localContent"></div>
       <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
     </div>
   </div>
 
-  <div id="trail" class="hidden page">
-    <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <div class="page-banner">
-      <img id="imgBannerTrail" src="trail.jpg" alt="">
-      <div class="page-banner-text">
-        <strong>Trail to Lake</strong>
-        <span>Quick details before you head out toward the trail and Lake Blue Ridge.</span>
-      </div>
+ <div id="trail" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <div class="page-banner">
+    <img id="imgBannerTrail" src="trail.jpg" alt="">
+    <div class="page-banner-text">
+      <strong>Green Mountain Trail Access</strong>
+      <span>One of the best parts of Darby’s Ridge is trail access from the property with a route toward Lake Blue Ridge.</span>
     </div>
+  </div>
     <div class="panel">
       <div id="trailContent"></div>
       <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
@@ -1209,39 +1209,45 @@
     <div id="checkoutContent"></div>
   </div>
 
-  <div id="requestToBook" class="hidden page">
-    <button class="back" type="button" onclick="showPage('home')">← Back</button>
-    <h1>Request to Book Again</h1>
+ <div id="requestToBook" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <h1>Unlock Returning Guest Discounts</h1>
 
-    <div class="panel">
-      <p class="small-note request-note">
-        Returning guests are welcome to submit a stay request here. You can also book directly on Airbnb using the button below, and we’ll send an updated returning guest discount quote when available.
-      </p>
+  <div class="panel">
+    <p class="small-note request-note">
+      Submit your request for your returning guest discount here. If you prefer to book through Airbnb, include the Airbnb listing link and your requested dates below. We’ll send back an updated quote with your discount before you finalize booking.
+    </p>
 
-      <a id="airbnbBookLink" class="link-btn secondary hidden" href="#" target="_blank" rel="noopener noreferrer">Book on Airbnb</a>
+    <a id="airbnbBookLink" class="link-btn secondary hidden" href="#" target="_blank" rel="noopener noreferrer">Open Airbnb Listing</a>
 
-      <label for="requestName">Name</label>
-      <input id="requestName" type="text" placeholder="Your name">
+    <label for="requestAirbnbLink">Airbnb Listing Link</label>
+    <input id="requestAirbnbLink" type="text" placeholder="Paste Airbnb listing link here">
 
-      <label for="requestPhone">Phone Number</label>
-      <input id="requestPhone" type="tel" placeholder="Best phone number">
+    <label for="requestName">Name</label>
+    <input id="requestName" type="text" placeholder="Your name">
 
-      <label for="requestArrival">Preferred Arrival Date</label>
-      <input id="requestArrival" type="text" placeholder="Enter date">
+    <label for="requestPhone">Phone Number</label>
+    <input id="requestPhone" type="tel" placeholder="Best phone number">
 
-      <label for="requestDeparture">Preferred Departure Date</label>
-      <input id="requestDeparture" type="text" placeholder="Enter date">
+    <label for="requestPreviousStay">Previous Stay Dates</label>
+    <input id="requestPreviousStay" type="text" placeholder="Example: June 12–15, 2025">
 
-      <label for="requestGuests">Number of Guests</label>
-      <input id="requestGuests" type="text" placeholder="How many guests?">
+    <label for="requestArrival">Preferred Arrival Date</label>
+    <input id="requestArrival" type="text" placeholder="Enter date">
 
-      <label for="requestNotes">Notes</label>
-      <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
+    <label for="requestDeparture">Preferred Departure Date</label>
+    <input id="requestDeparture" type="text" placeholder="Enter date">
 
-      <div id="requestBookSuccess" class="form-message form-success">Request submitted.</div>
-      <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Request</button>
-    </div>
+    <label for="requestGuests">Number of Guests</label>
+    <input id="requestGuests" type="text" placeholder="How many guests?">
+
+    <label for="requestNotes">Notes</label>
+    <textarea id="requestNotes" rows="5" placeholder="Anything you'd like us to know"></textarea>
+
+    <div id="requestBookSuccess" class="form-message form-success">Discount request submitted.</div>
+    <button class="action-btn center-button" type="button" onclick="submitRequestToBook()">Submit Discount Request</button>
   </div>
+</div> 
 
   <div id="login" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
@@ -1512,85 +1518,61 @@ Please refer to the guest guide for additional house information, tips for your 
 
       local: `<div class="favorites-list">
 
+       local: `<div class="favorites-list">
+
         <div class="favorite-item">
-          <h3>Harvest on Main</h3>
-          <p>Our go-to for a cozy, elevated dinner right in downtown Blue Ridge.</p>
+          <h3>Adventure Day</h3>
+          <p>Start with coffee at the cabin, spend the morning exploring the trail access from Darby’s Ridge, then head into Blue Ridge for lunch and an afternoon by the lake.</p>
           <p>
-            <a href="https://harvestonmain.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Harvest+on+Main+Blue+Ridge+GA">Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA">Lake Map</a>
           </p>
         </div>
 
         <div class="favorite-item">
-          <h3>Toccoa Riverside Restaurant</h3>
-          <p>Beautiful riverfront dining with mountain views and a scenic drive getting there.</p>
+          <h3>Romantic Day</h3>
+          <p>Sleep in, enjoy a slow morning on the deck, browse downtown Blue Ridge, and end the day with dinner at Harvest on Main or Black Sheep.</p>
           <p>
-            <a href="https://www.toccoariversiderestaurant.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Toccoa+Riverside+Restaurant+Blue+Ridge+GA">Map</a>
+            <a href="https://harvestonmain.com/" target="_blank">Harvest on Main</a> |
+            <a href="https://blacksheepblueridge.com/" target="_blank">Black Sheep</a>
           </p>
         </div>
 
         <div class="favorite-item">
-          <h3>Black Sheep Restaurant</h3>
-          <p>A historic home turned into a stylish spot for cocktails, brunch, and dinner.</p>
+          <h3>Family Day</h3>
+          <p>Ride the Blue Ridge Scenic Railway, stop by Mercier Orchards, grab treats, and come back to the cabin for game room time and a fire outside.</p>
           <p>
-            <a href="https://blacksheepblueridge.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Black+Sheep+Restaurant+Blue+Ridge+GA">Map</a>
+            <a href="https://brscenic.com/" target="_blank">Scenic Railway</a> |
+            <a href="https://mercier-orchards.com/" target="_blank">Mercier Orchards</a>
           </p>
         </div>
 
         <div class="favorite-item">
-          <h3>Fightingtown Tavern</h3>
-          <p>A casual local favorite for burgers, drinks, and a laid-back Blue Ridge vibe.</p>
-          <p>
-            <a href="https://fightingtowntavern.webflow.io/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Fightingtown+Tavern+Blue+Ridge+GA">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Lake Blue Ridge</h3>
-          <p>A beautiful mountain lake for boating, fishing, swimming, or just relaxing by the water.</p>
-          <p>
-            <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Blue Ridge Scenic Railway</h3>
-          <p>A classic Blue Ridge experience with mountain views and a fun day-trip feel.</p>
-          <p>
-            <a href="https://brscenic.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Blue+Ridge+Scenic+Railway+Blue+Ridge+GA">Map</a>
-          </p>
-        </div>
-
-        <div class="favorite-item">
-          <h3>Mercier Orchards</h3>
-          <p>A Blue Ridge favorite for baked goods, cider, shopping, and seasonal fruit picking.</p>
-          <p>
-            <a href="https://mercier-orchards.com/" target="_blank">Website</a> |
-            <a href="https://www.google.com/maps/search/?api=1&query=Mercier+Orchards+Blue+Ridge+GA">Map</a>
-          </p>
+          <h3>Relax Day</h3>
+          <p>Keep it easy with a slow cabin morning, coffee with a view, a short outing into town, and a cozy evening back at Darby’s Ridge.</p>
         </div>
 
       </div>`,
 
-      trail: `<div class="favorites-list">
+     trail: `<div class="favorites-list">
 
         <div class="favorite-item">
-          <h3>Green Mountain Trail Access</h3>
-          <p>Darby’s Ridge offers trail access right from the property, making it easy to step outside and begin your hike without having to drive anywhere first.</p>
+          <h3>Access From the Property</h3>
+          <p>One of the best parts of staying at Darby’s Ridge is access to the Green Mountain Trail system from the property, so you can begin your hike right from the cabin area.</p>
         </div>
 
         <div class="favorite-item">
-          <h3>Trail to Lake</h3>
-          <p>This trail system is a beautiful way to explore the mountain setting around the cabin and make your way toward the Lake Blue Ridge area. Trail conditions can vary depending on weather and recent rainfall.</p>
+          <h3>About the Trail System</h3>
+          <p>The trail system offers a scenic wooded mountain hike with natural terrain, changing elevation, and a route that leads toward Lake Blue Ridge. Conditions can vary depending on weather and recent rain.</p>
         </div>
 
         <div class="favorite-item">
-          <h3>What to Bring</h3>
-          <p>We recommend sturdy shoes, water, and your phone before heading out. Cell service can be limited in the mountains, so it’s best to hike prepared and use extra caution on uneven or slick sections.</p>
+          <h3>Directions + Distance</h3>
+          <p>Follow the property trail access path and continue toward the Green Mountain trail route leading in the direction of the lake. Plan for a moderate outdoor walk and allow extra time for stops, photos, and changing trail conditions.</p>
+        </div>
+
+        <div class="favorite-item">
+          <h3>Before You Head Out</h3>
+          <p>Wear sturdy shoes, bring water, and take your phone. Cell service can be limited in the mountains, so it’s best to hike during daylight and use extra caution on uneven or slick sections.</p>
         </div>
 
         <div class="favorite-item">
@@ -1600,6 +1582,8 @@ Please refer to the guest guide for additional house information, tips for your 
             <a href="https://www.google.com/maps/search/?api=1&query=Lake+Blue+Ridge+GA">Lake Map</a>
           </p>
         </div>
+
+      </div>`,
 
       </div>`,
 
@@ -2580,53 +2564,63 @@ Take final walkthrough photos`,
       }
     }
 
-    async function submitRequestToBook(){
-      if(!supabaseClient){
-        alert('App not ready yet — refresh and try again.');
-        return;
-      }
+   async function submitRequestToBook(){
+  if(!supabaseClient){
+    alert('App not ready yet — refresh and try again.');
+    return;
+  }
 
-      const name = document.getElementById('requestName').value.trim();
-      const phone = document.getElementById('requestPhone').value.trim();
-      const arrival = document.getElementById('requestArrival').value.trim();
-      const departure = document.getElementById('requestDeparture').value.trim();
-      const guests = document.getElementById('requestGuests').value.trim();
-      const notes = document.getElementById('requestNotes').value.trim();
+  const airbnbLink = document.getElementById('requestAirbnbLink').value.trim();
+  const name = document.getElementById('requestName').value.trim();
+  const phone = document.getElementById('requestPhone').value.trim();
+  const previousStay = document.getElementById('requestPreviousStay').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+  const notes = document.getElementById('requestNotes').value.trim();
 
-      document.getElementById('requestBookSuccess').style.display = 'none';
+  document.getElementById('requestBookSuccess').style.display = 'none';
 
-      if(!name || !arrival || !departure){
-        alert('Please fill in name, arrival date, and departure date.');
-        return;
-      }
+  if(!name || !arrival || !departure){
+    alert('Please fill in name, arrival date, and departure date.');
+    return;
+  }
 
-      try {
-        const { error } = await supabaseClient
-          .from('booking_requests')
-          .insert([
-            { name, phone, arrival, departure, guests, notes }
-          ]);
+  const combinedNotes = [
+    previousStay ? `Previous Stay Dates: ${previousStay}` : '',
+    airbnbLink ? `Airbnb Link: ${airbnbLink}` : '',
+    notes ? `Notes: ${notes}` : ''
+  ].filter(Boolean).join('\n');
 
-        if(error){
-          console.error(error);
-          alert('Something went wrong saving request.');
-          return;
-        }
+  try {
+    const { error } = await supabaseClient
+      .from('booking_requests')
+      .insert([
+        { name, phone, arrival, departure, guests, notes: combinedNotes }
+      ]);
 
-        document.getElementById('requestName').value = '';
-        document.getElementById('requestPhone').value = '';
-        document.getElementById('requestArrival').value = '';
-        document.getElementById('requestDeparture').value = '';
-        document.getElementById('requestGuests').value = '';
-        document.getElementById('requestNotes').value = '';
-
-        document.getElementById('requestBookSuccess').style.display = 'block';
-        await renderOwnerDashboard();
-      } catch (e) {
-        console.error(e);
-        alert('Unexpected error occurred.');
-      }
+    if(error){
+      console.error(error);
+      alert('Something went wrong saving request.');
+      return;
     }
+
+    document.getElementById('requestAirbnbLink').value = '';
+    document.getElementById('requestName').value = '';
+    document.getElementById('requestPhone').value = '';
+    document.getElementById('requestPreviousStay').value = '';
+    document.getElementById('requestArrival').value = '';
+    document.getElementById('requestDeparture').value = '';
+    document.getElementById('requestGuests').value = '';
+    document.getElementById('requestNotes').value = '';
+
+    document.getElementById('requestBookSuccess').style.display = 'block';
+    await renderOwnerDashboard();
+  } catch (e) {
+    console.error(e);
+    alert('Unexpected error occurred.');
+  }
+} 
 
     async function loadCalendar(){
       const status = document.getElementById('calendarStatus');
