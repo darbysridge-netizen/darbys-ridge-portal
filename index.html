@@ -2734,7 +2734,7 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
   const results = document.getElementById('calendarResults');
 
   status.textContent = 'Loading calendar.';
-  results.innerHTML = '<div class="small-note">Loading.</div>';
+  results.innerHTML = '<div class="small-note">Loading...</div>';
 
   try{
     const response = await fetch('/api/airbnb-calendar', {
@@ -2773,8 +2773,6 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
       return;
     }
 
-    const notesMap = await loadReservationNotes();
-
     results.innerHTML = data.bookings.map((booking,index)=>{
       const guestLabel =
         booking.guestName ||
@@ -2782,50 +2780,12 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
         booking.summary ||
         `Booking ${index + 1}`;
 
-      const checkIn = booking.checkIn || '';
-      const checkOut = booking.checkOut || '';
-      const reservationKeyRaw = buildReservationKey(guestLabel, checkIn, checkOut);
-      const reservationKey = encodeURIComponent(reservationKeyRaw);
-      const existingNote = notesMap[reservationKeyRaw] || '';
-
       return `
-        <div class="panel" style="margin-bottom:16px;">
-          <div class="status-row" style="align-items:flex-start;">
-            <div style="width:100%;">
-              <strong>${escapeHtml(guestLabel)}</strong><br>
-              <span class="small-note">Check-in: ${escapeHtml(checkIn)}</span><br>
-              <span class="small-note">Check-out: ${escapeHtml(checkOut)}</span>
-
-              <div style="margin-top:12px;">
-                <label for="reservation-note-${reservationKey}" class="small-note" style="display:block; margin-bottom:6px;">
-                  Team note
-                </label>
-                <textarea
-                  id="reservation-note-${reservationKey}"
-                  rows="3"
-                  style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
-                  placeholder="Birthday, anniversary, blocked no cleaning, owner stay, late checkout, etc."
-                >${escapeHtml(existingNote)}</textarea>
-
-                <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                  <button
-                    id="reservation-save-${reservationKey}"
-                    class="action-btn tertiary-btn"
-                    type="button"
-                    onclick="saveReservationNote(
-                      decodeURIComponent('${reservationKey}'),
-                      ${JSON.stringify(guestLabel)},
-                      ${JSON.stringify(checkIn)},
-                      ${JSON.stringify(checkOut)}
-                    )"
-                  >
-                    Save Note
-                  </button>
-
-                  <span id="reservation-status-${reservationKey}" class="small-note"></span>
-                </div>
-              </div>
-            </div>
+        <div class="status-row">
+          <div>
+            <strong>${escapeHtml(guestLabel)}</strong><br>
+            <span class="small-note">Check-in: ${escapeHtml(booking.checkIn || '')}</span><br>
+            <span class="small-note">Check-out: ${escapeHtml(booking.checkOut || '')}</span>
           </div>
         </div>
       `;
@@ -2835,7 +2795,7 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
     status.textContent = 'Unable to load calendar.';
     results.innerHTML = '<div class="small-note">The Airbnb sync is failing. Most likely the Vercel /api/airbnb-calendar function is missing, broken, or not deployed.</div>';
   }
-}  
+}
         });
 
         if(!response.ok){
