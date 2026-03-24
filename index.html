@@ -2662,74 +2662,8 @@ Take final walkthrough photos`,
     alert('Unexpected error occurred.');
   }
 } 
-function buildReservationKey(guestLabel, checkIn, checkOut){
-  return `${guestLabel || 'Booking'}__${checkIn || ''}__${checkOut || ''}`;
-}
 
-async function loadReservationNotes(){
-  const { data, error } = await supabaseClient
-    .from('reservation_notes')
-    .select('reservation_key, note');
-
-  if(error){
-    console.error('Error loading reservation notes:', error);
-    return {};
-  }
-
-  const notesMap = {};
-  (data || []).forEach(row => {
-    notesMap[row.reservation_key] = row.note || '';
-  });
-
-  return notesMap;
-}
-
-async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut){
-  const textarea = document.getElementById(`reservation-note-${reservationKey}`);
-  const button = document.getElementById(`reservation-save-${reservationKey}`);
-  const status = document.getElementById(`reservation-status-${reservationKey}`);
-
-  if(!textarea){
-    alert('Could not find note field.');
-    return;
-  }
-
-  const note = textarea.value.trim();
-
-  if(button) button.disabled = true;
-  if(status) status.textContent = 'Saving note...';
-
-  try{
-    const { error } = await supabaseClient
-      .from('reservation_notes')
-      .upsert([{
-        reservation_key: reservationKey,
-        guest_label: guestLabel,
-        check_in: checkIn,
-        check_out: checkOut,
-        note,
-        updated_at: new Date().toISOString()
-      }], {
-        onConflict: 'reservation_key'
-      });
-
-    if(error){
-      console.error('Error saving reservation note:', error);
-      if(status) status.textContent = 'Could not save note.';
-      alert('Could not save reservation note.');
-      return;
-    }
-
-    if(status) status.textContent = 'Note saved.';
-  } catch(e){
-    console.error(e);
-    if(status) status.textContent = 'Unexpected error.';
-    alert('Unexpected error saving reservation note.');
-  } finally {
-    if(button) button.disabled = false;
-  }
-}
-  async function loadCalendar(){
+async function loadCalendar(){
   const status = document.getElementById('calendarStatus');
   const results = document.getElementById('calendarResults');
 
@@ -2795,61 +2729,7 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
     status.textContent = 'Unable to load calendar.';
     results.innerHTML = '<div class="small-note">The Airbnb sync is failing. Most likely the Vercel /api/airbnb-calendar function is missing, broken, or not deployed.</div>';
   }
-}
-        });
-
-        if(!response.ok){
-          status.textContent = `Calendar sync error (${response.status})`;
-          results.innerHTML = '<div class="small-note">The Airbnb calendar API route is not responding correctly right now.</div>';
-          return;
-        }
-
-        let data;
-        try{
-          data = await response.json();
-        } catch(jsonError){
-          console.error(jsonError);
-          status.textContent = 'Calendar sync error';
-          results.innerHTML = '<div class="small-note">The calendar endpoint did not return valid JSON.</div>';
-          return;
-        }
-
-        if(!data.success){
-          status.textContent = data.error || 'Unable to load calendar.';
-          results.innerHTML = '<div class="small-note">Calendar not available right now.</div>';
-          return;
-        }
-
-        status.textContent = 'Calendar connected.';
-
-        if(!data.bookings || !data.bookings.length){
-          results.innerHTML = '<div class="small-note">No upcoming bookings found.</div>';
-          return;
-        }
-
-        results.innerHTML = data.bookings.map((booking,index)=>{
-          const guestLabel =
-            booking.guestName ||
-            booking.name ||
-            booking.summary ||
-            `Booking ${index + 1}`;
-
-          return `
-            <div class="status-row">
-              <div>
-                <strong>${escapeHtml(guestLabel)}</strong><br>
-                <span class="small-note">Check-in: ${escapeHtml(booking.checkIn || '')}</span><br>
-                <span class="small-note">Check-out: ${escapeHtml(booking.checkOut || '')}</span>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } catch(e){
-        console.error(e);
-        status.textContent = 'Unable to load calendar.';
-        results.innerHTML = '<div class="small-note">The Airbnb sync is failing. Most likely the Vercel /api/airbnb-calendar function is missing, broken, or not deployed.</div>';
-      }
-    }
+} 
 
     async function seedDefaultContentIfNeeded(){
       const sections = [
