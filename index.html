@@ -2707,23 +2707,36 @@ async function loadCalendar(){
       return;
     }
 
-    results.innerHTML = data.bookings.map((booking,index)=>{
-      const guestLabel =
-        booking.guestName ||
-        booking.name ||
-        booking.summary ||
-        `Booking ${index + 1}`;
+results.innerHTML = data.bookings.map((booking,index)=>{
+  const guestLabel =
+    booking.guestName ||
+    booking.name ||
+    booking.summary ||
+    `Booking ${index + 1}`;
 
-      return `
-        <div class="status-row">
-          <div>
-            <strong>${escapeHtml(guestLabel)}</strong><br>
-            <span class="small-note">Check-in: ${escapeHtml(booking.checkIn || '')}</span><br>
-            <span class="small-note">Check-out: ${escapeHtml(booking.checkOut || '')}</span>
+  return `
+    <div class="panel" style="margin-bottom:16px;">
+      <div class="status-row" style="align-items:flex-start;">
+        <div style="width:100%;">
+          <strong>${escapeHtml(guestLabel)}</strong><br>
+          <span class="small-note">Check-in: ${escapeHtml(booking.checkIn || '')}</span><br>
+          <span class="small-note">Check-out: ${escapeHtml(booking.checkOut || '')}</span>
+
+          <div style="margin-top:12px;">
+            <label class="small-note" style="display:block; margin-bottom:6px;">
+              Team Note
+            </label>
+            <textarea
+              rows="3"
+              style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
+              placeholder="Birthday, blocked no cleaning, owner stay, anniversary, late checkout, etc."
+            ></textarea>
           </div>
         </div>
-      `;
-    }).join('');
+      </div>
+    </div>
+  `;
+}).join('');   
   } catch(e){
     console.error(e);
     status.textContent = 'Unable to load calendar.';
