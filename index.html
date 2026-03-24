@@ -1028,6 +1028,114 @@
         display:block;
       }
     }
+    /* PLAN YOUR STAY SECTION */
+
+.local-panel{
+  padding:16px;
+}
+
+.plan-stay-grid{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.plan-stay-card{
+  background:linear-gradient(145deg, #fbf4ea, #f2e4d2);
+  border:1px solid #eadbc8;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 6px 14px rgba(0,0,0,.05);
+}
+
+.plan-stay-image{
+  height:150px;
+  position:relative;
+  overflow:hidden;
+}
+
+.plan-stay-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.plan-stay-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.05));
+}
+
+.plan-stay-badge{
+  position:absolute;
+  left:14px;
+  bottom:12px;
+  color:white;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+.plan-stay-body{
+  padding:16px;
+}
+
+.plan-stay-body h3{
+  margin:0 0 8px;
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  color:#3c2c1f;
+}
+
+.plan-stay-sub{
+  font-size:14px;
+  margin-bottom:12px;
+  color:#6a5543;
+}
+
+.day-stop{
+  background:white;
+  border:1px solid #eadbc8;
+  border-radius:12px;
+  padding:10px 12px;
+  margin-top:8px;
+}
+
+.day-stop strong{
+  display:block;
+  font-size:12px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+  color:#8b6a4a;
+}
+
+.plan-links{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.plan-links a{
+  padding:8px 12px;
+  background:#d8c3aa;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:12px;
+  color:#3c2c1f;
+}
+
+.plan-tip{
+  margin-top:12px;
+  padding:10px 12px;
+  background:#efe2d0;
+  border-radius:12px;
+  font-size:13px;
+  color:#5c4938;
+}
   </style>
 </head>
 
@@ -1064,11 +1172,18 @@
           </div>
         </div>
 
-      <div class="menu-card" onclick="showPage('local')">
-  <img id="imgHomeLocal" src="local.jpg" alt="">
-  <div class="menu-label">
-    <span>EXPERIENCES</span>
-    <strong>Choose your perfect day - adventure, romance,family fun, or relaxation</strong>
+    <div id="local" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
+  <div class="page-banner">
+    <img id="imgBannerLocal" src="local.jpg" alt="">
+    <div class="page-banner-text">
+      <strong>Play Your Stay</strong>
+      <span>Choose your perfect Blue Ridge day — adventure, romance, family fun, or total relaxation.</span>
+    </div>
+  </div>
+  <div class="panel local-panel">
+    <div id="localContent"></div>
+    <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
   </div>
 </div>  
 
