@@ -2671,7 +2671,47 @@ Take final walkthrough photos`,
     alert('Unexpected error occurred.');
   }
 } 
+async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut){
+  const textarea = document.getElementById(`reservation-note-${reservationKey}`);
+  const status = document.getElementById(`reservation-status-${reservationKey}`);
 
+  if(!textarea){
+    alert('Could not find note field.');
+    return;
+  }
+
+  const note = textarea.value.trim();
+
+  if(status) status.textContent = 'Saving...';
+
+  try{
+    const { error } = await supabaseClient
+      .from('reservation_notes')
+      .upsert([{
+        reservation_key: reservationKey,
+        guest_label: guestLabel,
+        check_in: checkIn,
+        check_out: checkOut,
+        note,
+        updated_at: new Date().toISOString()
+      }], {
+        onConflict: 'reservation_key'
+      });
+
+    if(error){
+      console.error(error);
+      if(status) status.textContent = 'Could not save.';
+      alert('Could not save reservation note.');
+      return;
+    }
+
+    if(status) status.textContent = 'Saved';
+  } catch(e){
+    console.error(e);
+    if(status) status.textContent = 'Error';
+    alert('Unexpected error saving reservation note.');
+  }
+}
 async function loadCalendar(){
   const status = document.getElementById('calendarStatus');
   const results = document.getElementById('calendarResults');
@@ -2735,11 +2775,24 @@ results.innerHTML = data.bookings.map((booking,index)=>{
             <label class="small-note" style="display:block; margin-bottom:6px;">
               Team Note
             </label>
-            <textarea
-              rows="3"
-              style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
-              placeholder="Birthday, blocked no cleaning, owner stay, anniversary, late checkout, etc."
-            ></textarea>
+  <textarea
+  id="reservation-note-${index}"
+  rows="3"
+  style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
+  placeholder="Birthday, blocked no cleaning, owner stay, anniversary, late checkout, etc."
+></textarea>
+
+<div style="margin-top:8px;">
+  <button
+    type="button"
+    class="action-btn tertiary-btn"
+  onclick="saveReservationNote('${index}', '${guestLabel}', '${booking.checkIn || ''}', '${booking.checkOut || ''}')" 
+  >
+    Save Note
+  </button>
+
+  <span id="reservation-status-${index}" class="small-note"></span>
+</div>         
           </div>
         </div>
       </div>
