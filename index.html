@@ -1223,9 +1223,38 @@
     <img src="waze.jpg" alt="">
     <div class="page-banner-text">
       <strong>Way to the Ridge</strong>
-     <span>Use Waze for the most accurate route to the cabin.</span>
+      <span>Use Waze for the most accurate route to the cabin.</span>
     </div>
   </div>
+
+  <div class="panel">
+    <h3>Best Route</h3>
+
+    <p class="small-note">
+      We strongly recommend using Waze for the most accurate route to Darby’s Ridge.
+      Some other navigation apps can occasionally route guests incorrectly near the property.
+    </p>
+
+    <div style="text-align:center;">
+      <a
+        class="link-btn"
+        href="https://waze.com/ul?q=66%20Forest%20Trail%2C%20Blue%20Ridge%2C%20Georgia&navigate=yes"
+        target="_self"
+      >
+        Open in Waze
+      </a>
+    </div>
+
+    <p class="map-note">
+      📍 66 Forest Trail, Blue Ridge, Georgia
+    </p>
+
+    <p class="map-note">
+      ⚠️ If you see a gate before Bear Lane, you’ve turned too early — continue forward to Ridges Over the Lake.
+    </p>
+  </div>
+</div>
+
 <div id="enhanceStay" class="hidden page">
   <button class="back" type="button" onclick="showPage('home')">← Back</button>
 
@@ -1590,17 +1619,7 @@ Then click the Airbnb link to start your booking request. Once submitted, we’l
     <button class="bottom-home" type="button" onclick="showPage('home')">Home</button>
     <button type="button" onclick="showPage('ownerLogin')">Mgmt Portal</button>
   </div>
-function submitConcierge() {
-  const selected = Array.from(document.querySelectorAll('#enhanceStay input[type=checkbox]:checked'))
-    .map(el => el.value)
-    .join('%0D%0A');
 
-  const notes = document.getElementById('conciergeNotes').value;
-
-  const body = `Concierge Request:%0D%0A%0D%0A${selected}%0D%0A%0D%0ANotes:%0D%0A${notes}`;
-
-  window.location.href = `mailto:darbysridge@gmail.com?subject=Enhance Your Stay Request&body=${body}`;
-}
   <script>
     const SUPABASE_URL = 'https://iweqytwgvmdwrnnphydl.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3ZXF5dHdndm1kd3JubnBoeWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2OTA0MjEsImV4cCI6MjA4OTI2NjQyMX0.-3sbHljAu_InHCLlQF6GwY0RS6qaZnWbrKCCsX94L7M';
@@ -2010,11 +2029,11 @@ Take final walkthrough photos`,
       }
     }
 
-    function showPage(page){
-      const pages = [
-        'home','guidebook','info','local','trail','waysToTheRidge','guestMemories','checkout','requestToBook','enhancestay'
-        'login','ownerLogin','team','cleanings','supplies','maintenance','turnover','owner'
-      ];
+   function showPage(page){
+  const pages = [
+    'home','guidebook','info','local','trail','waysToTheRidge','enhanceStay','guestMemories','checkout','requestToBook',
+    'login','ownerLogin','team','cleanings','supplies','maintenance','turnover','owner'
+  ];
 
       pages.forEach(id => {
         const el = document.getElementById(id);
@@ -2954,6 +2973,29 @@ results.innerHTML = data.bookings.map((booking,index)=>{
       await loadOwnerEditor();
       await loadOwnerImageEditor();
     });
+   function submitConcierge() {
+  const checked = document.querySelectorAll('#enhanceStay input[type="checkbox"]:checked');
+  let selected = [];
+
+  checked.forEach(function(item) {
+    selected.push(item.value);
+  });
+
+  const notesEl = document.getElementById('conciergeNotes');
+  const notes = notesEl ? notesEl.value.trim() : '';
+
+  const body =
+    'Enhance Your Stay Request\n\n' +
+    'Selected Packages:\n' +
+    (selected.length ? selected.join('\n') : 'None selected') +
+    '\n\nNotes:\n' +
+    notes;
+
+  window.location.href =
+    'mailto:darbysridge@gmail.com' +
+    '?subject=' + encodeURIComponent('Enhance Your Stay Request') +
+    '&body=' + encodeURIComponent(body);
+} 
   </script>
 </body>
 </html>
