@@ -2801,63 +2801,84 @@ Take final walkthrough photos`,
       }
     }
 
-   async function submitRequestToBook(){
+
+function selectEnhancePackage(packageName){
+  const packageInput = document.getElementById('enhancePackage');
+  if(packageInput){
+    packageInput.value = packageName;
+  }
+
+  const formPanel = document.getElementById('enhanceGuestName');
+  if(formPanel){
+    formPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+async function submitEnhanceStayRequest(){
   if(!supabaseClient){
     alert('App not ready yet — refresh and try again.');
     return;
   }
 
-  const airbnbLink = document.getElementById('requestAirbnbLink').value.trim();
-  const name = document.getElementById('requestName').value.trim();
-  const phone = document.getElementById('requestPhone').value.trim();
-  const previousStay = document.getElementById('requestPreviousStay').value.trim();
-  const arrival = document.getElementById('requestArrival').value.trim();
-  const departure = document.getElementById('requestDeparture').value.trim();
-  const guests = document.getElementById('requestGuests').value.trim();
-  const notes = document.getElementById('requestNotes').value.trim();
+  const packageName = document.getElementById('enhancePackage').value.trim();
+  const guestName = document.getElementById('enhanceGuestName').value.trim();
+  const guestEmail = document.getElementById('enhanceGuestEmail').value.trim();
+  const guestPhone = document.getElementById('enhanceGuestPhone').value.trim();
+  const arrivalDate = document.getElementById('enhanceArrivalDate').value.trim();
+  const notes = document.getElementById('enhanceNotes').value.trim();
 
-  document.getElementById('requestBookSuccess').style.display = 'none';
+  const success = document.getElementById('enhanceStaySuccess');
+  const errorBox = document.getElementById('enhanceStayError');
 
-  if(!name || !arrival || !departure){
-    alert('Please fill in name, arrival date, and departure date.');
+  success.style.display = 'none';
+  errorBox.style.display = 'none';
+
+  if(!packageName){
+    errorBox.textContent = 'Please choose a package first.';
+    errorBox.style.display = 'block';
     return;
   }
 
-  const combinedNotes = [
-    previousStay ? `Previous Stay Dates: ${previousStay}` : '',
-    airbnbLink ? `Airbnb Link: ${airbnbLink}` : '',
-    notes ? `Notes: ${notes}` : ''
-  ].filter(Boolean).join('\n');
+  if(!guestName || !guestEmail || !arrivalDate){
+    errorBox.textContent = 'Please fill in package, guest name, email, and arrival date.';
+    errorBox.style.display = 'block';
+    return;
+  }
 
-  try {
+  try{
     const { error } = await supabaseClient
-      .from('booking_requests')
-      .insert([
-        { name, phone, arrival, departure, guests, notes: combinedNotes }
-      ]);
+      .from('enhance_stay_requests')
+      .insert([{
+        package_name: packageName,
+        guest_name: guestName,
+        guest_email: guestEmail,
+        guest_phone: guestPhone,
+        arrival_date: arrivalDate,
+        notes: notes
+      }]);
 
     if(error){
       console.error(error);
-      alert('Something went wrong saving request.');
+      errorBox.textContent = 'Something went wrong saving your request.';
+      errorBox.style.display = 'block';
       return;
     }
 
-    document.getElementById('requestAirbnbLink').value = '';
-    document.getElementById('requestName').value = '';
-    document.getElementById('requestPhone').value = '';
-    document.getElementById('requestPreviousStay').value = '';
-    document.getElementById('requestArrival').value = '';
-    document.getElementById('requestDeparture').value = '';
-    document.getElementById('requestGuests').value = '';
-    document.getElementById('requestNotes').value = '';
+    document.getElementById('enhancePackage').value = '';
+    document.getElementById('enhanceGuestName').value = '';
+    document.getElementById('enhanceGuestEmail').value = '';
+    document.getElementById('enhanceGuestPhone').value = '';
+    document.getElementById('enhanceArrivalDate').value = '';
+    document.getElementById('enhanceNotes').value = '';
 
-    document.getElementById('requestBookSuccess').style.display = 'block';
-    await renderOwnerDashboard();
-  } catch (e) {
+    success.style.display = 'block';
+  } catch(e){
     console.error(e);
-    alert('Unexpected error occurred.');
+    errorBox.textContent = 'Unexpected error occurred.';
+    errorBox.style.display = 'block';
   }
-} 
+}
+    
 async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut){
   const textarea = document.getElementById(`reservation-note-${reservationKey}`);
   const status = document.getElementById(`reservation-status-${reservationKey}`);
