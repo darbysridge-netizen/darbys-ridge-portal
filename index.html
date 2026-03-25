@@ -2701,7 +2701,7 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
     if(error){
       console.error(error);
       if(status) status.textContent = 'Could not save.';
-      alert('Could not save reservation note.');
+    
       return;
     }
 
@@ -2709,7 +2709,7 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
   } catch(e){
     console.error(e);
     if(status) status.textContent = 'Error';
-    alert('Unexpected error saving reservation note.');
+   
   }
 }
 async function loadCalendar(){
