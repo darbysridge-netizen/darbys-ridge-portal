@@ -1094,7 +1094,13 @@
     <strong>Trail Access</strong>
   </div>
 </div>     
-
+<div class="menu-card" onclick="showPage('waysToTheRidge')">
+  <img src="mountains.jpg" alt="">
+  <div class="menu-label">
+    <span>NAVIGATION</span>
+    <strong>Ways to the Ridge</strong>
+  </div>
+</div>
         <div class="menu-card" onclick="showPage('guestMemories')">
           <img id="imgHomeMemories" src="outdoor.jpg" alt="">
           <div class="menu-label">
@@ -1110,7 +1116,13 @@
             <strong>Checkout</strong>
           </div>
         </div>
-
+<div class="menu-card" onclick="showPage('waysToTheRidge')">
+  <img src="mountains.jpg" alt="">
+  <div class="menu-label">
+    <span>NAVIGATION</span>
+    <strong>Ways to the Ridge</strong>
+  </div>
+</div>
    <div class="menu-card wide-card" onclick="showPage('requestToBook')">
   <img id="imgHomeRequest" src="mountains.jpg" alt="">
   <div class="menu-label">
@@ -1204,7 +1216,38 @@
       <div class="map-note">Map links are set to open in the same window when possible for an easier in-app return.</div>
     </div>
   </div>
+<div id="waysToTheRidge" class="hidden page">
+  <button class="back" type="button" onclick="showPage('home')">← Back</button>
 
+  <div class="page-banner">
+    <img src="mountains.jpg" alt="">
+    <div class="page-banner-text">
+      <strong>Ways to the Ridge</strong>
+      <span>Use Waze for the most reliable route to Darby’s Ridge.</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Best Route</h3>
+
+    <p class="small-note">
+      We recommend using Waze for navigation.
+      Tap below and it will open with the address already entered.
+    </p>
+
+    <a
+      class="link-btn"
+      href="https://waze.com/ul?q=66%20Forest%20Trail%2C%20Blue%20Ridge%2C%20Georgia&navigate=yes"
+      target="_self"
+    >
+      Open in Waze
+    </a>
+
+    <p class="map-note">
+      66 Forest Trail, Blue Ridge, Georgia
+    </p>
+  </div>
+</div>
   <div id="guestMemories" class="hidden page">
     <button class="back" type="button" onclick="showPage('home')">← Back</button>
     <h1>Guest Memories</h1>
@@ -1918,7 +1961,7 @@ Take final walkthrough photos`,
 
     function showPage(page){
       const pages = [
-        'home','guidebook','info','local','trail','guestMemories','checkout','requestToBook',
+        'home','guidebook','info','local','trail','waysToTheRidge','guestMemories','checkout','requestToBook',
         'login','ownerLogin','team','cleanings','supplies','maintenance','turnover','owner'
       ];
 
