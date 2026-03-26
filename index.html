@@ -2112,17 +2112,79 @@ Take final walkthrough photos`,
       }
     }
 
-    function checkLogin(){
-      const password = document.getElementById('teamPassword').value;
-      const error = document.getElementById('loginError');
+   async function checkLogin(){
+  const username = document.getElementById('teamUsername').value.trim().toLowerCase();
+  const password = document.getElementById('teamPassword').value;
+  const error = document.getElementById('loginError');
 
-      if (password === TEAM_PASSWORD) {
-        error.style.display = 'none';
-        showPage('team');
-      } else {
-        error.style.display = 'block';
-      }
-    }
+  if(!username || !password){
+    error.textContent = 'Enter username and password.';
+    error.style.display = 'block';
+    return;
+  }
+
+  const { data, error: dbError } = await supabaseClient
+    .from('app_users')
+    .select('*')
+    .eq('username', username)
+    .eq('password', password)
+    .eq('role', 'team')
+    .eq('active', true)
+    .maybeSingle();
+
+  if(dbError){
+    console.error(dbError);
+    error.textContent = 'Login failed.';
+    error.style.display = 'block';
+    return;
+  }
+
+  if(data){
+    currentUser = data;
+    error.style.display = 'none';
+    showPage('team');
+  } else {
+    error.textContent = 'Incorrect username or password.';
+    error.style.display = 'block';
+  }
+}
+
+async function checkOwnerLogin(){
+  const username = document.getElementById('ownerUsername').value.trim().toLowerCase();
+  const password = document.getElementById('ownerPassword').value;
+  const error = document.getElementById('ownerLoginError');
+
+  if(!username || !password){
+    error.textContent = 'Enter username and password.';
+    error.style.display = 'block';
+    return;
+  }
+
+  const { data, error: dbError } = await supabaseClient
+    .from('app_users')
+    .select('*')
+    .eq('username', username)
+    .eq('password', password)
+    .eq('role', 'owner')
+    .eq('active', true)
+    .maybeSingle();
+
+  if(dbError){
+    console.error(dbError);
+    error.textContent = 'Login failed.';
+    error.style.display = 'block';
+    return;
+  }
+
+  if(data){
+    currentUser = data;
+    error.style.display = 'none';
+    showPage('owner');
+  } else {
+    error.textContent = 'Incorrect username or password.';
+    error.style.display = 'block';
+  }
+}
 
     function checkOwnerLogin(){
       const password = document.getElementById('ownerPassword').value;
