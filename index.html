@@ -2916,11 +2916,12 @@ async function saveReservationNote(rowIndex, reservationKey, guestLabel, checkIn
       saveError = error;
     }
 
-    if(saveError){
-      console.error(saveError);
-      if(status) status.textContent = 'Could not save.';
-      return;
-    }
+   if(saveError){
+  console.error(saveError);
+  alert(JSON.stringify(saveError));   // 👈 ADD THIS LINE
+  if(status) status.textContent = 'Could not save.';
+  return;
+}
 
     if(status) status.textContent = 'Saved';
   } catch(e){
