@@ -2860,9 +2860,9 @@ async function submitEnhanceStayRequest(){
   }
 }
     
-async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut){
-  const textarea = document.getElementById(`reservation-note-${reservationKey}`);
-  const status = document.getElementById(`reservation-status-${reservationKey}`);
+async function saveReservationNote(rowIndex, reservationKey, guestLabel, checkIn, checkOut){
+  const textarea = document.getElementById(`reservation-note-${rowIndex}`);
+  const status = document.getElementById(`reservation-status-${rowIndex}`);
 
   if(!textarea){
     alert('Could not find note field.');
@@ -2890,7 +2890,6 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
     if(error){
       console.error(error);
       if(status) status.textContent = 'Could not save.';
-    
       return;
     }
 
@@ -2898,7 +2897,6 @@ async function saveReservationNote(reservationKey, guestLabel, checkIn, checkOut
   } catch(e){
     console.error(e);
     if(status) status.textContent = 'Error';
-   
   }
 }
 async function loadCalendar(){
@@ -2944,13 +2942,29 @@ async function loadCalendar(){
       results.innerHTML = '<div class="small-note">No upcoming bookings found.</div>';
       return;
     }
+const { data: savedNotes, error: notesError } = await supabaseClient
+  .from('reservation_notes')
+  .select('reservation_key, note');
 
-results.innerHTML = data.bookings.map((booking,index)=>{
+if(notesError){
+  console.error(notesError);
+}
+results.innerHTML = data.bookings.map((booking, index) => {
   const guestLabel =
     booking.guestName ||
     booking.name ||
     booking.summary ||
     `Booking ${index + 1}`;
+
+  const reservationKey = [
+    booking.guestName || booking.name || booking.summary || `Booking ${index + 1}`,
+    booking.checkIn || '',
+    booking.checkOut || ''
+  ].join('|');
+
+  const existingNote = savedNotes?.find(
+    item => item.reservation_key === reservationKey
+  )?.note || '';
 
   return `
     <div class="panel" style="margin-bottom:16px;">
@@ -2964,30 +2978,31 @@ results.innerHTML = data.bookings.map((booking,index)=>{
             <label class="small-note" style="display:block; margin-bottom:6px;">
               Team Note
             </label>
-  <textarea
-  id="reservation-note-${index}"
-  rows="3"
-  style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
-  placeholder="Birthday, blocked no cleaning, owner stay, anniversary, late checkout, etc."
-></textarea>
 
-<div style="margin-top:8px;">
-  <button
-    type="button"
-    class="action-btn tertiary-btn"
-  onclick="saveReservationNote('${index}', '${guestLabel}', '${booking.checkIn || ''}', '${booking.checkOut || ''}')" 
-  >
-    Save Note
-  </button>
+            <textarea
+              id="reservation-note-${index}"
+              rows="3"
+              style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbb89d; font-family:inherit; box-sizing:border-box;"
+              placeholder="Birthday, blocked no cleaning, owner stay, anniversary, late checkout, etc."
+            >${escapeHtml(existingNote)}</textarea>
 
-  <span id="reservation-status-${index}" class="small-note"></span>
-</div>         
+            <div style="margin-top:8px;">
+              <button
+                type="button"
+                class="action-btn tertiary-btn"
+                onclick='saveReservationNote(${index}, ${JSON.stringify(reservationKey)}, ${JSON.stringify(guestLabel)}, ${JSON.stringify(booking.checkIn || "")}, ${JSON.stringify(booking.checkOut || "")})'
+              >
+                Save Note
+              </button>
+
+              <span id="reservation-status-${index}" class="small-note"></span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   `;
-}).join('');   
+}).join('');
   } catch(e){
     console.error(e);
     status.textContent = 'Unable to load calendar.';
