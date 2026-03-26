@@ -2186,18 +2186,7 @@ async function checkOwnerLogin(){
   }
 }
 
-    function checkOwnerLogin(){
-      const password = document.getElementById('ownerPassword').value;
-      const error = document.getElementById('ownerLoginError');
-
-      if (password === OWNER_PASSWORD_VALUE) {
-        error.style.display = 'none';
-        showPage('owner');
-      } else {
-        error.style.display = 'block';
-      }
-    }
-
+  
     async function addSupplyItem(){
       const input = document.getElementById('supplySimpleInput');
       const value = input.value.trim();
