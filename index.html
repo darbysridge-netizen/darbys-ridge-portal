@@ -2874,21 +2874,50 @@ async function saveReservationNote(rowIndex, reservationKey, guestLabel, checkIn
   if(status) status.textContent = 'Saving...';
 
   try{
-    const { error } = await supabaseClient
+    const { data: existingRows, error: findError } = await supabaseClient
       .from('reservation_notes')
-      .upsert([{
-        reservation_key: reservationKey,
-        guest_label: guestLabel,
-        check_in: checkIn,
-        check_out: checkOut,
-        note,
-        updated_at: new Date().toISOString()
-      }], {
-        onConflict: 'reservation_key'
-      });
+      .select('reservation_key')
+      .eq('reservation_key', reservationKey)
+      .limit(1);
 
-    if(error){
-      console.error(error);
+    if(findError){
+      console.error(findError);
+      if(status) status.textContent = 'Could not save.';
+      return;
+    }
+
+    let saveError = null;
+
+    if(existingRows && existingRows.length > 0){
+      const { error } = await supabaseClient
+        .from('reservation_notes')
+        .update({
+          guest_label: guestLabel,
+          check_in: checkIn,
+          check_out: checkOut,
+          note,
+          updated_at: new Date().toISOString()
+        })
+        .eq('reservation_key', reservationKey);
+
+      saveError = error;
+    } else {
+      const { error } = await supabaseClient
+        .from('reservation_notes')
+        .insert([{
+          reservation_key: reservationKey,
+          guest_label: guestLabel,
+          check_in: checkIn,
+          check_out: checkOut,
+          note,
+          updated_at: new Date().toISOString()
+        }]);
+
+      saveError = error;
+    }
+
+    if(saveError){
+      console.error(saveError);
       if(status) status.textContent = 'Could not save.';
       return;
     }
