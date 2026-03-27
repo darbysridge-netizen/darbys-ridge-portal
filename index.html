@@ -3241,6 +3241,61 @@ const existingNote = savedNotes?.find(
     error.style.display = 'block';
   }
 }  
+  async function submitRequestToBook(){
+  const name = document.getElementById('requestName').value.trim();
+  const phone = document.getElementById('requestPhone').value.trim();
+  const arrival = document.getElementById('requestArrival').value.trim();
+  const departure = document.getElementById('requestDeparture').value.trim();
+  const guests = document.getElementById('requestGuests').value.trim();
+
+  const success = document.getElementById('requestBookSuccess');
+  const error = document.getElementById('requestBookError');
+
+  success.style.display = 'none';
+  error.style.display = 'none';
+
+  if(!name || !phone || !arrival || !departure){
+    error.textContent = 'Please complete name, phone, arrival, and departure.';
+    error.style.display = 'block';
+    return;
+  }
+
+  try{
+    const { error: insertError } = await supabaseClient
+      .from('booking_requests')
+      .insert([{
+        property_key: 'darbys-ridge',
+        name,
+        phone,
+        arrival,
+        departure,
+        guests
+      }]);
+
+    if(insertError){
+      console.error(insertError);
+      error.textContent = 'There was a problem submitting your request.';
+      error.style.display = 'block';
+      return;
+    }
+
+    success.style.display = 'block';
+
+    document.getElementById('requestName').value = '';
+    document.getElementById('requestPhone').value = '';
+    document.getElementById('requestArrival').value = '';
+    document.getElementById('requestDeparture').value = '';
+    document.getElementById('requestGuests').value = '';
+    document.getElementById('requestPreviousStay').value = '';
+    document.getElementById('requestNotes').value = '';
+
+    await renderOwnerDashboard();
+  } catch(e){
+    console.error(e);
+    error.textContent = 'There was a problem submitting your request.';
+    error.style.display = 'block';
+  }
+}  
    function submitConcierge() {
   const checked = document.querySelectorAll('#enhanceStay input[type="checkbox"]:checked');
   let selected = [];
