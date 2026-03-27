@@ -2393,6 +2393,55 @@ async function checkOwnerLogin(){
     }
 
     async function deleteTurnoverMedia(id, imagePath){
+    async function deleteTurnoverSubmission(id){
+  const okay = confirm('Delete this entire turnover submission and all attached media?');
+  if(!okay) return;
+
+  try{
+    const { data: mediaItems, error: mediaLoadError } = await supabaseClient
+      .from('turnover_photos')
+      .select('*')
+      .eq('turnover_id', id);
+
+    if(mediaLoadError) throw mediaLoadError;
+
+    if(mediaItems && mediaItems.length){
+      const pathsToRemove = mediaItems
+        .map(item => item.image_path)
+        .filter(Boolean);
+
+      if(pathsToRemove.length){
+        const { error: storageError } = await supabaseClient
+          .storage
+          .from(TURNOVER_BUCKET)
+          .remove(pathsToRemove);
+
+        if(storageError){
+          console.error(storageError);
+        }
+      }
+
+      const { error: deletePhotosError } = await supabaseClient
+        .from('turnover_photos')
+        .delete()
+        .eq('turnover_id', id);
+
+      if(deletePhotosError) throw deletePhotosError;
+    }
+
+    const { error: deleteTurnoverError } = await supabaseClient
+      .from('turnovers')
+      .delete()
+      .eq('id', id);
+
+    if(deleteTurnoverError) throw deleteTurnoverError;
+
+    await renderOwnerDashboard();
+  } catch(e){
+    console.error(e);
+    alert('Could not delete turnover submission.');
+  }
+}  
       const okay = confirm('Delete this turnover media item?');
       if(!okay) return;
 
@@ -2486,31 +2535,36 @@ async function checkOwnerLogin(){
             .order('created_at', { ascending: false });
 
           if(mediaItems && mediaItems.length){
-            mediaHtml = `
-              <div class="submission-photos">
-                ${mediaItems.map(media => `
-                  <div>
-                    ${renderMediaPreviewTag(media.image_url, media.media_type || 'image/jpeg')}
-                    <div class="admin-actions">
-                      <button class="mini-delete" type="button" onclick="deleteTurnoverMedia(${media.id}, '${escapeHtml(media.image_path || '')}')">Delete</button>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-            `;
+         mediaHtml = `
+  <div class="owner-gallery-strip">
+    ${mediaItems.map(media => `
+      <div class="submission-card">
+        <div class="owner-media-thumb">
+          ${renderMediaPreviewTag(media.image_url, media.media_type || 'image/jpeg')}
+        </div>
+        <div class="admin-actions">
+          <button class="mini-delete" type="button" onclick="deleteTurnoverMedia(${media.id}, '${escapeHtml(media.image_path || '')}')">Delete</button>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+`;  
           }
         } catch(e){
           console.error(e);
         }
 
-        html += `
-          <div class="submission-card">
-            <h4>${escapeHtml(item.cleaner || 'Cleaner')}</h4>
-            <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
-            ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-            ${mediaHtml}
-          </div>
-        `;
+      html += `
+  <div class="submission-card">
+    <h4>${escapeHtml(item.cleaner || 'Turnover Submission')}</h4>
+    <p><strong>Date:</strong> ${escapeHtml(item.turnover_date || '')}</p>
+    ${item.notes ? `<p><strong>Notes:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+    ${mediaHtml}
+    <div class="admin-actions">
+      <button class="mini-delete" type="button" onclick="deleteTurnoverSubmission(${item.id})">Delete Submission</button>
+    </div>
+  </div>
+`; 
       }
 
       container.innerHTML = html || '<div class="small-note">No turnover submissions yet.</div>';
