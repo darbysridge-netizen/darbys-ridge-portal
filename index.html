@@ -1481,8 +1481,7 @@ Then click the Airbnb link to start your booking request. Once submitted, we’l
     <h1>Team Access</h1>
 
     <div class="panel">
-   <p style="margin-top:0;">Enter your username and password to access the portal.</p>  
-     <input id="teamUsername" type="text" placeholder="Enter username">
+  <p style="margin-top:0;">Enter the team password to access the portal.</p>
 <input id="teamPassword" type="password" placeholder="Enter password">
       <div id="loginError" class="form-message form-error">Incorrect password. Please try again.</div>
       <button class="action-btn" type="button" onclick="checkLogin()">Enter Team Portal</button>
@@ -2093,13 +2092,14 @@ Take final walkthrough photos`,
       }
     }
 
-   async function checkLogin(){
-  const username = document.getElementById('teamUsername').value.trim().toLowerCase();
+  async function checkLogin(){
   const password = document.getElementById('teamPassword').value;
   const error = document.getElementById('loginError');
 
-  if(!username || !password){
-    error.textContent = 'Enter username and password.';
+  error.style.display = 'none';
+
+  if(!password){
+    error.textContent = 'Enter the team password.';
     error.style.display = 'block';
     return;
   }
@@ -2107,7 +2107,6 @@ Take final walkthrough photos`,
   const { data, error: dbError } = await supabaseClient
     .from('app_users')
     .select('*')
-    .eq('username', username)
     .eq('password', password)
     .eq('role', 'team')
     .eq('active', true)
@@ -2115,20 +2114,21 @@ Take final walkthrough photos`,
 
   if(dbError){
     console.error(dbError);
-    error.textContent = 'Login failed.';
+    error.textContent = 'Unable to check login right now.';
     error.style.display = 'block';
     return;
   }
 
-  if(data){
-    currentUser = data;
-    error.style.display = 'none';
-    showPage('team');
-  } else {
-    error.textContent = 'Incorrect username or password.';
+  if(!data){
+    error.textContent = 'Incorrect password. Please try again.';
     error.style.display = 'block';
+    return;
   }
-}
+
+  currentUser = data;
+  document.getElementById('teamPassword').value = '';
+  showPage('team');
+} 
 
 async function checkOwnerLogin(){
   const username = document.getElementById('ownerUsername').value.trim().toLowerCase();
