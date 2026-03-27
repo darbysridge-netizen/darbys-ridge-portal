@@ -1577,8 +1577,7 @@ Then click the Airbnb link to start your booking request. Once submitted, we’l
     <h1>Turnover Submission</h1>
 
     <div class="panel">
-      <label for="turnoverCleaner">Cleaner Name</label>
-      <input id="turnoverCleaner" type="text" placeholder="Cleaner name">
+      
 
       <label for="turnoverDate">Turnover Date</label>
       <input id="turnoverDate" type="text" placeholder="Enter date">
@@ -2750,7 +2749,7 @@ async function checkOwnerLogin(){
     }
 
     async function submitTurnoverComplete(){
-      const cleaner = document.getElementById('turnoverCleaner').value.trim();
+     
       const date = document.getElementById('turnoverDate').value.trim();
       const notes = document.getElementById('turnoverNotes').value.trim();
       const files = document.getElementById('turnoverFiles').files;
