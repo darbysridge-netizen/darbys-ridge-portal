@@ -2830,10 +2830,10 @@ async function submitTurnoverComplete(){
 
  if(insertError){
   console.error(insertError);
-  error.textContent = insertError.message || 'There was a problem submitting your request.';
+  error.textContent = insertError.message || JSON.stringify(insertError) || 'There was a problem submitting your request.';
   error.style.display = 'block';
   return;
-}   
+}
 
     if(files && files.length){
       const items = getSelectedMedia(files);
@@ -2861,9 +2861,9 @@ async function submitTurnoverComplete(){
     document.getElementById('turnoverPreview').innerHTML = '';
 
     await renderOwnerDashboard();
- } catch(e){
+} catch(e){
   console.error(e);
-  error.textContent = e.message || 'There was a problem submitting your request.';
+  error.textContent = e.message || JSON.stringify(e) || 'There was a problem submitting your request.';
   error.style.display = 'block';
 }
 }    
