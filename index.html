@@ -3183,14 +3183,12 @@ const existingNote = savedNotes?.find(
       await loadOwnerImageEditor();
     });
 
-  async function submitRequestToBook(){
+ async function submitRequestToBook(){
   const name = document.getElementById('requestName').value.trim();
   const phone = document.getElementById('requestPhone').value.trim();
-  const previousStay = document.getElementById('requestPreviousStay').value.trim();
   const arrival = document.getElementById('requestArrival').value.trim();
   const departure = document.getElementById('requestDeparture').value.trim();
   const guests = document.getElementById('requestGuests').value.trim();
-  const notes = document.getElementById('requestNotes').value.trim();
 
   const success = document.getElementById('requestBookSuccess');
   const error = document.getElementById('requestBookError');
@@ -3208,13 +3206,12 @@ const existingNote = savedNotes?.find(
     const { error: insertError } = await supabaseClient
       .from('booking_requests')
       .insert([{
+        property_key: 'darbys-ridge',
         name,
         phone,
-        previous_stay: previousStay,
-        preferred_arrival: arrival,
-        preferred_departure: departure,
-        guest_count: guests,
-        notes
+        arrival,
+        departure,
+        guests
       }]);
 
     if(insertError){
@@ -3228,10 +3225,10 @@ const existingNote = savedNotes?.find(
 
     document.getElementById('requestName').value = '';
     document.getElementById('requestPhone').value = '';
-    document.getElementById('requestPreviousStay').value = '';
     document.getElementById('requestArrival').value = '';
     document.getElementById('requestDeparture').value = '';
     document.getElementById('requestGuests').value = '';
+    document.getElementById('requestPreviousStay').value = '';
     document.getElementById('requestNotes').value = '';
 
     await renderOwnerDashboard();
@@ -3240,7 +3237,7 @@ const existingNote = savedNotes?.find(
     error.textContent = 'There was a problem submitting your request.';
     error.style.display = 'block';
   }
-}  
+}
   async function submitRequestToBook(){
   const name = document.getElementById('requestName').value.trim();
   const phone = document.getElementById('requestPhone').value.trim();
