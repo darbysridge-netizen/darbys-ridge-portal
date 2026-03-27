@@ -3007,7 +3007,7 @@ async function loadCalendar(){
     }
 const { data: savedNotes, error: notesError } = await supabaseClient
   .from('reservation_notes')
-  .select('reservation_key, note');
+  .select('reservation_key, check_in, check_out, note');
 
 if(notesError){
   console.error(notesError);
@@ -3019,16 +3019,19 @@ results.innerHTML = data.bookings.map((booking, index) => {
     booking.summary ||
     `Booking ${index + 1}`;
 
-  const reservationKey = [
-    booking.guestName || booking.name || booking.summary || `Booking ${index + 1}`,
-    booking.checkIn || '',
-    booking.checkOut || ''
-  ].join('|');
+ const reservationKey = [
+  booking.checkIn || '',
+  booking.checkOut || ''
+].join('|');
 
-  const existingNote = savedNotes?.find(
-    item => item.reservation_key === reservationKey
-  )?.note || '';
-
+const existingNote = savedNotes?.find(
+  item =>
+    item.reservation_key === reservationKey ||
+    (
+      (item.check_in || '') === (booking.checkIn || '') &&
+      (item.check_out || '') === (booking.checkOut || '')
+    )
+)?.note || ''; 
   return `
     <div class="panel" style="margin-bottom:16px;">
       <div class="status-row" style="align-items:flex-start;">
