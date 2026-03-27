@@ -2829,8 +2829,8 @@ async function submitTurnoverComplete(){
       .single();
 
  if(insertError){
-  console.error(insertError);
-  error.textContent = insertError.message || JSON.stringify(insertError) || 'There was a problem submitting your request.';
+  console.error('booking request insert error:', insertError);
+  error.textContent = 'Submit failed: ' + (insertError.message || JSON.stringify(insertError));
   error.style.display = 'block';
   return;
 }
@@ -2862,8 +2862,8 @@ async function submitTurnoverComplete(){
 
     await renderOwnerDashboard();
 } catch(e){
-  console.error(e);
-  error.textContent = e.message || JSON.stringify(e) || 'There was a problem submitting your request.';
+  console.error('submitRequestToBook crashed:', e);
+  error.textContent = 'Unexpected error: ' + (e.message || JSON.stringify(e));
   error.style.display = 'block';
 }
 }    
