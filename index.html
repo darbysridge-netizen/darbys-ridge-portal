@@ -3216,7 +3216,7 @@ const existingNote = savedNotes?.find(
 
     if(insertError){
       console.error(insertError);
-      error.textContent = 'There was a problem submitting your request.';
+      error.textContent = insertError.message || 'There was a problem submitting your request.';
       error.style.display = 'block';
       return;
     }
