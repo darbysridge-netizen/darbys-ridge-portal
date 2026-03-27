@@ -2471,35 +2471,7 @@ async function deleteTurnoverMedia(id, imagePath){
     alert('Could not delete turnover media.');
   }
 }  
-      const okay = confirm('Delete this turnover media item?');
-      if(!okay) return;
-
-      try{
-        if(imagePath){
-          const { error: storageError } = await supabaseClient
-            .storage
-            .from(TURNOVER_BUCKET)
-            .remove([imagePath]);
-
-          if(storageError){
-            console.error(storageError);
-          }
-        }
-
-        const { error } = await supabaseClient
-          .from('turnover_photos')
-          .delete()
-          .eq('id', id);
-
-        if(error) throw error;
-
-        await renderOwnerDashboard();
-      } catch(e){
-        console.error(e);
-        alert('Could not delete turnover media.');
-      }
-    }
-
+     
     async function renderOwnerGuestGallery(){
       const container = document.getElementById('ownerGuestGalleryEntries');
       if(!container) return;
