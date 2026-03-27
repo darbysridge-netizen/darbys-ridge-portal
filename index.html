@@ -2392,8 +2392,7 @@ async function checkOwnerLogin(){
       }
     }
 
-    async function deleteTurnoverMedia(id, imagePath){
-    async function deleteTurnoverSubmission(id){
+  async function deleteTurnoverSubmission(id){
   const okay = confirm('Delete this entire turnover submission and all attached media?');
   if(!okay) return;
 
@@ -2440,6 +2439,36 @@ async function checkOwnerLogin(){
   } catch(e){
     console.error(e);
     alert('Could not delete turnover submission.');
+  }
+}
+
+async function deleteTurnoverMedia(id, imagePath){
+  const okay = confirm('Delete this turnover media item?');
+  if(!okay) return;
+
+  try{
+    if(imagePath){
+      const { error: storageError } = await supabaseClient
+        .storage
+        .from(TURNOVER_BUCKET)
+        .remove([imagePath]);
+
+      if(storageError){
+        console.error(storageError);
+      }
+    }
+
+    const { error } = await supabaseClient
+      .from('turnover_photos')
+      .delete()
+      .eq('id', id);
+
+    if(error) throw error;
+
+    await renderOwnerDashboard();
+  } catch(e){
+    console.error(e);
+    alert('Could not delete turnover media.');
   }
 }  
       const okay = confirm('Delete this turnover media item?');
