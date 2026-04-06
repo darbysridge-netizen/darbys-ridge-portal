@@ -2890,42 +2890,6 @@ async function deleteTurnoverMedia(id, imagePath){
   }
 }  
 
-      try{
-        const items = getSelectedMedia(files);
-
-        for(const item of items){
-          const uploaded = await uploadFileToBucket(GUEST_BUCKET, item.file, 'guest');
-
-          const { error } = await supabaseClient
-            .from('guest_gallery')
-            .insert([{
-              guest_name: guestName || 'Guest Memory',
-              image_url: uploaded.url,
-              image_path: uploaded.path,
-              media_type: item.mediaType
-            }]);
-
-          if(error) throw error;
-        }
-
-        await renderGuestGallery();
-        await renderOwnerDashboard();
-
-        message.className = 'form-message form-success';
-        message.textContent = 'Media added to the shared guest gallery.';
-        message.style.display = 'block';
-
-        document.getElementById('guestMediaFiles').value = '';
-        document.getElementById('guestMemoryName').value = '';
-        document.getElementById('guestPreview').innerHTML = '';
-      } catch(e){
-        console.error(e);
-        message.className = 'form-message form-error';
-        message.textContent = 'Those files could not be uploaded. Check your Supabase guest gallery setup.';
-        message.style.display = 'block';
-      }
-    }
-
     async function previewTurnoverMedia(){
       const container = document.getElementById('turnoverPreview');
       const files = document.getElementById('turnoverFiles').files;
