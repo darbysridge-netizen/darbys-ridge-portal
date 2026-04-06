@@ -2160,11 +2160,13 @@ function renderMediaPreviewTag(url, mediaType, muted = false){
       if (page === 'supplies') renderSupplyList();
       if (page === 'maintenance') renderMaintenanceList();
       if (page === 'guestMemories') renderGuestGallery();
-      if (page === 'owner') {
-        renderOwnerDashboard();
-        loadOwnerEditor();
-        loadOwnerImageEditor();
-      }
+   if (page === 'owner') {
+  renderOwnerDashboard();
+  renderOwnerGuestGallery();
+  renderOwnerTurnovers();
+  loadOwnerEditor();
+  loadOwnerImageEditor();
+}   
     }
 
   async function checkLogin(){
@@ -2460,8 +2462,9 @@ async function checkOwnerLogin(){
 
         if(error) throw error;
 
-        await renderGuestGallery();
-        await renderOwnerDashboard();
+      await renderGuestGallery();
+await renderOwnerDashboard();
+await renderOwnerGuestGallery();  
       } catch(e){
         console.error(e);
         alert('Could not delete guest media.');
@@ -2861,7 +2864,8 @@ async function deleteTurnoverMedia(id, imagePath){
     }
 
     await renderGuestGallery();
-    await renderOwnerDashboard();
+await renderOwnerDashboard();
+await renderOwnerGuestGallery();
 
     if(successCount > 0){
       message.className = 'form-message form-success';
