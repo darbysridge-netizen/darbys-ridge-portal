@@ -3377,6 +3377,108 @@ const existingNote = savedNotes?.find(
     '?subject=' + encodeURIComponent('Enhance Your Stay Request') +
     '&body=' + encodeURIComponent(body);
 } 
+async function renderTeamTurnoverLog(){
+  const container = document.getElementById('teamTurnoverLog');
+  if(!container) return;
+
+  container.innerHTML = 'Loading...';
+
+  try{
+    const { data: turnovers, error } = await supabaseClient
+      .from('turnovers')
+      .select('id, turnover_date, created_at')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if(error){
+      console.error(error);
+      container.innerHTML = 'Unable to load submitted turnovers.';
+      return;
+    }
+
+    if(!turnovers || !turnovers.length){
+      container.innerHTML = 'No submissions yet.';
+      return;
+    }
+
+    const ids = turnovers.map(t => t.id);
+
+    const { data: uploads } = await supabaseClient
+      .from('turnover_photos')
+      .select('turnover_id')
+      .in('turnover_id', ids);
+
+    const counts = {};
+    (uploads || []).forEach(u => {
+      counts[u.turnover_id] = (counts[u.turnover_id] || 0) + 1;
+    });
+
+    container.innerHTML = turnovers.map(t => {
+      const count = counts[t.id] || 0;
+
+      return `
+        <div class="owner-list-card">
+      <strong>${t.turnover_date || 'No date'}</strong><br> 
+          <span class="small-note">Submitted • ${count} upload${count === 1 ? '' : 's'}</span>
+        </div>
+      `;
+    }).join('');
+  } catch(e){
+    console.error(e);
+    container.innerHTML = 'Unable to load submitted turnovers.';
+  }
+}  
+ async function renderTeamTurnoverLog(){
+  const container = document.getElementById('teamTurnoverLog');
+  if(!container) return;
+
+  container.innerHTML = 'Loading...';
+
+  try{
+    const { data: turnovers, error } = await supabaseClient
+      .from('turnovers')
+      .select('id, turnover_date, created_at')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if(error){
+      console.error(error);
+      container.innerHTML = 'Unable to load submitted turnovers.';
+      return;
+    }
+
+    if(!turnovers || !turnovers.length){
+      container.innerHTML = 'No submissions yet.';
+      return;
+    }
+
+    const ids = turnovers.map(t => t.id);
+
+    const { data: uploads } = await supabaseClient
+      .from('turnover_photos')
+      .select('turnover_id')
+      .in('turnover_id', ids);
+
+    const counts = {};
+    (uploads || []).forEach(u => {
+      counts[u.turnover_id] = (counts[u.turnover_id] || 0) + 1;
+    });
+
+    container.innerHTML = turnovers.map(t => {
+      const count = counts[t.id] || 0;
+
+      return `
+        <div class="owner-list-card">
+          <strong>${t.turnover_date}</strong><br>
+          <span class="small-note">Submitted • ${count} upload${count === 1 ? '' : 's'}</span>
+        </div>
+      `;
+    }).join('');
+  } catch(e){
+    console.error(e);
+    container.innerHTML = 'Unable to load submitted turnovers.';
+  }
+}   
   </script>
 
 </body>
