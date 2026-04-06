@@ -1955,7 +1955,7 @@ Take final walkthrough photos`,
       return String(type || '').startsWith('video/');
     }
 
-   function renderMediaPreviewTag(url, mediaType, muted = false){
+function renderMediaPreviewTag(url, mediaType, muted = false){
   if(isVideoType(mediaType)){
     return `
       <video ${muted ? 'muted' : ''} controls playsinline preload="metadata">
@@ -1965,43 +1965,7 @@ Take final walkthrough photos`,
   }
 
   return `<img src="${escapeHtml(url)}" alt="Media">`;
-}
-
-function renderOpenableMediaTag(url, mediaType){
-  const encodedUrl = encodeURIComponent(url || '');
-  const encodedType = encodeURIComponent(mediaType || '');
-
-  return `
-    <button
-      type="button"
-      class="media-open-btn"
-      onclick="openMediaLightbox('${encodedUrl}', '${encodedType}')"
-    >
-      ${renderMediaPreviewTag(url, mediaType)}
-    </button>
-  `;
-}
-
-function openMediaLightbox(encodedUrl, encodedType){
-  const url = decodeURIComponent(encodedUrl || '');
-  const mediaType = decodeURIComponent(encodedType || '');
-  const content = document.getElementById('mediaLightboxContent');
-  const lightbox = document.getElementById('mediaLightbox');
-
-  if(!content || !lightbox) return;
-
-  if(isVideoType(mediaType)){
-    content.innerHTML = `
-      <video controls playsinline autoplay>
-        <source src="${escapeHtml(url)}" type="${escapeHtml(mediaType || 'video/mp4')}">
-      </video>
-    `;
-  } else {
-    content.innerHTML = `<img src="${escapeHtml(url)}" alt="Media">`;
-  }
-
-  lightbox.classList.remove('hidden');
-}
+}   
 
 function closeMediaLightbox(){
   const content = document.getElementById('mediaLightboxContent');
@@ -3451,11 +3415,6 @@ const existingNote = savedNotes?.find(
     '&body=' + encodeURIComponent(body);
 } 
   </script>
-<div id="mediaLightbox" class="media-lightbox hidden" onclick="closeMediaLightbox()">
-  <div class="media-lightbox-inner" onclick="event.stopPropagation()">
-    <button class="media-lightbox-close" type="button" onclick="closeMediaLightbox()">×</button>
-    <div id="mediaLightboxContent"></div>
-  </div>
-</div>  
+
 </body>
 </html>
