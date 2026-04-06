@@ -2571,7 +2571,7 @@ async function deleteTurnoverMedia(id, imagePath){
             ${data.map(item => `
               <div class="submission-card">
                 <div class="owner-media-thumb">
-              ${renderOpenableMediaTag(item.image_url, item.media_type || 'image/jpeg')}   
+         ${renderMediaPreviewTag(item.image_url, item.media_type || 'image/jpeg')}
                 </div>
                 <p><strong>Name:</strong> ${escapeHtml(item.guest_name || 'Guest Memory')}</p>
                 <p><strong>Type:</strong> ${escapeHtml(item.media_type || 'image/jpeg')}</p>
