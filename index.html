@@ -1664,7 +1664,10 @@ Then click the Airbnb link to start your booking request. Once submitted, we’l
 
       <div id="turnoverSuccess" class="form-message form-success">Turnover submission saved.</div>
       <div id="turnoverError" class="form-message form-error">There was a problem saving the turnover submission.</div>
-
+<div class="panel">
+  <h3>Recent Submitted Turnovers</h3>
+  <div id="teamTurnoverLog" class="small-note">No submissions yet.</div>
+</div>
       <button class="action-btn center-button" type="button" onclick="submitTurnoverComplete()">Submit Turnover</button>
     </div>
   </div>
@@ -2966,7 +2969,8 @@ async function submitTurnoverComplete(){
 
     await renderOwnerDashboard();
 success.textContent = 'Submitted ✅';
-success.style.display = 'block';    
+success.style.display = 'block';  
+await renderTeamTurnoverLog();    
 } catch(e){
   console.error('submitRequestToBook crashed:', e);
   error.textContent = 'Unexpected error: ' + (e.message || JSON.stringify(e));
