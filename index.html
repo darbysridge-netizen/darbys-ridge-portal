@@ -2941,7 +2941,8 @@ async function submitTurnoverComplete(){
   error.style.display = 'block';
   return;
 }
-
+success.textContent = 'Submitted ✅';
+success.style.display = 'block';
     if(files && files.length){
       const items = getSelectedMedia(files);
 
@@ -2968,8 +2969,7 @@ async function submitTurnoverComplete(){
     document.getElementById('turnoverPreview').innerHTML = '';
 
     await renderOwnerDashboard();
-success.textContent = 'Submitted ✅';
-success.style.display = 'block';  
+
 await renderTeamTurnoverLog();    
 } catch(e){
   console.error('submitRequestToBook crashed:', e);
