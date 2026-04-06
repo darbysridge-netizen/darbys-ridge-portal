@@ -1967,13 +1967,6 @@ function renderMediaPreviewTag(url, mediaType, muted = false){
   return `<img src="${escapeHtml(url)}" alt="Media">`;
 }   
 
-function closeMediaLightbox(){
-  const content = document.getElementById('mediaLightboxContent');
-  const lightbox = document.getElementById('mediaLightbox');
-
-  if(content) content.innerHTML = '';
-  if(lightbox) lightbox.classList.add('hidden');
-}
 
     async function getSectionContent(section){
       if(!supabaseClient) return defaultContent[section] || '';
