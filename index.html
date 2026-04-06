@@ -1896,64 +1896,64 @@ Take final walkthrough photos`,
   book_again_airbnb_link: ``
 };
 
-    function escapeHtml(text){
-      return String(text ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+ function escapeHtml(text){
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
-    function highlightLabels(text){
-      return text.replace(/(Network:|Password:|Gate Code:)/g, '<span class="highlight">$1</span>');
-    }
+function highlightLabels(text){
+  return text.replace(/(Network:|Password:|Gate Code:)/g, '<span class="highlight">$1</span>');
+}
 
-    function formatInfoContent(raw){
-      const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
-      let html = '<div class="essentials-panel">';
+function formatInfoContent(raw){
+  const sections = raw.split(/\n\s*\n/).map(item => item.trim()).filter(Boolean);
+  let html = '<div class="essentials-panel">';
 
-      for(let i = 0; i < sections.length; i += 2){
-        const title = sections[i] || '';
-        const body = sections[i + 1] || '';
+  for(let i = 0; i < sections.length; i += 2){
+    const title = sections[i] || '';
+    const body = sections[i + 1] || '';
 
-        html += `
-          <div class="essentials-block">
-            <h3>${escapeHtml(title)}</h3>
-            <p>${highlightLabels(escapeHtml(body))}</p>
-          </div>
-        `;
-      }
+    html += `
+      <div class="essentials-block">
+        <h3>${escapeHtml(title)}</h3>
+        <p>${highlightLabels(escapeHtml(body))}</p>
+      </div>
+    `;
+  }
 
-      html += '</div>';
-      return html;
-    }
+  html += '</div>';
+  return html;
+}
 
-    function formatCheckoutContent(raw){
-      const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
-      if(!lines.length) return '';
+function formatCheckoutContent(raw){
+  const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
+  if(!lines.length) return '';
 
-      const title = lines[0];
-      const items = lines.slice(1);
+  const title = lines[0];
+  const items = lines.slice(1);
 
-      return `
-        <div class="checkout-panel">
-          <h3 class="checkout-title">${escapeHtml(title)}</h3>
-          <ul class="checkmark-list">
-            ${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
-          </ul>
-        </div>
-      `;
-    }
+  return `
+    <div class="checkout-panel">
+      <h3 class="checkout-title">${escapeHtml(title)}</h3>
+      <ul class="checkmark-list">
+        ${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
 
-    function getFileExtension(name){
-      const parts = String(name || '').split('.');
-      return parts.length > 1 ? parts.pop().toLowerCase() : '';
-    }
+function getFileExtension(name){
+  const parts = String(name || '').split('.');
+  return parts.length > 1 ? parts.pop().toLowerCase() : '';
+}
 
-    function isVideoType(type){
-      return String(type || '').startsWith('video/');
-    }
+function isVideoType(type){
+  return String(type || '').startsWith('video/');
+}
 
 function renderMediaPreviewTag(url, mediaType, muted = false){
   if(isVideoType(mediaType)){
@@ -1965,7 +1965,7 @@ function renderMediaPreviewTag(url, mediaType, muted = false){
   }
 
   return `<img src="${escapeHtml(url)}" alt="Media">`;
-}   
+} 
 
 
     async function getSectionContent(section){
