@@ -2965,6 +2965,8 @@ async function submitTurnoverComplete(){
     document.getElementById('turnoverPreview').innerHTML = '';
 
     await renderOwnerDashboard();
+success.textContent = 'Submitted ✅';
+success.style.display = 'block';    
 } catch(e){
   console.error('submitRequestToBook crashed:', e);
   error.textContent = 'Unexpected error: ' + (e.message || JSON.stringify(e));
