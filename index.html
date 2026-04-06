@@ -2972,7 +2972,7 @@ success.style.display = 'block';
 
 await renderTeamTurnoverLog();    
 } catch(e){
-  console.error('submitRequestToBook crashed:', e);
+  console.error('submitTurnoverComplete crashed:', e);
   error.textContent = 'Unexpected error: ' + (e.message || JSON.stringify(e));
   error.style.display = 'block';
 }
